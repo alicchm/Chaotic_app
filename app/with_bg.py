@@ -33,13 +33,13 @@ def enc_open_window():
     page2_encode_results.grid(column=0, row=0, sticky='news')
 
     #tło strony
-    enc2_bg_img = ImageTk.PhotoImage(Image.open("encode2_bg2.jpg").resize((566,325), Image.Resampling.LANCZOS))
+    enc2_bg_img = ImageTk.PhotoImage(Image.open("app/encode2_bg2.jpg").resize((566,325), Image.Resampling.LANCZOS))
     enc2_bgimg_label = tk.Label(page2_encode_results, image=enc2_bg_img, bg='#242424')
     enc2_bgimg_label.img = enc2_bg_img  
     enc2_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
     
     #wyświetlenie zakodowanego obrazu
-    enc2_img_base = Image.open("encoded.png")
+    enc2_img_base = Image.open("app/encoded.png")
     enc2_img = ImageTk.PhotoImage(enc2_img_base.resize((270,270), Image.Resampling.LANCZOS))
     enc2_img_label = tk.Label(page2_encode_results, image=enc2_img)
     enc2_img_label.img = enc2_img  
@@ -68,7 +68,7 @@ def enc_open_window():
     page2_encode_measures.grid(column=0, row=0, sticky='news')
     
     #tło strony
-    enc2_meas_bg_img = ImageTk.PhotoImage(Image.open("encode2_measures_bg.jpg").resize((566,325), Image.Resampling.LANCZOS))
+    enc2_meas_bg_img = ImageTk.PhotoImage(Image.open("app/encode2_measures_bg.jpg").resize((566,325), Image.Resampling.LANCZOS))
     enc2_meas_bgimg_label = tk.Label(page2_encode_measures, image=enc2_meas_bg_img, bg='#242424')
     enc2_meas_bgimg_label.img = enc2_meas_bg_img  
     enc2_meas_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
@@ -127,7 +127,7 @@ def dec_open_window():
     dec2_window.resizable(False, False)
 
     #wyświetlenie odkodowanego obrazu
-    dec2_img_base = Image.open("lena.jpg")
+    dec2_img_base = Image.open("app/lena.jpg")
     dec2_img = ImageTk.PhotoImage(dec2_img_base.resize((270,270), Image.Resampling.LANCZOS))
     dec2_img_label = tk.Label(dec2_window, image=dec2_img)
     dec2_img_label.img = dec2_img  
@@ -148,7 +148,7 @@ root.title('Chaotyczny program')
 root.configure(bg="#242424")
 root.resizable(False, False) 
 
-root_icon = ImageTk.PhotoImage(file = 'app_logo_mini2.png')
+root_icon = ImageTk.PhotoImage(file = 'app/app_logo_mini2.png')
 root.iconphoto(False, root_icon)
 
 #notebook = tworzenie zakładek
@@ -173,7 +173,7 @@ notebook.add(page_decode, text='Deszyfrowanie')
 
 #strona z kodowaniem
 #tło strony
-enc_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((566,325), Image.Resampling.LANCZOS))
+enc_bg_img = ImageTk.PhotoImage(Image.open("app/encode_bg5.jpg").resize((566,325), Image.Resampling.LANCZOS))
 enc_bgimg_label = tk.Label(page_encode, image=enc_bg_img, bg='#242424')
 enc_bgimg_label.img = enc_bg_img  
 enc_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
@@ -214,7 +214,7 @@ enc_encode_button = tk.Button(page_encode, text = 'Szyfruj!', width=15, height=1
 enc_encode_button.place(relx=0.056, rely=0.82)
 
 #wyświetlanie załadowanego obrazu
-enc_image = Image.open("lena.jpg")
+enc_image = Image.open("app/lena.jpg")
 enc_image = enc_image.resize((270,270), Image.Resampling.LANCZOS)
 enc_image_tk = ImageTk.PhotoImage(enc_image)
 
@@ -223,7 +223,7 @@ enc_image_label.place(relx=0.425, rely=0.082)
 
 #strona z dekodowaniem
 #tło strony
-dec_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((566,325), Image.Resampling.LANCZOS))
+dec_bg_img = ImageTk.PhotoImage(Image.open("app/encode_bg5.jpg").resize((566,325), Image.Resampling.LANCZOS))
 dec_bgimg_label = tk.Label(page_decode, bg='#242424') #image=dec_bg_img,
 # dec_bgimg_label.img = enc_bg_img  
 # dec_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
@@ -257,7 +257,7 @@ dec_encode_button = tk.Button(page_decode, text = 'Deszyfruj!', width=15, height
 dec_encode_button.place(relx=0.056, rely=0.82)
 
 #wyświetlanie załadowanego obrazu
-dec_image = Image.open("encoded.png")
+dec_image = Image.open("app/encoded.png")
 dec_image = dec_image.resize((270,270), Image.Resampling.LANCZOS)
 dec_image_tk = ImageTk.PhotoImage(dec_image)
 
