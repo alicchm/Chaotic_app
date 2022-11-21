@@ -1,5 +1,6 @@
 from PIL import Image, ImageStat
 import numpy as np
+import collections as col
 
 class Cipher():
     def __init__(self):
@@ -14,18 +15,20 @@ class Cipher():
         self.cryptogram = None
         self.decrypted_image = None
 
+
     def set_source_path(self, path):
         self.source_path = path
-
-    def set_ciphertype(self, value):
-        if value == 'algorithm1':
-            self.cipher_type = 'algorithm1'
-        if value == 'algorithm2':
-            self.cipher_type = 'algorithm2'
+        self.set_image()
 
     def set_image(self):
         self.image = Image.open(self.path)
 
+
+    def start_encryption(self):
+        if self.cipher_type == 'algorytm1':
+            self.encryption1(self)
+        elif self.cipher_type == 'algorytm2':
+            self.encryption2(self)
 
     def get_ciphertyper(self, value):
         return self.cipher_type
@@ -65,7 +68,7 @@ class Cipher():
             length -= 1
         return dec
 
-    def encryption(self):
+    def encryption2(self):
         ### CZYTANIE -> PERMUTACJA ###
         N,M = im.size
         print(im.size)
@@ -125,7 +128,7 @@ class Cipher():
             ciphered_im.append(tmp_1)
         self.cryptogram = Image.fromarray(np.uint8(ciphered_im))
 
-    def decryption(self):
+    def decryption2(self):
         N,M = self.Image.size
         #print(im.size)
         px = np.asarray(self.image)
@@ -185,22 +188,22 @@ class Cipher():
         return decode_px
         
 
-    def generate_sbox(Spx, x, N, M, p):
+    def generate_sbox(self, Spx, N, M):
         sn = list(np.arange(start=0,stop=256,step=1)) #lista [0,1,..,255]
         lengthSn = len(sn)
         sb = []
 
         #obliczenie wartości początkowej
-        initial_val = (x+(Spx/(3*255*N*M)))%1
+        initial_val = (self.x+(Spx/(3*255*N*M)))%1
         
         #opuszczenie tysiąca pierwszych wartości x z rekurencji
         for i in range(10**3):
-            initial_val = asymetric_tent_map(initial_val, p)
+            initial_val = self.asymetric_tent_map(initial_val, self.p)
         
         xs = initial_val
 
         while lengthSn > 0:
-            xs = asymetric_tent_map(xs,p) #calculate x from recurence
+            xs = self.asymetric_tent_map(xs,self.p) #calculate x from recurence
             index = (xs*lengthSn)//1 #calculate index
             index = int(index)
             sb.append(sn[index]) #add Sn[index] to Sb
@@ -209,25 +212,25 @@ class Cipher():
             
         return sb
 
-    def encryption1(im, x, p):
-        I = np.asarray(im)
-        N, M = im.size #szerokość, wysokość
+    def encryption1(self):
+        I = np.asarray(self.im)
+        N, M = self.im.size #szerokość, wysokość
         
         #obliczenie wartości klucza Spx
-        Spx = calc_spx(I)
+        Spx = self.calc_spx(I)
         print(Spx)
             
-        sb = generate_sbox(Spx, x, N, M, p)
+        sb = self.generate_sbox(Spx, N, M)
         
-        xk = x
+        xk = self.x
         first_place = []
         last_place = []
 
-        deque_sb = col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
+        deque_sb = self.col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
 
         for i in range(M): #po wierszach obrazu
             for j in range(N): #po kolumnach obrazu
-                xk = m_map(xk,p) #calculate xk from m_map
+                xk = self.m_map(xk, self.p) #calculate xk from m_map
 
                 #Read the S − box value for the pixels RGB components (S − box(px(i,j)));
                 new_px_vals = [deque_sb[I[i][j][0]],deque_sb[I[i][j][1]],deque_sb[I[i][j][2]]] 
@@ -254,26 +257,26 @@ class Cipher():
                 px_list[i].append(first_place[(i*M)+j])
         
         #zapisanie listy jako obraz
-        enc_im = Image.fromarray(np.uint8(px_list))
+        self.cryptogram = Image.fromarray(np.uint8(px_list))
         
-        return enc_im
+        return self.cryptogram
 
-    def decryption1(enc_im, x, p, enc_spx):
-        J = np.asarray(enc_im)
-        enc_N, enc_M = enc_im.size
+    def decryption1(self):
+        J = np.asarray(self.cryptogram)
+        enc_N, enc_M = self.cryptogram.size
         
         J_flatter = J.reshape(enc_N*enc_M,3) #zmiana struktury na listę pikseli
         J_flatter
         
-        sb = generate_sbox(enc_spx, x, enc_N, enc_M, p)
+        sb = self.generate_sbox(self.Spx, enc_N, enc_M)
         
         px_list2 = []
-        xk2 = x
+        xk2 = self.x
         
         deque_sb = col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
 
         while len(J_flatter)>0:
-            xk2 = m_map(xk2,p) #calculate x from recurence
+            xk2 = self.m_map(xk2, self.p) #calculate x from recurence
 
             if xk2 <= 0.5: #pierwszy nieodczytany piksel
                 px = J_flatter[0]
