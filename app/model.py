@@ -302,5 +302,8 @@ class Cipher():
             for j in range(enc_N):
                 decode_px[i].append(px_list2[(i*enc_M)+j])
                 
-        im2 = Image.fromarray(np.uint8(decode_px))
-        return im2    
+        self.cryptogram = Image.fromarray(np.uint8(decode_px))
+
+
+    #MIARY (metoda draw histograms jest w w widoku)
+        
