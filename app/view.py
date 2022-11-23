@@ -193,10 +193,10 @@ class View():
         enc2_key_label.place(relx=0.72, rely=0.49)
 
         #label - wartość klucza
-        enc2_keyval_label = tk.Label(page2_encode_results, text='1233456787654', bg='#CED4CF')
+        enc2_keyval_label = tk.Text(page2_encode_results, bg='#CED4CF', height=1, width=13, relief='flat', inactiveselectbackground='#CED4CF')
+        enc2_keyval_label.insert(1.0,'1233456787')
+        enc2_keyval_label.configure(state='disabled') #trzeba najpierw podać zawartość, potem zmienić stan
         enc2_keyval_label.place(relx=0.742, rely=0.578)
-
-        
 
         #strona z miarami jakości
         page2_encode_measures = tk.Frame(enc2_window, width=566, height=325, bg="#242424")

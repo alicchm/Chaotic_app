@@ -8,7 +8,7 @@ class App(tk.Tk):
         super().__init__()
         view = View(self)
         model = Cipher()
-        controller = Controller(view)
+        controller = Controller(view, model)
         view.setController(controller)
         
 if __name__ == '__main__':
