@@ -1,12 +1,14 @@
 import tkinter as tk
 from tkinter import CENTER, LEFT, RIGHT, Toplevel, ttk, filedialog
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image, ImageStat
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 from io import BytesIO
 import win32clipboard
 from controller import Controller
+import random
+from math import log2, sqrt
 
 #na czas implementacji
 from tkinter.messagebox import showinfo
@@ -273,8 +275,6 @@ class View():
         #button - kopiuj obraz do schowka
         dec2_copy_button = tk.Button(dec2_window, text = 'Kopiuj obraz', width=15, height=1, bg='#93A295', bd=0, command=lambda:self.copy_to_clipboard(dec2_img_base))
         dec2_copy_button.place(relx=0.72, rely=0.31)
-
-    #główne okno
     
     def draw_histograms(im): #rysowanie histogramów
         plt.hist([x[0] for x in list(im.getdata())], bins = 256, color = 'tab:red')
@@ -287,11 +287,16 @@ class View():
         plt.ylim((0,4000))
         plt.show()
 
-    def key_sensitivity(im, x, p, change_value):
+    def key_sensitivity(im, x, p, change_value, alg_num):
         
-        im_oryg = encryption1(im, x, p)
-        im_x = encryption1(im, x+change_value, p)
-        im_p = encryption1(im, x, p+change_value)
+        if alg_num==1:
+            im_oryg = encryption1(im, x, p)
+            im_x = encryption1(im, x+change_value, p)
+            im_p = encryption1(im, x, p+change_value)
+        else:
+            im_oryg = encryption2(im, x, p)
+            im_x = encryption2(im, x+change_value, p)
+            im_p = encryption2(im, x, p+change_value)
         
         plt.figure(figsize=(20,10))
         
@@ -307,7 +312,7 @@ class View():
         plt.axis('off')
         plt.imshow(im_p)
 
-    def npcr(im, x, p):
+    def npcr(im, x, p, alg_num):
         N, M = im.size #szerokość, wysokość
         im2 = im.copy()
         im2_px = im2.load()
@@ -315,8 +320,12 @@ class View():
         random_M = random.randint(0, M-1)
         im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
         
-        enc_im = encryption1(im, x, p)
-        enc_im2 = encryption1(im2, x, p)
+        if alg_num==1:
+            enc_im = encryption1(im, x, p)
+            enc_im2 = encryption1(im2, x, p)
+        else:
+            enc_im = encryption2(im, x, p)
+            enc_im2 = encryption2(im2, x, p)
         
         enc_px = list(enc_im.getdata())
         enc_px2 = list(enc_im2.getdata())
@@ -346,7 +355,7 @@ class View():
         values = [(x/length) * 100 for x in values]
         return values
 
-    def uaci(im, x, p):
+    def uaci(im, x, p, alg_num):
         N, M = im.size #szerokość, wysokość
         im2 = im.copy()
         im2_px = im2.load()
@@ -354,8 +363,12 @@ class View():
         random_M = random.randint(0, M-1)
         im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
         
-        enc_im = encryption1(im, x, p)
-        enc_im2 = encryption1(im2, x, p)
+        if alg_num==1:
+            enc_im = encryption1(im, x, p)
+            enc_im2 = encryption1(im2, x, p)
+        else:
+            enc_im = encryption2(im, x, p)
+            enc_im2 = encryption2(im2, x, p)
         
         enc_px = list(enc_im.getdata())
         enc_px2 = list(enc_im2.getdata())
@@ -385,10 +398,13 @@ class View():
             results.append(round(sum_channel,4))
         return results
 
-    def correlations(im, x, p, encrypted = 1):
+    def correlations(im, x, p, alg_num, encrypted = 1):
         
         if encrypted == 1:
-            im = encryption1(im, x, p)
+            if alg_num==1:
+                im = encryption1(im, x, p)
+            else:
+                im = encryption2(im, x, p)
         
         N, M = im.size
         r = []
