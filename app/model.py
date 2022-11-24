@@ -25,10 +25,18 @@ class Cipher():
 
 
     def start_encryption(self):
-        if self.cipher_type == 'algorytm1':
-            self.encryption1(self)
-        elif self.cipher_type == 'algorytm2':
-            self.encryption2(self)
+        if self.source_path!='' and self.image!=None and self.x!=None and self.p!=None:
+            if self.cipher_type == 'algorytm1':
+                self.encryption1(self)
+            elif self.cipher_type == 'algorytm2':
+                self.encryption2(self)
+
+    def start_decryption(self):
+        if self.source_path!='' and self.image!=None and self.Spx!=None:
+            if self.cipher_type == 'algorytm1':
+                self.decryption1(self)
+            elif self.cipher_type == 'algorytm2':
+                self.decryption2(self)
 
     def get_ciphertyper(self, value):
         return self.cipher_type
