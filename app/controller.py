@@ -33,5 +33,17 @@ class Controller:
     def get_cryptogram(self):
         return self.model.cryptogram
     
-    def get_key_sensivity(change_value, alg_num):
-        return self.model.key_sensivity(change_value, alg_num)
+    def get_key_sensivity(self, change_value):
+        return self.model.key_sensivity(change_value)
+
+    def get_npcr(self):
+        return self.model.npcr()
+
+    def get_uaci(self):
+        return self.model.npcr()
+
+    def get_entropy(self):
+        return self.model.entropy()
+
+    def get_correlations(self):
+        return self.model.correlations()

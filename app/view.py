@@ -7,8 +7,6 @@ import numpy as np
 from io import BytesIO
 import win32clipboard
 from controller import Controller
-import random
-from math import log2, sqrt
 
 #na czas implementacji
 from tkinter.messagebox import showinfo
@@ -325,7 +323,7 @@ class View():
         plt.ylim((0,4000))
         plt.show()
 
-    def key_sensivity():
+    def key_sensivity(self):
         im_oryg, im_x, im_p = self.controler.get_key_sensivity()
         plt.figure(figsize=(20,10))
         
