@@ -32,6 +32,6 @@ class Controller:
 
     def get_cryptogram(self):
         return self.model.cryptogram
-
     
-        
+    def get_key_sensivity(change_value, alg_num):
+        return self.model.key_sensivity(change_value, alg_num)

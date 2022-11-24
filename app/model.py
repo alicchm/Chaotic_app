@@ -185,7 +185,7 @@ class Cipher():
                 decode_px[i].append(px_list[(i*M)+j])
         self.decrypted_image =  Image.fromarray(np.uint8(decode_px))
         
-        return decode_px
+        return self.decrypted_image
         
 
     def generate_sbox(self, Spx, N, M):
@@ -306,4 +306,207 @@ class Cipher():
 
 
     #MIARY (metoda draw histograms jest w w widoku)
+
+
+    def key_sensitivity(self, change_value, alg_num):
+        
+        if alg_num==1:
+            im_oryg = self.encryption1(self.image, self.x, self.p)
+            im_x = self.encryption1(self.image, self.x+change_value, self.p)
+            im_p = self.encryption1(self.image, self.x, self.p+change_value)
+        else:
+            im_oryg = self.encryption2(self.image, self.x, self.p)
+            im_x = self.encryption2(self.image, self.x+change_value, self.p)
+            im_p = self.encryption2(self.image, self.x, self.p+change_value)
+        
+        return im_oryg, im_x, im_p
+
+    def npcr(im, x, p, alg_num):
+        N, M = im.size #szerokość, wysokość
+        im2 = im.copy()
+        im2_px = im2.load()
+        random_N = random.randint(0, N-1)
+        random_M = random.randint(0, M-1)
+        im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
+        
+        if alg_num==1:
+            enc_im = encryption1(im, x, p)
+            enc_im2 = encryption1(im2, x, p)
+        else:
+            enc_im = encryption2(im, x, p)
+            enc_im2 = encryption2(im2, x, p)
+        
+        enc_px = list(enc_im.getdata())
+        enc_px2 = list(enc_im2.getdata())
+        
+        res = []
+        
+        for i in range(0,3): #dla każdego kanału RGB
+            dif_sum = 0 
+            for j in range(len(enc_px)): #obliczenie sumy ze wzoru
+                if enc_px[j][i] != enc_px2[j][i]:
+                    dif_sum += 1
+            
+            res.append(round((dif_sum/(N*M))*100,4))
+            
+        return res
+
+    def npcr2(im1, im2):
+        im1 = np.asarray(im1)
+        im2 = np.asarray(im2)
+        values = [0,0,0]
+        for i in range(len(im1)):
+            for j in range(len(im1[i])):
+                for k in range(len(im1[i][j])):
+                    if im1[i][j][k] != im2[i][j][k]:
+                        values[k]+=1
+        length = im1.size/3
+        values = [(x/length) * 100 for x in values]
+        return values
+
+    def uaci(im, x, p, alg_num):
+        N, M = im.size #szerokość, wysokość
+        im2 = im.copy()
+        im2_px = im2.load()
+        random_N = random.randint(0, N-1)
+        random_M = random.randint(0, M-1)
+        im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
+        
+        if alg_num==1:
+            enc_im = encryption1(im, x, p)
+            enc_im2 = encryption1(im2, x, p)
+        else:
+            enc_im = encryption2(im, x, p)
+            enc_im2 = encryption2(im2, x, p)
+        
+        enc_px = list(enc_im.getdata())
+        enc_px2 = list(enc_im2.getdata())
+        
+        res = []
+        
+        for i in range(0,3): #dla każdego kanału RGB
+            dif_sum = 0 
+            for j in range(len(enc_px)): #obliczenie sumy ze wzoru
+                dif_sum += (abs(enc_px[j][i] - enc_px2[j][i])/255)
+            
+            res.append(round((dif_sum/(N*M))*100,2))
+        return res
+
+    def Entropy(image): #entropia
+        r, g, b = image.split()
+        
+        results = []
+        
+        for i in (r,g,b):
+            i = i.histogram()
+            sum_channel = 0
+            
+            for j in i:
+                sum_channel += - (j/sum(i))*(log2(j/sum(i)))
+                
+            results.append(round(sum_channel,4))
+        return results
+
+    def correlations(im, x, p, alg_num, encrypted = 1):
+        
+        if encrypted == 1:
+            if alg_num==1:
+                im = encryption1(im, x, p)
+            else:
+                im = encryption2(im, x, p)
+        
+        N, M = im.size
+        r = []
+            
+        #horizontal
+        im21 = im.crop((0,0,N-1,M))
+        im22 = im.crop((1,0,N,M))
+        
+        stat21 = ImageStat.Stat(im21)
+        stat22 = ImageStat.Stat(im22)
+        stat21_mean = stat21.mean
+        stat22_mean = stat22.mean
+        
+        im21_px = im21.load()
+        im22_px = im22.load()
+        
+        r_temp = []
+        for k in range(3):
+            cov = 0
+            var21 = 0
+            var22 = 0
+            for i in range(M):
+                for j in range(N-1):
+                    var21 += (im21_px[j,i][k] - stat21_mean[k])**2
+                    var22 += (im22_px[j,i][k] - stat22_mean[k])**2
+                    cov += (im21_px[j,i][k] - stat21_mean[k])*(im22_px[j,i][k] - stat22_mean[k])
+                    
+            cov = cov/N
+            sigma21 = sqrt(var21/N)
+            sigma22 = sqrt(var22/N)
+            r_value = cov/(sigma21*sigma22)
+            r_temp.append(round(r_value,4))
+        r.append(r_temp)
+        
+        #vertical
+        im31 = im.crop((0,0,N,M-1))
+        im32 = im.crop((0,1,N,M))
+        
+        stat31 = ImageStat.Stat(im31)
+        stat32 = ImageStat.Stat(im32)
+        stat31_mean = stat31.mean
+        stat32_mean = stat32.mean
+        
+        im31_px = im31.load()
+        im32_px = im32.load()
+        
+        r_temp = []
+        for k in range(3):
+            cov = 0
+            var31 = 0
+            var32 = 0
+            for i in range(M-1):
+                for j in range(N):
+                    var31 += (im31_px[j,i][k] - stat31_mean[k])**2
+                    var32 += (im32_px[j,i][k] - stat32_mean[k])**2
+                    cov += (im31_px[j,i][k] - stat31_mean[k])*(im32_px[j,i][k] - stat32_mean[k])
+                    
+            cov = cov/N
+            sigma31 = sqrt(var31/N)
+            sigma32 = sqrt(var32/N)
+            r_value = cov/(sigma31*sigma32)
+            r_temp.append(round(r_value,4))
+        r.append(r_temp)
+        
+        #diagonal
+        im41 = im.crop((0,0,N-1,M-1))
+        im42 = im.crop((1,1,N,M))
+        
+        stat41 = ImageStat.Stat(im41)
+        stat42 = ImageStat.Stat(im42)
+        stat41_mean = stat41.mean
+        stat42_mean = stat42.mean
+        
+        im41_px = im41.load()
+        im42_px = im42.load()
+        
+        r_temp = []
+        for k in range(3):
+            cov = 0
+            var41 = 0
+            var42 = 0
+            for i in range(M-1):
+                for j in range(N-1):
+                    var41 += (im41_px[j,i][k] - stat41_mean[k])**2
+                    var42 += (im42_px[j,i][k] - stat42_mean[k])**2
+                    cov += (im41_px[j,i][k] - stat41_mean[k])*(im42_px[j,i][k] - stat42_mean[k])
+                    
+            cov = cov/N
+            sigma41 = sqrt(var41/N)
+            sigma42 = sqrt(var42/N)
+            r_value = cov/(sigma41*sigma42)
+            r_temp.append(round(r_value,4))
+        r.append(r_temp)
+        
+        return r
         
