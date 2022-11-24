@@ -18,7 +18,7 @@ class View():
         self.root = master
         self.controller = None
         #self.root = tk.Tk()
-        self.root.geometry('566x345')
+        self.root.geometry('570x355')
         self.root.title('Chaotyczny program')
         self.root.configure(bg="#242424")
         self.root.resizable(False, False) 
@@ -143,39 +143,41 @@ class View():
         self.dec_image_label.place(relx=0.425, rely=0.082)
 
         #strona z opisem algorytmów
-        self.desc_main_frame = tk.Frame(self.page_description, width=566, height=600, bg='#242424')
-        self.desc_main_frame.pack(fill='both')
+        self.desc_main_frame = tk.Frame(self.page_description, bg='#242424') #width=566, height=600,
+        self.desc_main_frame.pack(fill='both', expand=1)
 
-        self.desc_main_frame.columnconfigure(0,weight=9)
-        self.desc_main_frame.columnconfigure(1,weight=1)
-        self.desc_main_frame.rowconfigure(0,weight=3)
-        self.desc_main_frame.rowconfigure(1,weight=1)
-        self.desc_main_frame.rowconfigure(2,weight=1)
-        self.desc_main_frame.rowconfigure(3,weight=3)
+        self.desc_canvas = tk.Canvas(self.desc_main_frame, bg='#242424')
+        self.desc_canvas.pack(side='left', fill='both', expand=1)
 
-        self.desc_scrollbar = tk.Scrollbar(self.desc_main_frame, orient='vertical')
-        self.desc_scrollbar.grid(column=1, row=0, rowspan=4, sticky='news')
-        # self.desc_scrollbar.pack(side='right', fill='y')
+        self.desc_scrollbar = tk.Scrollbar(self.desc_main_frame, orient='vertical', command=self.desc_canvas.yview, bg='#242424')
+        self.desc_scrollbar.pack(side='right', fill='y')
 
-        self.desc_alg1_textbox = tk.Text(self.desc_main_frame, height=5, width=30)
+        self.desc_canvas.configure(yscrollcommand=self.desc_scrollbar.set)
+        self.desc_canvas.bind('<Configure>', lambda e: self.desc_canvas.configure(scrollregion = self.desc_canvas.bbox("all")))
+
+        self.desc_inner_frame = tk.Frame(self.desc_canvas, bg='#242424')
+        self.desc_canvas.create_window((0,0), window=self.desc_inner_frame, anchor='nw')
+
+        self.desc_alg1_textbox = tk.Text(self.desc_inner_frame, height=5, bg='#242424', foreground='#f5f5f5')
         self.desc_alg1_textbox.insert(1.0,'Tutaj może jakiś tekst.\n A tu jeszcze trochę tekstu.')
         self.desc_alg1_textbox.configure(state='disabled')
-        # self.desc_alg1_textbox.pack(side='left')
-        self.desc_alg1_textbox.grid(column=0, row=0, sticky='news')
+        self.desc_alg1_textbox.grid(column=0, row=0, sticky='ew')
 
-        self.desc_alg1_label = tk.Label(self.desc_main_frame, height=5, width=20, text='Może tu jakiś wzór')
-        # self.desc_alg1_label.pack(side='left')
-        self.desc_alg1_label.grid(column=0, row=1, sticky='news')
+        self.desc_alg1_label = tk.Label(self.desc_inner_frame, height=5, text='Może tu jakiś wzór', anchor='w', bg='#242424', foreground='#f5f5f5')
+        self.desc_alg1_label.grid(column=0, row=1, sticky='ew')
 
-        self.desc_alg2_label = tk.Label(self.desc_main_frame, height=5, width=20, text='Może tu jeszcze jakiś wzór')
-        # self.desc_alg2_label.pack(side='bottom')
-        self.desc_alg2_label.grid(column=0, row=2, sticky='news')
+        self.desc_alg2_label = tk.Label(self.desc_inner_frame, height=5, text='Może tu jeszcze jakiś wzór', anchor='w', bg='#242424', foreground='#f5f5f5')
+        self.desc_alg2_label.grid(column=0, row=2, sticky='ew')
 
-        self.desc_alg2_textbox = tk.Text(self.desc_main_frame, height=5, width=30)
+        self.desc_alg2_textbox = tk.Text(self.desc_inner_frame, height=5, bg='#242424', foreground='#f5f5f5')
         self.desc_alg2_textbox.insert(1.0,'Tutaj może jakiś tekst.\n A tu jeszcze trochę tekstu.')
         self.desc_alg2_textbox.configure(state='disabled')
-        # self.desc_alg2_textbox.pack(side='left')
-        self.desc_alg2_textbox.grid(column=0, row=3, sticky='news')
+        self.desc_alg2_textbox.grid(column=0, row=3, sticky='ew')
+
+        self.desc_alg2_textbox = tk.Text(self.desc_inner_frame, height=5, bg='#242424', foreground='#f5f5f5')
+        self.desc_alg2_textbox.insert(1.0,'Tutaj może jakiś tekst.\n A tu jeszcze trochę tekstu.')
+        self.desc_alg2_textbox.configure(state='disabled')
+        self.desc_alg2_textbox.grid(column=0, row=4, sticky='ew')
 
     def setController(self, controller):
         self.controller = controller
