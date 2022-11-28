@@ -14,6 +14,7 @@ from tkinter.messagebox import showinfo
 class View():
     def __init__(self, master):
         self.root = master
+        self.root.protocol("WM_DELETE_WINDOW", self.app_close)
         self.controller = None
 
         #rozmiary okien, obrazów itp.
@@ -223,12 +224,21 @@ class View():
     def enc_selectalgorithm(self):
         print('wybrano algorytm: ', self.enc_option_radio.get())
 
+    def app_close(self):
+        self.root.quit()
+        self.root.destroy()
+
+    def inner_window_close(self, win):
+        # win.quit()
+        win.destroy()
+
     def enc_open_window(self):
         enc2_window = Toplevel(self.root)
         enc2_window.geometry(f'{self.small_window_width}x{self.small_window_height}')
         enc2_window.title('Chaotyczny program - po szyfrowaniu')
         enc2_window.configure(bg=self.dark_bg_color)
         enc2_window.resizable(False, False)
+        enc2_window.protocol("WM_DELETE_WINDOW", lambda: self.inner_window_close(enc2_window))
 
         #strona z zakodowanym obrazem
         page2_encode_results = tk.Frame(enc2_window, width=self.nb_page_width, height=self.nb_page_height, bg=self.dark_bg_color)
@@ -327,6 +337,7 @@ class View():
         dec2_window.title('Chaotyczny program - po deszyfrowaniu')
         dec2_window.configure(bg=self.dark_bg_color)
         dec2_window.resizable(False, False)
+        dec2_window.protocol("WM_DELETE_WINDOW", lambda: self.inner_window_close(dec2_window))
 
         #wyświetlenie odkodowanego obrazu
         dec2_img_base = Image.open("lena.jpg")
