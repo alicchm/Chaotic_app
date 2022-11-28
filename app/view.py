@@ -110,7 +110,8 @@ class View():
 
         #wyświetlanie załadowanego obrazu
         self.enc_image = Image.open("lena.jpg")
-        self.enc_image = self.enc_image.resize((self.max_image_width,self.max_image_height), Image.Resampling.LANCZOS)
+
+        self.enc_image = self.enc_image.resize(self.resize_image(self.enc_image), Image.Resampling.LANCZOS)
         self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)
 
         self.enc_image_label = ttk.Label(self.page_encode, image=self.enc_image_tk)
@@ -153,7 +154,7 @@ class View():
 
         #wyświetlanie załadowanego obrazu
         self.dec_image = Image.open("encoded.png")
-        self.dec_image = self.dec_image.resize((self.max_image_width,self.max_image_height), Image.Resampling.LANCZOS)
+        self.dec_image = self.dec_image.resize(self.resize_image(self.dec_image), Image.Resampling.LANCZOS)
         self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
 
         self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
@@ -207,6 +208,18 @@ class View():
 
         showinfo(title='Wybrany plik', message=enc_filename)
 
+    def resize_image(self, img):
+        width, height = img.size
+        if width>height:
+            if width>self.max_image_width:
+                height = (height*self.max_image_width)/width
+                width = self.max_image_width
+        else:
+            width = (width*self.max_image_height)/height
+            height = self.max_image_height
+        
+        return int(width), int(height)
+
     def enc_selectalgorithm(self):
         print('wybrano algorytm: ', self.enc_option_radio.get())
 
@@ -229,7 +242,7 @@ class View():
         
         #wyświetlenie zakodowanego obrazu
         enc2_img_base = Image.open("encoded.png")
-        enc2_img = ImageTk.PhotoImage(enc2_img_base.resize((self.max_image_width,self.max_image_height), Image.Resampling.LANCZOS))
+        enc2_img = ImageTk.PhotoImage(enc2_img_base.resize(self.resize_image(enc2_img_base), Image.Resampling.LANCZOS))
         enc2_img_label = tk.Label(page2_encode_results, image=enc2_img)
         enc2_img_label.img = enc2_img  
         enc2_img_label.place(relx=0.315, rely=0.5, anchor='center')
@@ -317,7 +330,7 @@ class View():
 
         #wyświetlenie odkodowanego obrazu
         dec2_img_base = Image.open("lena.jpg")
-        dec2_img = ImageTk.PhotoImage(dec2_img_base.resize((self.max_image_width,self.max_image_height), Image.Resampling.LANCZOS))
+        dec2_img = ImageTk.PhotoImage(dec2_img_base.resize(self.resize_image(dec2_img_base), Image.Resampling.LANCZOS))
         dec2_img_label = tk.Label(dec2_window, image=dec2_img)
         dec2_img_label.img = dec2_img  
         dec2_img_label.place(relx=0.315, rely=0.5, anchor='center')
