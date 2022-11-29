@@ -3,6 +3,9 @@ class Controller:
         self.model = model
         self.view = view
 
+    def start_encryption(self):
+        self.model.cryptogram = self.model.start_encryption(self.model.im, self.model.x, self.model.p)
+
     def set_x(self, x):
         self.model.x = x
 

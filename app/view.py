@@ -17,6 +17,16 @@ class View():
         self.root.protocol("WM_DELETE_WINDOW", self.app_close)
         self.controller = None
 
+        #zmienne
+        self.path = None
+        self.image = None
+        self.encrypted_image = None
+        self.image_todecrypt = None
+        self.image_decrypted = None
+        self.x = None
+        self.p = None
+        self.spx = None
+
         #miary
         self.key_sensivity = None
         self.npcr = None
@@ -213,6 +223,10 @@ class View():
             title = 'Wybierz obraz',
             filetypes=[('Obraz JPG','*.jpg')]
         )
+        #USTAWIANIE ŚCIEŻKI I OBRAZU
+        self.path = enc_filename
+        self.controller.set_image(self.path)
+        #TUTAJ SIE USTAWIA OBRAZEK JAKĄŚ FUNKCJĄ FOR EXAMPLE self.controller.get_image()
 
         showinfo(title='Wybrany plik', message=enc_filename)
 
@@ -258,7 +272,8 @@ class View():
         enc2_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
         
         #wyświetlenie zakodowanego obrazu
-        enc2_img_base = Image.open("encoded.png")
+        #TU MOŻNA Z PALCA ZROBIĆ JAK W FUNKACJACH ŁADUJĄCYCH OBRAZY PRZYPISZE SIĘ ZMIENNĄ
+        enc2_img_base = Image.open("encoded.png") #self.encrypted_image
         enc2_img = ImageTk.PhotoImage(enc2_img_base.resize(self.resize_image(enc2_img_base), Image.Resampling.LANCZOS))
         enc2_img_label = tk.Label(page2_encode_results, image=enc2_img)
         enc2_img_label.img = enc2_img  
@@ -396,5 +411,14 @@ class View():
         plt.axis('off')
         plt.imshow(im_p)
     
-
+    def start_encryption(self):
+        self.controller.set_ciphertype(self.enc_option_radio)
+        self.controller.start_encryption()
     
+    def set_image_for_enc(self):
+        self.enc_image = self.enc_image.resize(self.resize_image(self.image), Image.Resampling.LANCZOS)
+        self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)
+
+    def set_image_for_decr(self):
+        self.dec_image = self.dec_image.resize(self.resize_image(self.image_todecrypt), Image.Resampling.LANCZOS)
+        self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
