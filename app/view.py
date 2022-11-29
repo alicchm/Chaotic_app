@@ -17,6 +17,13 @@ class View():
         self.root.protocol("WM_DELETE_WINDOW", self.app_close)
         self.controller = None
 
+        #miary
+        self.key_sensivity = None
+        self.npcr = None
+        self.uaci = None
+        self.entropy = None
+        self.get_correlations = None
+
         #rozmiary okien, obrazów itp.
         self.root_window_width = 570
         self.root_window_height = 355
@@ -366,8 +373,15 @@ class View():
         plt.ylim((0,4000))
         plt.show()
 
+    def get_measures(self):
+        self.key_sensivity = self.controller.get_key_sensivity()
+        self.npcr = self.controller.get_npcr()
+        self.uaci = self.controller.get_uaci()
+        self.entropy = self.controller.get_entropy()
+        self.get_correlations = self.controller.get_correlations()
+
     def key_sensivity(self):
-        im_oryg, im_x, im_p = self.controler.get_key_sensivity()
+        im_oryg, im_x, im_p = self.key_sensivity()
         plt.figure(figsize=(20,10))
         
         plt.subplot(1,3,1)
@@ -381,3 +395,6 @@ class View():
         plt.subplot(1,3,3)
         plt.axis('off')
         plt.imshow(im_p)
+    
+
+    
