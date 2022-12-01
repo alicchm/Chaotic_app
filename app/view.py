@@ -20,6 +20,8 @@ class View():
         #zmienne
         self.path = None
         self.image = None
+        #self.enc_image = None
+        #self.enc_image_tk = None
         self.encrypted_image = None
         self.image_todecrypt = None
         self.image_decrypted = None
@@ -127,18 +129,10 @@ class View():
         self.enc_encode_button.place(relx=0.056, rely=0.82)
 
         #wyświetlanie załadowanego obrazu
-        self.enc_image = Image.open("lena.jpg")
-
-        self.enc_image = self.enc_image.resize(self.resize_image(self.enc_image), Image.Resampling.LANCZOS)
-        self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)
-
-        self.enc_image_label = ttk.Label(self.page_encode, image=self.enc_image_tk)
-        self.enc_image_label.place(relx=0.425, rely=0.082)
-
+        
         #strona z dekodowaniem
         #tło strony
-        self.dec_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
-        self.dec_bgimg_label = tk.Label(self.page_decode, bg=self.dark_bg_color) #image=dec_bg_img,
+        
         # dec_bgimg_label.img = enc_bg_img  
         # dec_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
@@ -227,7 +221,8 @@ class View():
         self.path = enc_filename
         self.controller.set_image(self.path)
         #TUTAJ SIE USTAWIA OBRAZEK JAKĄŚ FUNKCJĄ FOR EXAMPLE self.controller.get_image()
-
+        self.image = self.controller.get_image().copy()
+        self.set_image_for_enc()
         showinfo(title='Wybrany plik', message=enc_filename)
 
     def resize_image(self, img):
@@ -416,9 +411,15 @@ class View():
         self.controller.start_encryption()
     
     def set_image_for_enc(self):
-        self.enc_image = self.enc_image.resize(self.resize_image(self.image), Image.Resampling.LANCZOS)
+        print(self.image)
+        self.enc_image = self.image.resize(self.resize_image(self.image), Image.Resampling.LANCZOS)
         self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)
 
+        self.enc_image_label = ttk.Label(self.page_encode, image=self.enc_image_tk)
+        self.enc_image_label.place(relx=0.425, rely=0.082)
+
+
     def set_image_for_decr(self):
-        self.dec_image = self.dec_image.resize(self.resize_image(self.image_todecrypt), Image.Resampling.LANCZOS)
-        self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
+        #self.dec_im = 
+        self.dec_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
+        self.dec_bgimg_label = tk.Label(self.page_decode, bg=self.dark_bg_color) #image=dec_bg_img,

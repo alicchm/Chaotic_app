@@ -3,9 +3,10 @@ import numpy as np
 import collections as col
 import random
 from math import log2, sqrt
+import os
+import ntpath
 
-
-class Cipher():
+class Cipher:
     def __init__(self):
         self.alg_num = 1 #default wybrany czyli np 1/2
         self.source_path = ''
@@ -21,10 +22,12 @@ class Cipher():
 
     def set_source_path(self, path):
         self.source_path = path
+        print(self.source_path)
         self.set_image()
 
     def set_image(self):
-        self.image = Image.open(self.path)
+        self.image = Image.open(self.source_path)
+        print('JEZU')
 
 
     def start_encryption(self):

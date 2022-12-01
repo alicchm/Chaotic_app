@@ -2,6 +2,7 @@ class Controller:
     def __init__(self, view, model):
         self.model = model
         self.view = view
+        print('model gotów')
 
     def start_encryption(self):
         self.model.cryptogram = self.model.start_encryption(self.model.im, self.model.x, self.model.p)
@@ -13,7 +14,7 @@ class Controller:
         self.model.px = px
 
     def set_image(self, path):
-        self.model.source_path(path)
+        self.model.set_source_path(path)
 
     def set_Spx(self, Spx):
         self.model.Spx = Spx
