@@ -20,6 +20,7 @@ class View():
         #zmienne
         self.path = None
         self.image = None
+        self.cipher_type = 1
         #self.enc_image = None
         #self.enc_image_tk = None
         self.encrypted_image = None
@@ -82,6 +83,10 @@ class View():
         self.page_decode.grid(sticky='NESW')
         self.page_description.grid(sticky='NESW')
 
+        self.notebook.bind("<<NotebookTabChanged>>", self.routine)
+        self.notebook.bind("<<NotebookTabChanged>>", self.routine)
+        #self.page_description.bind("<<NotebookTabChanged>>", self.routine())
+
         self.notebook.add(self.page_encode, text='Szyfrowanie')
         self.notebook.add(self.page_decode, text='Deszyfrowanie')
         self.notebook.add(self.page_description, text='Opis algorytmów')
@@ -95,7 +100,7 @@ class View():
 
         #przycisk ładowania obrazu
         #page_encode.wm_attributes('-transparentcolor')
-        self.enc_loadimg_button = tk.Button(self.page_encode, text = 'Ładuj obraz', command=self.enc_openimage, width=15, height=1, bg=self.orange_color, bd=0)
+        self.enc_loadimg_button = tk.Button(self.page_encode, text = 'Ładuj obraz', command=lambda:self.enc_openimage(1), width=15, height=1, bg=self.orange_color, bd=0)
         self.enc_loadimg_button.place(relx=0.056, rely=0.1)
 
         #wybór algorytmu
@@ -103,12 +108,12 @@ class View():
         self.enc_style_radiobutton = ttk.Style()
         self.enc_style_radiobutton.configure('enc_radio.TRadiobutton', background=self.orange_color)
 
-        self.enc_algorithm1_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 1.', variable=self.enc_option_radio, value=1, command=self.enc_selectalgorithm, style='enc_radio.TRadiobutton')
+        self.enc_algorithm1_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 1.', variable=self.enc_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='enc_radio.TRadiobutton')
         self.enc_algorithm1_radio.place(relx=0.07, rely=0.29)
-
-        self.enc_algorithm2_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 2.', variable=self.enc_option_radio, value=2, command=self.enc_selectalgorithm, style='enc_radio.TRadiobutton')
+        
+        self.enc_algorithm2_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 2.', variable=self.enc_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='enc_radio.TRadiobutton')
         self.enc_algorithm2_radio.place(relx=0.07, rely=0.38)
-
+        self.enc_option_radio.set(1)
         #wartości x i p
         self.enc_x_label = tk.Label(self.page_encode, text='x:', bg=self.orange_color)
         self.enc_x_label.place(relx=0.07, rely=0.57)
@@ -125,20 +130,21 @@ class View():
         self.enc_p_spinbox.place(relx=0.105, rely=0.666)
 
         #szyfrowanie - start algorytmu
-        self.enc_encode_button = tk.Button(self.page_encode, text = 'Szyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.enc_open_window)
+        self.enc_encode_button = tk.Button(self.page_encode, text = 'Szyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.enc_open_window) #TU BD START ENC
         self.enc_encode_button.place(relx=0.056, rely=0.82)
 
         #wyświetlanie załadowanego obrazu
         
         #strona z dekodowaniem
         #tło strony
-        
+        self.dec_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
+        self.dec_bgimg_label = tk.Label(self.page_decode, bg=self.dark_bg_color)
         # dec_bgimg_label.img = enc_bg_img  
         # dec_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #przycisk ładowania obrazu
         #page_encode.wm_attributes('-transparentcolor')
-        self.dec_loadimg_button = tk.Button(self.page_decode, text = 'Ładuj obraz', command=self.enc_openimage, width=15, height=1, bg=self.orange_color, bd=0)
+        self.dec_loadimg_button = tk.Button(self.page_decode, text = 'Ładuj obraz', command=lambda:self.enc_openimage(2), width=15, height=1, bg=self.orange_color, bd=0)
         self.dec_loadimg_button.place(relx=0.056, rely=0.1)
 
         #wybór algorytmu
@@ -146,12 +152,12 @@ class View():
         self.dec_style_radiobutton = ttk.Style()
         self.dec_style_radiobutton.configure('dec_radio.TRadiobutton', background=self.orange_color)
 
-        self.dec_algorithm1_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 1.', variable=self.dec_option_radio, value=1, command=self.enc_selectalgorithm, style='dec_radio.TRadiobutton')
+        self.dec_algorithm1_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 1.', variable=self.dec_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='dec_radio.TRadiobutton')
         self.dec_algorithm1_radio.place(relx=0.07, rely=0.29)
 
-        self.dec_algorithm2_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 2.', variable=self.dec_option_radio, value=2, command=self.enc_selectalgorithm, style='dec_radio.TRadiobutton')
+        self.dec_algorithm2_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 2.', variable=self.dec_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='dec_radio.TRadiobutton')
         self.dec_algorithm2_radio.place(relx=0.07, rely=0.38)
-
+        self.dec_option_radio.set(1)
         #wartości x i p
         self.dec_key_label = tk.Label(self.page_decode, text='klucz:', bg=self.orange_color)
         self.dec_key_label.place(relx=0.07, rely=0.57)
@@ -164,13 +170,13 @@ class View():
         self.dec_encode_button = tk.Button(self.page_decode, text = 'Deszyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.dec_open_window)
         self.dec_encode_button.place(relx=0.056, rely=0.82)
 
-        #wyświetlanie załadowanego obrazu
-        self.dec_image = Image.open("encoded.png")
-        self.dec_image = self.dec_image.resize(self.resize_image(self.dec_image), Image.Resampling.LANCZOS)
-        self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
+        #wyświetlanie załadowanego obrazu TERAZ JEST W FUNKCJI set_image_for_dec
+        #self.dec_image = Image.open("encoded.png")
+        #self.dec_image = self.dec_image.resize(self.resize_image(self.dec_image), Image.Resampling.LANCZOS)
+        #self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
 
-        self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
-        self.dec_image_label.place(relx=0.425, rely=0.082)
+        #self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
+        #self.dec_image_label.place(relx=0.425, rely=0.082)
 
         #strona z opisem algorytmów
         self.desc_main_frame = tk.Frame(self.page_description, bg=self.dark_bg_color)
@@ -209,10 +215,30 @@ class View():
         self.desc_alg2_textbox.configure(state='disabled')
         self.desc_alg2_textbox.grid(column=0, row=4, sticky='ew')
 
+    def routine(self, event):
+        self.path = None
+        self.image = None
+        self.encrypted_image = None
+        self.image_todecrypt = None
+        self.image_decrypted = None
+        self.x = None
+        self.p = None
+        self.spx = None
+        self.cipher_type = 1
+        print('działa')
+        self.enc_option_radio.set(1)
+        self.dec_option_radio.set(1)
+        if hasattr(self, 'enc_image_label'):
+            self.enc_image_label.config(image='')
+            print('działa 1')
+
+        if hasattr(self, 'dec_image_label'):
+            self.dec_image_label.config(image='')
+            print('działa 2')
     def setController(self, controller):
         self.controller = controller
 
-    def enc_openimage(self):
+    def enc_openimage(self, tab_num):
         enc_filename = filedialog.askopenfilename(
             title = 'Wybierz obraz',
             filetypes=[('Obraz JPG','*.jpg')]
@@ -221,8 +247,13 @@ class View():
         self.path = enc_filename
         self.controller.set_image(self.path)
         #TUTAJ SIE USTAWIA OBRAZEK JAKĄŚ FUNKCJĄ FOR EXAMPLE self.controller.get_image()
-        self.image = self.controller.get_image().copy()
-        self.set_image_for_enc()
+        
+        if tab_num == 1:
+            self.image = self.controller.get_image().copy()
+            self.set_image_for_enc()
+        else:
+            self.image = self.controller.get_image().copy()
+            self.set_image_for_dec()
         showinfo(title='Wybrany plik', message=enc_filename)
 
     def resize_image(self, img):
@@ -237,8 +268,9 @@ class View():
         
         return int(width), int(height)
 
-    def enc_selectalgorithm(self):
+    def enc_selectalgorithm(self, cipher_type):
         print('wybrano algorytm: ', self.enc_option_radio.get())
+        self.cipher_type = cipher_type
 
     def app_close(self):
         self.root.quit()
@@ -419,7 +451,9 @@ class View():
         self.enc_image_label.place(relx=0.425, rely=0.082)
 
 
-    def set_image_for_decr(self):
-        #self.dec_im = 
-        self.dec_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
-        self.dec_bgimg_label = tk.Label(self.page_decode, bg=self.dark_bg_color) #image=dec_bg_img,
+    def set_image_for_dec(self):
+        self.dec_image = self.image.resize(self.resize_image(self.image), Image.Resampling.LANCZOS)
+        self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
+
+        self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
+        self.dec_image_label.place(relx=0.425, rely=0.082)

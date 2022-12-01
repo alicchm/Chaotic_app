@@ -27,8 +27,6 @@ class Cipher:
 
     def set_image(self):
         self.image = Image.open(self.source_path)
-        print('JEZU')
-
 
     def start_encryption(self):
         if self.source_path!='' and self.image!=None and self.x!=None and self.p!=None:
