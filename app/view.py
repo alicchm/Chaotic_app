@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 from io import BytesIO
-import win32clipboard
+import win32clipboard, os
+from datetime import datetime
 from controller import Controller
 from tkinter.messagebox import showinfo, showerror
 
@@ -250,13 +251,13 @@ class View():
     def enc_openimage(self, tab_num):
         enc_filename = filedialog.askopenfilename(
             title = 'Wybierz obraz',
-            filetypes=[('Obraz JPG i PNG','.jpg .png'), ('Obraz JPG','*.jpg'), ('Obraz PNG','*.png')]
+            filetypes=[('Obrazy JPG i PNG','.jpg .png'), ('Obraz JPG','*.jpg'), ('Obraz PNG','*.png')]
         )
 
         # showinfo(title='Wybrany plik', message=f'{enc_filename},{type(enc_filename)}')
         if enc_filename != '':
             if Image.open(enc_filename).mode == 'RGB':
-                showinfo(title='Wybrany plik', message=Image.open(enc_filename).mode)
+                # showinfo(title='Wybrany plik', message=Image.open(enc_filename).mode)
                 #USTAWIANIE ŚCIEŻKI I OBRAZU
                 self.path = enc_filename
                 self.controller.set_image(self.path)
@@ -272,6 +273,24 @@ class View():
                 msg = 'Wybrano nieobsługiwany typ pliku. Wymagany model przestrzeni barw obrazu to RGB (model RGBA nie jest obsługiwany).'
                 showerror(title='Nieobsługiwany plik', message=msg)
 
+    def save_img(self, parent_window, img, tab_number):
+        file_dir = filedialog.askdirectory(
+            initialdir=os.getcwd(), 
+            title='Zapisz plik',
+            parent=parent_window)
+
+        if file_dir!='' and self.path!=None: #and spx!=none
+            file_type = self.path.split('.')[1]
+            full_path = ''
+            if tab_number == 1: #zapisywanie zakodowanego obrazu
+                full_path = f'{file_dir}/encoded_{datetime.now().strftime("%Y%m%d_%H%M%S")}_{self.controller.get_Spx()}.{file_type}'
+                showinfo(title='Wybrany plik', message=full_path)
+            elif tab_number == 2:   #zapisywanie odkodowanego obrazu 
+                full_path = f'{file_dir}/decoded_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{file_type}'
+                showinfo(title='Wybrany plik', message=full_path)
+            img.save(full_path)
+
+        parent_window.focus_set()   #żeby podrzędne okno było dalej na wierzchu
 
     def resize_image(self, img):
         width, height = img.size
@@ -328,7 +347,7 @@ class View():
         enc2_img_label.place(relx=0.29, rely=0.5, anchor='center')
 
         #button - zapisz obraz
-        enc2_save_button = tk.Button(page2_encode_results, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0)
+        enc2_save_button = tk.Button(page2_encode_results, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.save_img(enc2_window, enc2_img_base, 1))
         enc2_save_button.place(relx=0.777, rely=0.219)
 
         #button - kopiuj obraz do schowka
@@ -426,7 +445,7 @@ class View():
         dec2_img_label.place(relx=0.29, rely=0.5, anchor='center')
 
         #button - zapisz obraz
-        dec2_save_button = tk.Button(dec2_window, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0)
+        dec2_save_button = tk.Button(dec2_window, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.save_img(dec2_window, dec2_img_base, 2))
         dec2_save_button.place(relx=0.777, rely=0.219)
 
         #button - kopiuj obraz do schowka
