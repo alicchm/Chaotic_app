@@ -7,9 +7,7 @@ import numpy as np
 from io import BytesIO
 import win32clipboard
 from controller import Controller
-
-#na czas implementacji
-from tkinter.messagebox import showinfo
+from tkinter.messagebox import showinfo, showerror
 
 class View():
     def __init__(self, master):
@@ -252,20 +250,28 @@ class View():
     def enc_openimage(self, tab_num):
         enc_filename = filedialog.askopenfilename(
             title = 'Wybierz obraz',
-            filetypes=[('Obraz JPG','*.jpg')]
+            filetypes=[('Obraz JPG i PNG','.jpg .png'), ('Obraz JPG','*.jpg'), ('Obraz PNG','*.png')]
         )
-        #USTAWIANIE ŚCIEŻKI I OBRAZU
-        self.path = enc_filename
-        self.controller.set_image(self.path)
-        #TUTAJ SIE USTAWIA OBRAZEK JAKĄŚ FUNKCJĄ FOR EXAMPLE self.controller.get_image()
-        
-        if tab_num == 1:
-            self.image = self.controller.get_image().copy()
-            self.set_image_for_enc()
-        else:
-            self.image = self.controller.get_image().copy()
-            self.set_image_for_dec()
-        #showinfo(title='Wybrany plik', message=enc_filename)
+
+        # showinfo(title='Wybrany plik', message=f'{enc_filename},{type(enc_filename)}')
+        if enc_filename != '':
+            if Image.open(enc_filename).mode == 'RGB':
+                showinfo(title='Wybrany plik', message=Image.open(enc_filename).mode)
+                #USTAWIANIE ŚCIEŻKI I OBRAZU
+                self.path = enc_filename
+                self.controller.set_image(self.path)
+                #TUTAJ SIE USTAWIA OBRAZEK JAKĄŚ FUNKCJĄ FOR EXAMPLE self.controller.get_image()
+                
+                if tab_num == 1:
+                    self.image = self.controller.get_image().copy()
+                    self.set_image_for_enc()
+                else:
+                    self.image = self.controller.get_image().copy()
+                    self.set_image_for_dec()
+            else:
+                msg = 'Wybrano nieobsługiwany typ pliku. Wymagany model przestrzeni barw obrazu to RGB (model RGBA nie jest obsługiwany).'
+                showerror(title='Nieobsługiwany plik', message=msg)
+
 
     def resize_image(self, img):
         width, height = img.size
