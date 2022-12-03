@@ -38,14 +38,23 @@ class View():
         self.get_correlations = None
 
         #rozmiary okien, obrazów itp.
-        self.root_window_width = 570
-        self.root_window_height = 355
-        self.small_window_width = 566
-        self.small_window_height = 345
-        self.nb_page_width = 566
-        self.nb_page_height = 325
-        self.max_image_width = 270
-        self.max_image_height = 270
+        self.root_window_width = 820 #570
+        self.root_window_height = 497 #355
+        self.small_window_width = 816 #566
+        self.small_window_height = 472 #345
+        self.nb_page_width = 816 #566
+        self.nb_page_height = 467 #325
+        self.max_image_width = 350 #270
+        self.max_image_height = 350 #270
+
+        #scieżki do obrazów w tle, logo, tytuł okien
+        self.main_window_bg = 'bg_img/encode_decode_bg2.png'
+        self.encoded_window_bg1 = 'bg_img/encoded_window_bg2.png'
+        self.encoded_window_bg2 = 'bg_img/encoded_measures_bg2.png'
+        self.decoded_window_bg = 'bg_img/decoded_window_bg2.png'
+
+        self.logo_img = 'app_logo_mini2.png'
+        self.window_title = 'Chaotyczne szyfrowanie obrazów'
 
         #paleta kolorów
         self.dark_bg_color = "#242424"
@@ -56,12 +65,13 @@ class View():
         self.dark_gray_color = "#93A295"
         self.light_gray_color = "#CED4CF"
 
+        #właściwości głównego okna
         self.root.geometry(f'{self.root_window_width}x{self.root_window_height}')
-        self.root.title('Chaotyczny program')
+        self.root.title(self.window_title)
         self.root.configure(bg=self.dark_bg_color)
         self.root.resizable(False, False) 
 
-        self.root_icon = ImageTk.PhotoImage(file = 'app_logo_mini2.png')
+        self.root_icon = ImageTk.PhotoImage(file = self.logo_img)
         self.root.iconphoto(False, self.root_icon)
 
         #notebook = tworzenie zakładek
@@ -93,15 +103,14 @@ class View():
 
         #strona z kodowaniem
         #tło strony
-        self.enc_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
+        self.enc_bg_img = ImageTk.PhotoImage(Image.open(self.main_window_bg))
         self.enc_bgimg_label = tk.Label(self.page_encode, image=self.enc_bg_img, bg=self.dark_bg_color)
         self.enc_bgimg_label.img = self.enc_bg_img  
         self.enc_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #przycisk ładowania obrazu
-        #page_encode.wm_attributes('-transparentcolor')
         self.enc_loadimg_button = tk.Button(self.page_encode, text = 'Ładuj obraz', command=lambda:self.enc_openimage(1), width=15, height=1, bg=self.orange_color, bd=0)
-        self.enc_loadimg_button.place(relx=0.056, rely=0.1)
+        self.enc_loadimg_button.place(relx=0.086, rely=0.2067)
 
         #wybór algorytmu
         self.enc_option_radio = tk.IntVar()
@@ -109,43 +118,43 @@ class View():
         self.enc_style_radiobutton.configure('enc_radio.TRadiobutton', background=self.orange_color)
 
         self.enc_algorithm1_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 1.', variable=self.enc_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='enc_radio.TRadiobutton')
-        self.enc_algorithm1_radio.place(relx=0.07, rely=0.29)
+        self.enc_algorithm1_radio.place(relx=0.09, rely=0.35)
         
         self.enc_algorithm2_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 2.', variable=self.enc_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='enc_radio.TRadiobutton')
-        self.enc_algorithm2_radio.place(relx=0.07, rely=0.38)
+        self.enc_algorithm2_radio.place(relx=0.09, rely=0.4)
         self.enc_option_radio.set(1)
         #wartości x i p
-        self.enc_x_label = tk.Label(self.page_encode, text='x:', bg=self.orange_color)
-        self.enc_x_label.place(relx=0.07, rely=0.57)
+        self.enc_x_label = tk.Label(self.page_encode, text='x =', bg=self.orange_color)
+        self.enc_x_label.place(relx=0.091, rely=0.55)
 
         self.enc_x_spinbox = tk.Spinbox(self.page_encode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
                             bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
-        self.enc_x_spinbox.place(relx=0.105, rely=0.576)
+        self.enc_x_spinbox.place(relx=0.125, rely=0.555)
 
-        self.enc_p_label = tk.Label(self.page_encode, text='p:', bg=self.orange_color)
-        self.enc_p_label.place(relx=0.07, rely=0.66)
+        self.enc_p_label = tk.Label(self.page_encode, text='p =', bg=self.orange_color)
+        self.enc_p_label.place(relx=0.091, rely=0.6)
 
         self.enc_p_spinbox = tk.Spinbox(self.page_encode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
                             bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
-        self.enc_p_spinbox.place(relx=0.105, rely=0.666)
+        self.enc_p_spinbox.place(relx=0.125, rely=0.605)
 
         #szyfrowanie - start algorytmu
         self.enc_encode_button = tk.Button(self.page_encode, text = 'Szyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.enc_open_window) #TU BD START ENC
-        self.enc_encode_button.place(relx=0.056, rely=0.82)
+        self.enc_encode_button.place(relx=0.086, rely=0.7398)
 
         #wyświetlanie załadowanego obrazu
+        #w funkcji set_image_for_enc()
         
         #strona z dekodowaniem
         #tło strony
-        self.dec_bg_img = ImageTk.PhotoImage(Image.open("encode_bg5.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
-        self.dec_bgimg_label = tk.Label(self.page_decode, bg=self.dark_bg_color)
-        # dec_bgimg_label.img = enc_bg_img  
-        # dec_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
+        self.dec_bg_img = ImageTk.PhotoImage(Image.open(self.main_window_bg))
+        self.dec_bgimg_label = tk.Label(self.page_decode, image=self.dec_bg_img, bg=self.dark_bg_color)
+        self.dec_bgimg_label.img = self.dec_bg_img  
+        self.dec_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #przycisk ładowania obrazu
-        #page_encode.wm_attributes('-transparentcolor')
         self.dec_loadimg_button = tk.Button(self.page_decode, text = 'Ładuj obraz', command=lambda:self.enc_openimage(2), width=15, height=1, bg=self.orange_color, bd=0)
-        self.dec_loadimg_button.place(relx=0.056, rely=0.1)
+        self.dec_loadimg_button.place(relx=0.086, rely=0.2067)
 
         #wybór algorytmu
         self.dec_option_radio = tk.IntVar()
@@ -153,22 +162,23 @@ class View():
         self.dec_style_radiobutton.configure('dec_radio.TRadiobutton', background=self.orange_color)
 
         self.dec_algorithm1_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 1.', variable=self.dec_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='dec_radio.TRadiobutton')
-        self.dec_algorithm1_radio.place(relx=0.07, rely=0.29)
+        self.dec_algorithm1_radio.place(relx=0.09, rely=0.35)
 
         self.dec_algorithm2_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 2.', variable=self.dec_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='dec_radio.TRadiobutton')
-        self.dec_algorithm2_radio.place(relx=0.07, rely=0.38)
+        self.dec_algorithm2_radio.place(relx=0.09, rely=0.4)
         self.dec_option_radio.set(1)
-        #wartości x i p
-        self.dec_key_label = tk.Label(self.page_decode, text='klucz:', bg=self.orange_color)
-        self.dec_key_label.place(relx=0.07, rely=0.57)
 
-        self.dec_key_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=100, format='%10.0f', increment=1, validate='focusout', width=10, relief='flat', 
+        #wartość klucza
+        self.dec_key_label = tk.Label(self.page_decode, text='Wartość klucza =', bg=self.orange_color)
+        self.dec_key_label.place(relx=0.095, rely=0.55)
+
+        self.dec_key_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=1000000000, format='%10.0f', increment=1, validate='focusout', width=11, relief='flat', 
                             bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color, justify=tk.RIGHT)
-        self.dec_key_spinbox.place(relx=0.105, rely=0.676)
+        self.dec_key_spinbox.place(relx=0.107, rely=0.6)
 
-        #szyfrowanie - start algorytmu
+        #deszyfrowanie - start algorytmu
         self.dec_encode_button = tk.Button(self.page_decode, text = 'Deszyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.dec_open_window)
-        self.dec_encode_button.place(relx=0.056, rely=0.82)
+        self.dec_encode_button.place(relx=0.086, rely=0.7398)
 
         #wyświetlanie załadowanego obrazu TERAZ JEST W FUNKCJI set_image_for_dec
         #self.dec_image = Image.open("encoded.png")
@@ -235,6 +245,7 @@ class View():
         if hasattr(self, 'dec_image_label'):
             self.dec_image_label.config(image='')
             print('działa 2')
+
     def setController(self, controller):
         self.controller = controller
 
@@ -254,18 +265,19 @@ class View():
         else:
             self.image = self.controller.get_image().copy()
             self.set_image_for_dec()
-        showinfo(title='Wybrany plik', message=enc_filename)
+        #showinfo(title='Wybrany plik', message=enc_filename)
 
     def resize_image(self, img):
         width, height = img.size
-        if width>height:
-            if width>self.max_image_width:
-                height = (height*self.max_image_width)/width
-                width = self.max_image_width
-        else:
-            width = (width*self.max_image_height)/height
-            height = self.max_image_height
-        
+        if width>self.max_image_width or height>self.max_image_height:
+            if width>height:
+                if width>self.max_image_width:
+                    height = (height*self.max_image_width)/width
+                    width = self.max_image_width
+            else:
+                width = (width*self.max_image_height)/height
+                height = self.max_image_height
+
         return int(width), int(height)
 
     def enc_selectalgorithm(self, cipher_type):
@@ -283,17 +295,20 @@ class View():
     def enc_open_window(self):
         enc2_window = Toplevel(self.root)
         enc2_window.geometry(f'{self.small_window_width}x{self.small_window_height}')
-        enc2_window.title('Chaotyczny program - po szyfrowaniu')
+        enc2_window.title(self.window_title)
         enc2_window.configure(bg=self.dark_bg_color)
         enc2_window.resizable(False, False)
         enc2_window.protocol("WM_DELETE_WINDOW", lambda: self.inner_window_close(enc2_window))
+
+        enc2_window_icon = ImageTk.PhotoImage(file = self.logo_img)
+        enc2_window.iconphoto(False, enc2_window_icon)
 
         #strona z zakodowanym obrazem
         page2_encode_results = tk.Frame(enc2_window, width=self.nb_page_width, height=self.nb_page_height, bg=self.dark_bg_color)
         page2_encode_results.grid(column=0, row=0, sticky='news')
 
         #tło strony
-        enc2_bg_img = ImageTk.PhotoImage(Image.open("encode2_bg2.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
+        enc2_bg_img = ImageTk.PhotoImage(Image.open(self.encoded_window_bg1))
         enc2_bgimg_label = tk.Label(page2_encode_results, image=enc2_bg_img, bg=self.dark_bg_color)
         enc2_bgimg_label.img = enc2_bg_img  
         enc2_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
@@ -304,39 +319,39 @@ class View():
         enc2_img = ImageTk.PhotoImage(enc2_img_base.resize(self.resize_image(enc2_img_base), Image.Resampling.LANCZOS))
         enc2_img_label = tk.Label(page2_encode_results, image=enc2_img)
         enc2_img_label.img = enc2_img  
-        enc2_img_label.place(relx=0.315, rely=0.5, anchor='center')
+        enc2_img_label.place(relx=0.29, rely=0.5, anchor='center')
 
         #button - zapisz obraz
         enc2_save_button = tk.Button(page2_encode_results, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0)
-        enc2_save_button.place(relx=0.72, rely=0.14)
+        enc2_save_button.place(relx=0.777, rely=0.219)
 
         #button - kopiuj obraz do schowka
         enc2_copy_button = tk.Button(page2_encode_results, text = 'Kopiuj obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.copy_to_clipboard(enc2_img_base))
-        enc2_copy_button.place(relx=0.72, rely=0.31)
+        enc2_copy_button.place(relx=0.777, rely=0.35)
 
         #label - klucz
-        enc2_key_label = tk.Label(page2_encode_results, text='Klucz:', bg=self.dark_gray_color, width=15, justify=CENTER)
-        enc2_key_label.place(relx=0.72, rely=0.49)
+        enc2_key_label = tk.Label(page2_encode_results, text='Wartość klucza =', bg=self.dark_gray_color, width=15, justify=CENTER)
+        enc2_key_label.place(relx=0.777, rely=0.49)
 
         #label - wartość klucza
         enc2_keyval_label = tk.Text(page2_encode_results, bg=self.light_gray_color, height=1, width=13, relief='flat', inactiveselectbackground=self.light_gray_color)
         enc2_keyval_label.insert(1.0,'1233456787')
         enc2_keyval_label.configure(state='disabled') #trzeba najpierw podać zawartość, potem zmienić stan
-        enc2_keyval_label.place(relx=0.742, rely=0.578)
+        enc2_keyval_label.place(relx=0.779, rely=0.54)
 
         #strona z miarami jakości
         page2_encode_measures = tk.Frame(enc2_window, width=self.nb_page_width, height=self.nb_page_height, bg=self.dark_bg_color)
         page2_encode_measures.grid(column=0, row=0, sticky='news')
         
         #tło strony
-        enc2_meas_bg_img = ImageTk.PhotoImage(Image.open("encode2_measures_bg.jpg").resize((self.nb_page_width,self.nb_page_height), Image.Resampling.LANCZOS))
+        enc2_meas_bg_img = ImageTk.PhotoImage(Image.open(self.encoded_window_bg2))
         enc2_meas_bgimg_label = tk.Label(page2_encode_measures, image=enc2_meas_bg_img, bg=self.dark_bg_color)
         enc2_meas_bgimg_label.img = enc2_meas_bg_img  
         enc2_meas_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #button - do wyników kodowania
-        enc2_toresults_button = tk.Button(page2_encode_measures, text = 'Powrót', width=8, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame(page2_encode_results))
-        enc2_toresults_button.place(relx=0.04, rely=0.885)
+        enc2_toresults_button = tk.Button(page2_encode_measures, text = 'Powrót', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame(page2_encode_results))
+        enc2_toresults_button.place(relx=0.029, rely=0.905)
 
         fig = plt.figure(figsize=(3,2),dpi=100)
         ax = fig.add_axes([0,0.1,0.8,0.8])
@@ -345,8 +360,8 @@ class View():
         line.draw()
 
         #button - do strony z miarami jakości
-        enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=8, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures, line, ax))
-        enc2_tomeasures_button.place(relx=0.86, rely=0.885)
+        enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures, line, ax))
+        enc2_tomeasures_button.place(relx=0.878, rely=0.929, anchor='center')
 
         self.change_frame(page2_encode_results) #żeby na starcie była otwarta pierwsza strona
 
@@ -383,25 +398,34 @@ class View():
     def dec_open_window(self):
         dec2_window = Toplevel(self.root)
         dec2_window.geometry(f'{self.small_window_width}x{self.small_window_height}')
-        dec2_window.title('Chaotyczny program - po deszyfrowaniu')
+        dec2_window.title(self.window_title)
         dec2_window.configure(bg=self.dark_bg_color)
         dec2_window.resizable(False, False)
         dec2_window.protocol("WM_DELETE_WINDOW", lambda: self.inner_window_close(dec2_window))
+
+        dec2_window_icon = ImageTk.PhotoImage(file = self.logo_img)
+        dec2_window.iconphoto(False, dec2_window_icon)
+
+        #tło strony
+        dec2_bg_img = ImageTk.PhotoImage(Image.open(self.decoded_window_bg))
+        dec2_bgimg_label = tk.Label(dec2_window, image=dec2_bg_img, bg=self.dark_bg_color)
+        dec2_bgimg_label.img = dec2_bg_img  
+        dec2_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #wyświetlenie odkodowanego obrazu
         dec2_img_base = Image.open("lena.jpg")
         dec2_img = ImageTk.PhotoImage(dec2_img_base.resize(self.resize_image(dec2_img_base), Image.Resampling.LANCZOS))
         dec2_img_label = tk.Label(dec2_window, image=dec2_img)
         dec2_img_label.img = dec2_img  
-        dec2_img_label.place(relx=0.315, rely=0.5, anchor='center')
+        dec2_img_label.place(relx=0.29, rely=0.5, anchor='center')
 
         #button - zapisz obraz
         dec2_save_button = tk.Button(dec2_window, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0)
-        dec2_save_button.place(relx=0.72, rely=0.14)
+        dec2_save_button.place(relx=0.777, rely=0.219)
 
         #button - kopiuj obraz do schowka
         dec2_copy_button = tk.Button(dec2_window, text = 'Kopiuj obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.copy_to_clipboard(dec2_img_base))
-        dec2_copy_button.place(relx=0.72, rely=0.31)
+        dec2_copy_button.place(relx=0.777, rely=0.35)
     
     def draw_histograms(im): #rysowanie histogramów
 
@@ -448,7 +472,7 @@ class View():
         self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)
 
         self.enc_image_label = ttk.Label(self.page_encode, image=self.enc_image_tk)
-        self.enc_image_label.place(relx=0.425, rely=0.082)
+        self.enc_image_label.place(relx=0.71, rely=0.502, anchor='center')
 
 
     def set_image_for_dec(self):
@@ -456,4 +480,4 @@ class View():
         self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
 
         self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
-        self.dec_image_label.place(relx=0.425, rely=0.082)
+        self.dec_image_label.place(relx=0.71, rely=0.502, anchor='center')
