@@ -16,7 +16,7 @@ class Cipher:
         self.Spx = None
 
         self.destination_path = ''
-        self.cryptogram = None
+        self.cryptogram = []
         self.decrypted_image = None
 
 
@@ -31,9 +31,9 @@ class Cipher:
     def start_encryption(self):
         if self.source_path!='' and self.image!=None and self.x!=None and self.p!=None:
             if self.cipher_type == 1:
-                self.encryption1(self)
+                return self.encryption1(self.image, self.x, self.p)
             elif self.cipher_type == 2:
-                self.encryption2(self)
+                return self.encryption2(self.image, self.x, self.p)
 
     def start_decryption(self):
         if self.source_path!='' and self.image!=None and self.Spx!=None:
@@ -45,19 +45,21 @@ class Cipher:
     def get_ciphertyper(self):
         return self.cipher_type
 
-    def m_map (xk, p):
+    def m_map(self, xk, p):
         if xk<=0.5 and xk>=0:
+            #print((xk/p)*(2-(xk/p)))
             return ((xk/p)*(2-(xk/p)))
         elif xk<=1 and xk>0.5:
+            #print(((1-xk)/p)*(2-((1-xk)/p)))
             return (((1-xk)/p)*(2-((1-xk)/p)))
     
-    def asymetric_tent_map(xk,p):
+    def asymetric_tent_map(self, xk, p):
         if xk<p and xk>0:
             return (xk/p)
         elif xk<1 and xk>=p:
             return ((1-xk)/(1-p))
         
-    def to_hex(x):
+    def to_hex(self, x):
         if x == 0:
             return [0, 0]
         hexa= []
@@ -72,7 +74,7 @@ class Cipher:
         return hexa
     #print(to_hex(255))
 
-    def to_decim(hexa):
+    def to_decim(self, hexa):
         length = len(hexa) - 1
         dec = 0
         for digit in hexa:
@@ -224,26 +226,34 @@ class Cipher:
             
         return sb
 
+    def calc_spx(self, im):  # suma pikseli, klucz prywatny s-box
+        px_sum = 0
+        for i in range(0,len(im)):
+            for j in range(0,len(im[i])):
+                for k in range(0,len(im[i][j])):
+                    px_sum += im[i][j][k]
+        return px_sum
+
     def encryption1(self, im, x1, p1):
         I = np.asarray(im)
         N, M = im.size #szerokość, wysokość
-        
+        print('COŚ DZIAŁA LOL')
         #obliczenie wartości klucza Spx
         Spx = self.calc_spx(I)
         print(Spx)
-            
-        sb = self.generate_sbox(Spx, N, M)
         p = p1
         xk = x1
+        sb = self.generate_sbox(xk, p, Spx, N, M)
+
         first_place = []
         last_place = []
-
-        deque_sb = self.col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
-
+        
+        deque_sb = col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
+        print(xk, p)
         for i in range(M): #po wierszach obrazu
             for j in range(N): #po kolumnach obrazu
                 xk = self.m_map(xk, p) #calculate xk from m_map
-
+                #print(xk)
                 #Read the S − box value for the pixels RGB components (S − box(px(i,j)));
                 new_px_vals = [deque_sb[I[i][j][0]],deque_sb[I[i][j][1]],deque_sb[I[i][j][2]]] 
 
@@ -251,14 +261,14 @@ class Cipher:
                     first_place.append(new_px_vals) #write value S − box(px(i,j)) in the first free place
                 elif xk > 0.5:
                     last_place.append(new_px_vals) #write value S − box(px(i,j)) in the last free place
-
+                
                 shift = int((256*xk)//1) #calculate shift
                 deque_sb.rotate(shift) #shift s-box
-                
+            #print(xk)
         #połączenie w całość pikseli zapisywanych od końca i od początku
         last_place_rv = last_place[::-1]
         first_place.extend(last_place_rv)
-        
+        #print(last_place_rv)
         #utworzenie nowej listy pikseli (zaszyfrowanych)
         px_list = []
         
@@ -267,11 +277,12 @@ class Cipher:
             px_list.append([])
             for j in range(N):
                 px_list[i].append(first_place[(i*M)+j])
-        
+        #print(px_list)
         #zapisanie listy jako obraz
-        self.cryptogram = Image.fromarray(np.uint8(px_list))
-        
-        return self.cryptogram
+        cryptogram = Image.fromarray(np.uint8(px_list))
+        print(np.asarray(cryptogram))
+        self.cryptogram = cryptogram
+        return cryptogram
 
     def decryption1(self, cryptogram, x1, p1):
         J = np.asarray(cryptogram)
@@ -313,9 +324,9 @@ class Cipher:
             decode_px.append([])
             for j in range(enc_N):
                 decode_px[i].append(px_list2[(i*enc_M)+j])
-                
-        self.cryptogram = Image.fromarray(np.uint8(decode_px))
 
+        self.cryptogram = Image.fromarray(np.uint8(decode_px))
+        return self.cryptogram
 
     #MIARY (metoda draw histograms jest w w widoku)
 

@@ -22,8 +22,8 @@ class View():
         self.cipher_type = 1
         #self.enc_image = None
         #self.enc_image_tk = None
-        self.encrypted_image = None
-        self.image_todecrypt = None
+        self.cryptogram = None
+        #self.image_todecrypt = None
         self.image_decrypted = None
         self.x = None
         self.p = None
@@ -138,7 +138,7 @@ class View():
         self.enc_p_spinbox.place(relx=0.125, rely=0.605)
 
         #szyfrowanie - start algorytmu
-        self.enc_encode_button = tk.Button(self.page_encode, text = 'Szyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.enc_open_window) #TU BD START ENC
+        self.enc_encode_button = tk.Button(self.page_encode, text = 'Szyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.start_encryption) #TU BD START ENC
         self.enc_encode_button.place(relx=0.086, rely=0.7398)
 
         #wyświetlanie załadowanego obrazu
@@ -340,18 +340,18 @@ class View():
         
         #wyświetlenie zakodowanego obrazu
         #TU MOŻNA Z PALCA ZROBIĆ JAK W FUNKACJACH ŁADUJĄCYCH OBRAZY PRZYPISZE SIĘ ZMIENNĄ
-        enc2_img_base = Image.open("encoded.png") #self.encrypted_image
-        enc2_img = ImageTk.PhotoImage(enc2_img_base.resize(self.resize_image(enc2_img_base), Image.Resampling.LANCZOS))
+        #enc2_img_base = Image.open("encoded.png") #self.encrypted_image
+        enc2_img = ImageTk.PhotoImage(self.cryptogram.resize(self.resize_image(self.cryptogram), Image.Resampling.LANCZOS))
         enc2_img_label = tk.Label(page2_encode_results, image=enc2_img)
         enc2_img_label.img = enc2_img  
         enc2_img_label.place(relx=0.29, rely=0.5, anchor='center')
 
         #button - zapisz obraz
-        enc2_save_button = tk.Button(page2_encode_results, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.save_img(enc2_window, enc2_img_base, 1))
+        enc2_save_button = tk.Button(page2_encode_results, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.save_img(enc2_window, self.cryptogram, 1))
         enc2_save_button.place(relx=0.777, rely=0.219)
 
         #button - kopiuj obraz do schowka
-        enc2_copy_button = tk.Button(page2_encode_results, text = 'Kopiuj obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.copy_to_clipboard(enc2_img_base))
+        enc2_copy_button = tk.Button(page2_encode_results, text = 'Kopiuj obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.copy_to_clipboard(self.cryptogram))
         enc2_copy_button.place(relx=0.777, rely=0.35)
 
         #label - klucz
@@ -488,8 +488,23 @@ class View():
         plt.imshow(im_p)
     
     def start_encryption(self):
-        self.controller.set_ciphertype(self.enc_option_radio)
-        self.controller.start_encryption()
+        print(self.enc_x_spinbox.get(), self.enc_p_spinbox.get(), self.enc_option_radio.get())
+        self.controller.set_x(float(self.enc_x_spinbox.get()))
+        self.controller.set_p(float(self.enc_p_spinbox.get()))
+        self.controller.set_ciphertype(float(self.enc_option_radio.get()))
+        self.cryptogram = self.controller.start_encryption()
+        print(np.asarray(self.cryptogram))
+        self.enc_open_window()
+        self.routine(1)
+
+    def start_decryption(self):
+        self.controller.set_x(float(self.dec_x_spinbox.get()))
+        self.controller.set_p(float(self.dec_p_spinbox.get()))
+        self.controller.set_ciphertype(float(self.dec_option_radio.get()))
+        self.cryptogram = self.controller.start_encryption()
+        print(np.asarray(self.cryptogram))
+        self.enc_open_window()
+        self.routine(1)
     
     def set_image_for_enc(self):
         print(self.image)
@@ -505,4 +520,5 @@ class View():
         self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
 
         self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
-        self.dec_image_label.place(relx=0.71, rely=0.502, anchor='center')
+        self.dec_image_label.place(relx=0.71, rely=0.502, anchor='center') 
+    

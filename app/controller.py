@@ -1,3 +1,5 @@
+import numpy as np
+
 class Controller:
     def __init__(self, view, model):
         self.model = model
@@ -5,13 +7,18 @@ class Controller:
         print('model gotów')
 
     def start_encryption(self):
-        self.model.cryptogram = self.model.start_encryption(self.model.im, self.model.x, self.model.p)
+        self.model.cryptogram = self.model.start_encryption()
+        return self.model.cryptogram
+
+    def start_decryption(self):
+        self.model.decryptogram = self.model.start_decryption()
+        return self.model.decryptogram
 
     def set_x(self, x):
         self.model.x = x
 
-    def set_px(self, px):
-        self.model.px = px
+    def set_p(self, p):
+        self.model.p = p
 
     def set_image(self, path):
         self.model.set_source_path(path)
@@ -35,6 +42,7 @@ class Controller:
         return self.model.Spx
 
     def get_cryptogram(self):
+        print(np.asarray(self.model.cryptogram))
         return self.model.cryptogram
     
     def get_key_sensivity(self, change_value):
