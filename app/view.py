@@ -47,7 +47,8 @@ class View():
         self.max_image_height = 350 #270
 
         #scieżki do obrazów w tle, logo, tytuł okien
-        self.main_window_bg = 'bg_img/encode_decode_bg2.png'
+        self.main_encode_bg = 'bg_img/encode_bg2.png'
+        self.main_decode_bg = 'bg_img/decode_bg2.png'
         self.encoded_window_bg1 = 'bg_img/encoded_window_bg2.png'
         self.encoded_window_bg2 = 'bg_img/encoded_measures_bg2.png'
         self.decoded_window_bg = 'bg_img/decoded_window_bg2.png'
@@ -102,7 +103,7 @@ class View():
 
         #strona z kodowaniem
         #tło strony
-        self.enc_bg_img = ImageTk.PhotoImage(Image.open(self.main_window_bg))
+        self.enc_bg_img = ImageTk.PhotoImage(Image.open(self.main_encode_bg))
         self.enc_bgimg_label = tk.Label(self.page_encode, image=self.enc_bg_img, bg=self.dark_bg_color)
         self.enc_bgimg_label.img = self.enc_bg_img  
         self.enc_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
@@ -122,6 +123,7 @@ class View():
         self.enc_algorithm2_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 2.', variable=self.enc_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='enc_radio.TRadiobutton')
         self.enc_algorithm2_radio.place(relx=0.09, rely=0.4)
         self.enc_option_radio.set(1)
+
         #wartości x i p
         self.enc_x_label = tk.Label(self.page_encode, text='x =', bg=self.orange_color)
         self.enc_x_label.place(relx=0.091, rely=0.55)
@@ -146,14 +148,14 @@ class View():
         
         #strona z dekodowaniem
         #tło strony
-        self.dec_bg_img = ImageTk.PhotoImage(Image.open(self.main_window_bg))
+        self.dec_bg_img = ImageTk.PhotoImage(Image.open(self.main_decode_bg))
         self.dec_bgimg_label = tk.Label(self.page_decode, image=self.dec_bg_img, bg=self.dark_bg_color)
         self.dec_bgimg_label.img = self.dec_bg_img  
         self.dec_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #przycisk ładowania obrazu
         self.dec_loadimg_button = tk.Button(self.page_decode, text = 'Ładuj obraz', command=lambda:self.enc_openimage(2), width=15, height=1, bg=self.orange_color, bd=0)
-        self.dec_loadimg_button.place(relx=0.086, rely=0.2067)
+        self.dec_loadimg_button.place(relx=0.086, rely=0.17)
 
         #wybór algorytmu
         self.dec_option_radio = tk.IntVar()
@@ -161,23 +163,38 @@ class View():
         self.dec_style_radiobutton.configure('dec_radio.TRadiobutton', background=self.orange_color)
 
         self.dec_algorithm1_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 1.', variable=self.dec_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='dec_radio.TRadiobutton')
-        self.dec_algorithm1_radio.place(relx=0.09, rely=0.35)
+        self.dec_algorithm1_radio.place(relx=0.09, rely=0.31)
 
         self.dec_algorithm2_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 2.', variable=self.dec_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='dec_radio.TRadiobutton')
-        self.dec_algorithm2_radio.place(relx=0.09, rely=0.4)
+        self.dec_algorithm2_radio.place(relx=0.09, rely=0.36)
         self.dec_option_radio.set(1)
+
+        #wartości x i p
+        self.dec_x_label = tk.Label(self.page_decode, text='x =', bg=self.orange_color)
+        self.dec_x_label.place(relx=0.091, rely=0.455)
+
+        self.dec_x_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
+                            bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
+        self.dec_x_spinbox.place(relx=0.125, rely=0.46)
+
+        self.dec_p_label = tk.Label(self.page_decode, text='p =', bg=self.orange_color)
+        self.dec_p_label.place(relx=0.091, rely=0.505)
+
+        self.dec_p_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
+                            bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
+        self.dec_p_spinbox.place(relx=0.125, rely=0.51)
 
         #wartość klucza
         self.dec_key_label = tk.Label(self.page_decode, text='Wartość klucza =', bg=self.orange_color)
-        self.dec_key_label.place(relx=0.095, rely=0.55)
+        self.dec_key_label.place(relx=0.095, rely=0.595)
 
         self.dec_key_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=1000000000, format='%10.0f', increment=1, validate='focusout', width=11, relief='flat', 
                             bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color, justify=tk.RIGHT)
-        self.dec_key_spinbox.place(relx=0.107, rely=0.6)
+        self.dec_key_spinbox.place(relx=0.107, rely=0.645)
 
         #deszyfrowanie - start algorytmu
         self.dec_encode_button = tk.Button(self.page_decode, text = 'Deszyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.dec_open_window)
-        self.dec_encode_button.place(relx=0.086, rely=0.7398)
+        self.dec_encode_button.place(relx=0.086, rely=0.786)
 
         #wyświetlanie załadowanego obrazu TERAZ JEST W FUNKCJI set_image_for_dec
         #self.dec_image = Image.open("encoded.png")
