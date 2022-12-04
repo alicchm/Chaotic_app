@@ -31,16 +31,20 @@ class Cipher:
     def start_encryption(self):
         if self.source_path!='' and self.image!=None and self.x!=None and self.p!=None:
             if self.cipher_type == 1:
-                return self.encryption1(self.image, self.x, self.p)
+                self.cryptogram = self.encryption1(self.image, self.x, self.p)
+                return self.cryptogram
             elif self.cipher_type == 2:
-                return self.encryption2(self.image, self.x, self.p)
+                self.cryptogram = self.encryption2(self.image, self.x, self.p)
+                return self.cryptogram
 
     def start_decryption(self):
         if self.source_path!='' and self.image!=None and self.Spx!=None:
             if self.cipher_type == 1:
-                self.decryption1(self)
+                self.decrypted_image = self.decryption1(self.image, self.Spx, self.x, self.p)
+                return self.decrypted_image
             elif self.cipher_type == 2:
-                self.decryption2(self)
+                self.decrypted_image = self.decryption2(self.image, self.Spx, self.x, self.p)
+                return self.decrypted_image
 
     def get_ciphertyper(self):
         return self.cipher_type
@@ -144,12 +148,12 @@ class Cipher:
 
         return cryptogram
 
-    def decryption2(self, im, x1, p1):
+    def decryption2(self, im, Spx, x1, p1):
         N,M = im.size
         #print(im.size)
         px = np.asarray(im)
         p = p1
-        Spx = self.Spx
+        Spx = Spx
         xk = x1
         decrypted_im = []
         taba = []
@@ -199,7 +203,7 @@ class Cipher:
             for j in range(N):
                 decode_px[i].append(px_list[(i*M)+j])
         decrypted_image =  Image.fromarray(np.uint8(decode_px))
-        
+        decrypted_image.save("odszyfrowane.jpg")
         return decrypted_image
         
 
@@ -237,9 +241,10 @@ class Cipher:
     def encryption1(self, im, x1, p1):
         I = np.asarray(im)
         N, M = im.size #szerokość, wysokość
-        print('COŚ DZIAŁA LOL')
+        print('DZIAŁA')
         #obliczenie wartości klucza Spx
-        Spx = self.calc_spx(I)
+        self.Spx = self.calc_spx(I)
+        Spx = self.Spx
         print(Spx)
         p = p1
         xk = x1
@@ -281,21 +286,22 @@ class Cipher:
         #zapisanie listy jako obraz
         cryptogram = Image.fromarray(np.uint8(px_list))
         print(np.asarray(cryptogram))
-        self.cryptogram = cryptogram
+
         return cryptogram
 
-    def decryption1(self, cryptogram, x1, p1):
+    def decryption1(self, cryptogram, Spx, x1, p1):
         J = np.asarray(cryptogram)
         enc_N, enc_M = cryptogram.size
         
         J_flatter = J.reshape(enc_N*enc_M,3) #zmiana struktury na listę pikseli
         J_flatter
         
-        sb = self.generate_sbox(self.Spx, enc_N, enc_M)
+        
         
         px_list2 = []
         xk2 = x1
         p = p1
+        sb = self.generate_sbox(xk2, p, Spx, enc_N, enc_M)
         deque_sb = col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
 
         while len(J_flatter)>0:
@@ -325,8 +331,8 @@ class Cipher:
             for j in range(enc_N):
                 decode_px[i].append(px_list2[(i*enc_M)+j])
 
-        self.cryptogram = Image.fromarray(np.uint8(decode_px))
-        return self.cryptogram
+        decrypted = Image.fromarray(np.uint8(decode_px))
+        return decrypted
 
     #MIARY (metoda draw histograms jest w w widoku)
 
@@ -532,4 +538,3 @@ class Cipher:
         r.append(r_temp)
         
         return r
-        

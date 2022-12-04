@@ -11,8 +11,8 @@ class Controller:
         return self.model.cryptogram
 
     def start_decryption(self):
-        self.model.decryptogram = self.model.start_decryption()
-        return self.model.decryptogram
+        self.model.decrypted_image = self.model.start_decryption()
+        return self.model.decrypted_image
 
     def set_x(self, x):
         self.model.x = x

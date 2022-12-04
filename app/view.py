@@ -9,6 +9,7 @@ import win32clipboard, os
 from datetime import datetime
 from controller import Controller
 from tkinter.messagebox import showinfo, showerror
+import copy
 
 class View():
     def __init__(self, master):
@@ -19,12 +20,15 @@ class View():
         #zmienne
         self.path = None
         self.image = None
+        self.image_toview = None
         self.cipher_type = 1
         #self.enc_image = None
         #self.enc_image_tk = None
         self.cryptogram = None
+        self.cryptogram_toview = None
         #self.image_todecrypt = None
         self.image_decrypted = None
+        self.image_decrypted_toview = None
         self.x = None
         self.p = None
         self.spx = None
@@ -193,7 +197,7 @@ class View():
         self.dec_key_spinbox.place(relx=0.107, rely=0.645)
 
         #deszyfrowanie - start algorytmu
-        self.dec_encode_button = tk.Button(self.page_decode, text = 'Deszyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.dec_open_window)
+        self.dec_encode_button = tk.Button(self.page_decode, text = 'Deszyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.start_decryption)
         self.dec_encode_button.place(relx=0.086, rely=0.786)
 
         #wyświetlanie załadowanego obrazu TERAZ JEST W FUNKCJI set_image_for_dec
@@ -305,7 +309,7 @@ class View():
             elif tab_number == 2:   #zapisywanie odkodowanego obrazu 
                 full_path = f'{file_dir}/decoded_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{file_type}'
                 showinfo(title='Wybrany plik', message=full_path)
-            img.save(full_path)
+            img.save(full_path, quality=100, subsampling=0)
 
         parent_window.focus_set()   #żeby podrzędne okno było dalej na wierzchu
 
@@ -357,8 +361,9 @@ class View():
         
         #wyświetlenie zakodowanego obrazu
         #TU MOŻNA Z PALCA ZROBIĆ JAK W FUNKACJACH ŁADUJĄCYCH OBRAZY PRZYPISZE SIĘ ZMIENNĄ
-        #enc2_img_base = Image.open("encoded.png") #self.encrypted_image
-        enc2_img = ImageTk.PhotoImage(self.cryptogram.resize(self.resize_image(self.cryptogram), Image.Resampling.LANCZOS))
+        #nc2_img_base = Image.open("encoded.png") #self.encrypted_image
+        self.cryptogram_toview = copy.copy(self.cryptogram)
+        enc2_img = ImageTk.PhotoImage(self.cryptogram_toview.resize(self.resize_image(self.cryptogram_toview), Image.Resampling.LANCZOS))
         enc2_img_label = tk.Label(page2_encode_results, image=enc2_img)
         enc2_img_label.img = enc2_img  
         enc2_img_label.place(relx=0.29, rely=0.5, anchor='center')
@@ -377,7 +382,7 @@ class View():
 
         #label - wartość klucza
         enc2_keyval_label = tk.Text(page2_encode_results, bg=self.light_gray_color, height=1, width=13, relief='flat', inactiveselectbackground=self.light_gray_color)
-        enc2_keyval_label.insert(1.0,'1233456787')
+        enc2_keyval_label.insert(1.0, self.spx)
         enc2_keyval_label.configure(state='disabled') #trzeba najpierw podać zawartość, potem zmienić stan
         enc2_keyval_label.place(relx=0.779, rely=0.54)
 
@@ -428,7 +433,7 @@ class View():
 
     def copy_to_clipboard(self, image1): #kopiowanie obrazu do schowka
         output = BytesIO()
-        image1.convert("RGB").save(output, "BMP")
+        image1.convert("RGB").save(output, "BMP", quality=100, subsampling=0)
         data = output.getvalue()[14:]
         output.close()
 
@@ -455,18 +460,19 @@ class View():
         dec2_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #wyświetlenie odkodowanego obrazu
-        dec2_img_base = Image.open("lena.jpg")
-        dec2_img = ImageTk.PhotoImage(dec2_img_base.resize(self.resize_image(dec2_img_base), Image.Resampling.LANCZOS))
+        #dec2_img_base = Image.open("lena.jpg")
+        self.image_decrypted_toview = copy.copy(self.image_decrypted)
+        dec2_img = ImageTk.PhotoImage(self.image_decrypted_toview.resize(self.resize_image(self.image_decrypted_toview), Image.Resampling.LANCZOS))
         dec2_img_label = tk.Label(dec2_window, image=dec2_img)
         dec2_img_label.img = dec2_img  
         dec2_img_label.place(relx=0.29, rely=0.5, anchor='center')
 
         #button - zapisz obraz
-        dec2_save_button = tk.Button(dec2_window, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.save_img(dec2_window, dec2_img_base, 2))
+        dec2_save_button = tk.Button(dec2_window, text = 'Zapisz obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.save_img(dec2_window, self.image_decrypted, 2))
         dec2_save_button.place(relx=0.777, rely=0.219)
 
         #button - kopiuj obraz do schowka
-        dec2_copy_button = tk.Button(dec2_window, text = 'Kopiuj obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.copy_to_clipboard(dec2_img_base))
+        dec2_copy_button = tk.Button(dec2_window, text = 'Kopiuj obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.copy_to_clipboard(self.image_decrypted))
         dec2_copy_button.place(relx=0.777, rely=0.35)
     
     def draw_histograms(im): #rysowanie histogramów
@@ -510,22 +516,25 @@ class View():
         self.controller.set_p(float(self.enc_p_spinbox.get()))
         self.controller.set_ciphertype(float(self.enc_option_radio.get()))
         self.cryptogram = self.controller.start_encryption()
+        self.spx = self.controller.get_Spx()
         print(np.asarray(self.cryptogram))
         self.enc_open_window()
-        self.routine(1)
+        #self.routine(1)
 
     def start_decryption(self):
         self.controller.set_x(float(self.dec_x_spinbox.get()))
         self.controller.set_p(float(self.dec_p_spinbox.get()))
+        self.controller.set_Spx(float(self.dec_key_spinbox.get()))
         self.controller.set_ciphertype(float(self.dec_option_radio.get()))
-        self.cryptogram = self.controller.start_encryption()
-        print(np.asarray(self.cryptogram))
-        self.enc_open_window()
-        self.routine(1)
+        self.image_decrypted = self.controller.start_decryption()
+        #print(np.asarray(self.cryptogram))
+        self.dec_open_window()
+        #self.routine(1)
     
     def set_image_for_enc(self):
         print(self.image)
-        self.enc_image = self.image.resize(self.resize_image(self.image), Image.Resampling.LANCZOS)
+        self.image_toview = copy.copy(self.image)
+        self.enc_image = self.image_toview.resize(self.resize_image(self.image_toview), Image.Resampling.LANCZOS)
         self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)
 
         self.enc_image_label = ttk.Label(self.page_encode, image=self.enc_image_tk)
@@ -533,7 +542,8 @@ class View():
 
 
     def set_image_for_dec(self):
-        self.dec_image = self.image.resize(self.resize_image(self.image), Image.Resampling.LANCZOS)
+        self.image_toview = copy.copy(self.image)
+        self.dec_image = self.image_toview.resize(self.resize_image(self.image_toview), Image.Resampling.LANCZOS)
         self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
 
         self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
