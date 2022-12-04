@@ -210,9 +210,17 @@ class View():
         self.dec_key_label = tk.Label(self.page_decode, text='Wartość klucza =', bg=self.orange_color)
         self.dec_key_label.place(relx=0.095, rely=0.595)
 
-        self.dec_key_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=1000000000, format='%10.0f', increment=1, validate='focusout', width=11, relief='flat', 
-                            bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color, justify=tk.RIGHT)
-        self.dec_key_spinbox.place(relx=0.107, rely=0.645)
+        self.dec_key = tk.StringVar()
+        self.dec_key_before = tk.StringVar()
+        self.dec_key_range = ['0', '1000000000']
+        self.dec_key.set(self.dec_key_range[0])
+        self.dec_key_before.set(self.dec_key_range[0])
+
+        entry_key_function = self.root.register(self.entry_key_validate)
+        entry_key_inval_function = self.root.register(self.entry_key_invalid)
+        self.dec_key_entry = tk.Entry(self.page_decode, width=11, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.dec_key, justify=tk.LEFT)
+        self.dec_key_entry.config(validate='focusout', validatecommand=(entry_key_function,'%P'), invalidcommand=(entry_key_inval_function))        
+        self.dec_key_entry.place(relx=0.107, rely=0.645)
 
         #deszyfrowanie - start algorytmu
         self.dec_encode_button = tk.Button(self.page_decode, text = 'Deszyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.dec_open_window)
@@ -277,6 +285,7 @@ class View():
         self.enc_p.set(self.enc_p_range[0])
         self.enc_x_before.set(self.enc_x_range[0])
         self.enc_p_before.set(self.enc_p_range[0])
+        self.dec_key.set(self.dec_key_range[0])
         print('działa')
         self.enc_option_radio.set(1)
         self.dec_option_radio.set(1)
@@ -319,6 +328,13 @@ class View():
     def check_if_float(self, value):
         try:
             float(value)
+            return True
+        except ValueError:
+            return False
+
+    def check_if_int(self, value):
+        try:
+            int(value)
             return True
         except ValueError:
             return False
@@ -414,6 +430,27 @@ class View():
         self.dec_p_entry.insert(0,float(self.enc_p_before.get()))
 
         self.enc_p.set(self.enc_p_before.get())
+
+    def entry_key_validate(self, value): #walidacja wprowadzonej wartości klucza
+        if value != '' and self.check_if_int(value) == True:
+            val_int = int(value)
+            if val_int>=0:
+                self.dec_key.set(val_int)
+                self.dec_key_before.set(val_int)
+                return True
+            else:
+                return False
+        else:      
+            return False
+
+    def entry_key_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości klucza
+        msg = f'Podana wartość jest nieprawidłowa. Podaj nieujemną liczbę całkowitą.'
+        showerror(title='Niepoprawna wartość', message=msg)
+        
+        self.dec_key_entry.delete(0,tk.END)
+        self.dec_key_entry.insert(0,int(self.dec_key_before.get()))
+
+        self.dec_key.set(self.dec_key_before.get())
 
     def save_img(self, parent_window, img, tab_number):
         file_dir = filedialog.askdirectory(
