@@ -124,20 +124,37 @@ class View():
         self.enc_algorithm2_radio.place(relx=0.09, rely=0.4)
         self.enc_option_radio.set(1)
 
-        #wartości x i p
+        #wartość x
+        self.enc_x = tk.StringVar()
+        self.enc_x_before = tk.StringVar()
+        self.enc_x_range = ['0.001', '0.999']
+        self.enc_x.set(self.enc_x_range[0])
+        self.enc_x_before.set(self.enc_x_range[0])
+
         self.enc_x_label = tk.Label(self.page_encode, text='x =', bg=self.orange_color)
         self.enc_x_label.place(relx=0.091, rely=0.55)
 
-        self.enc_x_spinbox = tk.Spinbox(self.page_encode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
-                            bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
-        self.enc_x_spinbox.place(relx=0.125, rely=0.555)
+        entry_x_val_function = self.root.register(self.entry_x_validate)
+        entry_x_inval_function = self.root.register(self.entry_x_invalid)
+        self.enc_x_entry = tk.Entry(self.page_encode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_x, justify=tk.LEFT)
+        self.enc_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function,'%P'), invalidcommand=(entry_x_inval_function))
+        self.enc_x_entry.place(relx=0.125, rely=0.555)
+
+        #wartość p
+        self.enc_p = tk.StringVar()
+        self.enc_p_before = tk.StringVar()
+        self.enc_p_range = ['0.25', '0.5']
+        self.enc_p.set(self.enc_p_range[0])
+        self.enc_p_before.set(self.enc_p_range[0])
 
         self.enc_p_label = tk.Label(self.page_encode, text='p =', bg=self.orange_color)
         self.enc_p_label.place(relx=0.091, rely=0.6)
 
-        self.enc_p_spinbox = tk.Spinbox(self.page_encode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
-                            bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
-        self.enc_p_spinbox.place(relx=0.125, rely=0.605)
+        entry_p_val_function = self.root.register(self.entry_p_validate)
+        entry_p_inval_function = self.root.register(self.entry_p_invalid)
+        self.enc_p_entry = tk.Entry(self.page_encode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_p, justify=tk.LEFT)
+        self.enc_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function,'%P'), invalidcommand=(entry_p_inval_function))        
+        self.enc_p_entry.place(relx=0.125, rely=0.605)
 
         #szyfrowanie - start algorytmu
         self.enc_encode_button = tk.Button(self.page_encode, text = 'Szyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.start_encryption) #TU BD START ENC
@@ -290,6 +307,59 @@ class View():
                 msg = 'Wybrano nieobsługiwany typ pliku. Wymagany model przestrzeni barw obrazu to RGB (model RGBA nie jest obsługiwany).'
                 showerror(title='Nieobsługiwany plik', message=msg)
 
+    def check_if_float(self, value):
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
+    def entry_x_validate(self, value): #walidacja wprowadzonej wartości x
+        if value != '' and self.check_if_float(value) == True:
+            val_float = float(value)
+            #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
+            self.enc_x.set(val_float)
+            self.enc_x_before.set(val_float)
+            return True
+        else:       
+            return False
+
+    def entry_x_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
+        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
+        showerror(title='Niepoprawna wartość', message=msg)
+        
+        self.enc_x_entry.delete(0,tk.END)
+        self.enc_x_entry.insert(0,float(self.enc_x_before.get()))
+
+        self.enc_x.set(self.enc_x_before.get())
+
+    def entry_p_validate(self, value): #walidacja wprowadzonej wartości p
+        if value != '' and self.check_if_float(value) == True:
+            val_float = float(value)
+            if (val_float<=0.5 and val_float>=0.25 and self.enc_option_radio.get()==1) or (val_float<1 and val_float>0 and self.enc_option_radio.get()==2):
+                self.enc_p.set(val_float)
+                self.enc_p_before.set(val_float)
+                return True
+            else: 
+                return False
+        else:      
+            return False
+
+    def entry_p_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
+        range = ''
+        print(self.enc_option_radio.get())
+        if self.enc_option_radio.get() == 1:
+            range = f'[0.25, 0.5]'
+        else:
+            range = f'(0, 1)'
+        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
+        showerror(title='Niepoprawna wartość', message=msg)
+        
+        self.enc_p_entry.delete(0,tk.END)
+        self.enc_p_entry.insert(0,float(self.enc_p_before.get()))
+
+        self.enc_p.set(self.enc_p_before.get())
+
     def save_img(self, parent_window, img, tab_number):
         file_dir = filedialog.askdirectory(
             initialdir=os.getcwd(), 
@@ -324,6 +394,22 @@ class View():
 
     def enc_selectalgorithm(self, cipher_type):
         print('wybrano algorytm: ', self.enc_option_radio.get())
+        if self.enc_option_radio.get() == 1:
+            self.enc_p_range[0] = '0.25'
+            self.enc_p_range[1] = '0.5'
+            self.enc_x_range[0] = '0.001'
+            self.enc_x_range[1] = '0.999'
+        elif self.enc_option_radio.get() == 2:
+            self.enc_p_range[0] = '0.001'
+            self.enc_p_range[1] = '0.999'
+            self.enc_x_range[0] = '0.001'
+            self.enc_x_range[1] = '0.999'
+
+        self.enc_p.set(self.enc_p_range[0])
+        self.enc_p_before.set(self.enc_p_range[0])
+        self.enc_x.set(self.enc_x_range[0])
+        self.enc_x_before.set(self.enc_x_range[0])
+        
         self.cipher_type = cipher_type
 
     def app_close(self):
@@ -505,9 +591,9 @@ class View():
         plt.imshow(im_p)
     
     def start_encryption(self):
-        print(self.enc_x_spinbox.get(), self.enc_p_spinbox.get(), self.enc_option_radio.get())
-        self.controller.set_x(float(self.enc_x_spinbox.get()))
-        self.controller.set_p(float(self.enc_p_spinbox.get()))
+        print(self.enc_x_entry.get(), self.enc_p_entry.get(), self.enc_option_radio.get())
+        self.controller.set_x(float(self.enc_x_entry.get()))
+        self.controller.set_p(float(self.enc_p_entry.get()))
         self.controller.set_ciphertype(float(self.enc_option_radio.get()))
         self.cryptogram = self.controller.start_encryption()
         print(np.asarray(self.cryptogram))
