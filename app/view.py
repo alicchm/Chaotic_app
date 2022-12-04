@@ -186,20 +186,25 @@ class View():
         self.dec_algorithm2_radio.place(relx=0.09, rely=0.36)
         self.dec_option_radio.set(1)
 
-        #wartości x i p
+        #wartość x
         self.dec_x_label = tk.Label(self.page_decode, text='x =', bg=self.orange_color)
         self.dec_x_label.place(relx=0.091, rely=0.455)
 
-        self.dec_x_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
-                            bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
-        self.dec_x_spinbox.place(relx=0.125, rely=0.46)
+        entry_x_val_function_dec = self.root.register(self.entry_x_validate_dec)
+        entry_x_inval_function_dec = self.root.register(self.entry_x_invalid_dec)
+        self.dec_x_entry = tk.Entry(self.page_decode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_x, justify=tk.LEFT)
+        self.dec_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function_dec,'%P'), invalidcommand=(entry_x_inval_function_dec))
+        self.dec_x_entry.place(relx=0.125, rely=0.46)
 
+        #wartość p
         self.dec_p_label = tk.Label(self.page_decode, text='p =', bg=self.orange_color)
         self.dec_p_label.place(relx=0.091, rely=0.505)
 
-        self.dec_p_spinbox = tk.Spinbox(self.page_decode, from_=0, to_=1, format='%10.4f', increment=0.001, validate='focusout', width=10, relief='flat', 
-                            bd=0, buttondownrelief=tk.FLAT, buttonuprelief=tk.FLAT, bg=self.light_orange_color)
-        self.dec_p_spinbox.place(relx=0.125, rely=0.51)
+        entry_p_val_function_dec = self.root.register(self.entry_p_validate_dec)
+        entry_p_inval_function_dec = self.root.register(self.entry_p_invalid_dec)
+        self.dec_p_entry = tk.Entry(self.page_decode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_p, justify=tk.LEFT)
+        self.dec_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function_dec,'%P'), invalidcommand=(entry_p_inval_function_dec))        
+        self.dec_p_entry.place(relx=0.125, rely=0.51)
 
         #wartość klucza
         self.dec_key_label = tk.Label(self.page_decode, text='Wartość klucza =', bg=self.orange_color)
@@ -268,6 +273,10 @@ class View():
         self.p = None
         self.spx = None
         self.cipher_type = 1
+        self.enc_x.set(self.enc_x_range[0])
+        self.enc_p.set(self.enc_p_range[0])
+        self.enc_x_before.set(self.enc_x_range[0])
+        self.enc_p_before.set(self.enc_p_range[0])
         print('działa')
         self.enc_option_radio.set(1)
         self.dec_option_radio.set(1)
@@ -324,13 +333,32 @@ class View():
         else:       
             return False
 
+    def entry_x_validate_dec(self, value): #walidacja wprowadzonej wartości x
+        print('x decode val')
+        if value != '' and self.check_if_float(value) == True:
+            val_float = float(value)
+            #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
+            self.enc_x.set(val_float)
+            self.enc_x_before.set(val_float)
+            return True
+        else:       
+            return False
+
     def entry_x_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
         msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
         showerror(title='Niepoprawna wartość', message=msg)
         
         self.enc_x_entry.delete(0,tk.END)
         self.enc_x_entry.insert(0,float(self.enc_x_before.get()))
+        self.enc_x.set(self.enc_x_before.get())
 
+    def entry_x_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
+        print('x decode inval')
+        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
+        showerror(title='Niepoprawna wartość', message=msg)
+        
+        self.dec_x_entry.delete(0,tk.END)
+        self.dec_x_entry.insert(0,float(self.enc_x_before.get()))
         self.enc_x.set(self.enc_x_before.get())
 
     def entry_p_validate(self, value): #walidacja wprowadzonej wartości p
@@ -345,9 +373,21 @@ class View():
         else:      
             return False
 
+    def entry_p_validate_dec(self, value): #walidacja wprowadzonej wartości p
+        print('p decode val')
+        if value != '' and self.check_if_float(value) == True:
+            val_float = float(value)
+            if (val_float<=0.5 and val_float>=0.25 and self.dec_option_radio.get()==1) or (val_float<1 and val_float>0 and self.dec_option_radio.get()==2):
+                self.enc_p.set(val_float)
+                self.enc_p_before.set(val_float)
+                return True
+            else: 
+                return False
+        else:      
+            return False
+
     def entry_p_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
         range = ''
-        print(self.enc_option_radio.get())
         if self.enc_option_radio.get() == 1:
             range = f'[0.25, 0.5]'
         else:
@@ -357,6 +397,21 @@ class View():
         
         self.enc_p_entry.delete(0,tk.END)
         self.enc_p_entry.insert(0,float(self.enc_p_before.get()))
+
+        self.enc_p.set(self.enc_p_before.get())
+    
+    def entry_p_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
+        print('p decode inval')
+        range = ''
+        if self.dec_option_radio.get() == 1:
+            range = f'[0.25, 0.5]'
+        else:
+            range = f'(0, 1)'
+        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
+        showerror(title='Niepoprawna wartość', message=msg)
+        
+        self.dec_p_entry.delete(0,tk.END)
+        self.dec_p_entry.insert(0,float(self.enc_p_before.get()))
 
         self.enc_p.set(self.enc_p_before.get())
 
