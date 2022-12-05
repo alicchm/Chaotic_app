@@ -471,7 +471,7 @@ class View():
             elif tab_number == 2:   #zapisywanie odkodowanego obrazu 
                 full_path = f'{file_dir}/decoded_{datetime.now().strftime("%Y%m%d_%H%M%S")}.{file_type}'
                 showinfo(title='Wybrany plik', message=full_path)
-            img.save(full_path, quality=100, subsampling=0)
+            img.save(full_path, format='PNG', subsampling=0, quality=100)
 
         parent_window.focus_set()   #żeby podrzędne okno było dalej na wierzchu
 
@@ -700,9 +700,9 @@ class View():
         #self.routine(1)
 
     def start_decryption(self):
-        self.controller.set_x(float(self.dec_x_spinbox.get()))
-        self.controller.set_p(float(self.dec_p_spinbox.get()))
-        self.controller.set_Spx(float(self.dec_key_spinbox.get()))
+        self.controller.set_x(float(self.dec_x_entry.get()))
+        self.controller.set_p(float(self.dec_p_entry.get()))
+        self.controller.set_Spx(float(self.dec_key_entry.get()))
         self.controller.set_ciphertype(float(self.dec_option_radio.get()))
         self.image_decrypted = self.controller.start_decryption()
         #print(np.asarray(self.cryptogram))
