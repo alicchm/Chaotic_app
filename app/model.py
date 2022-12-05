@@ -3,18 +3,16 @@ import numpy as np
 import collections as col
 import random
 from math import log2, sqrt
-import os
-import ntpath
 
 class Cipher:
     def __init__(self):
-        self.alg_num = 1 #default wybrany czyli np 1/2
+        #self.alg_num = 1 #default wybrany czyli np 1/2
         self.source_path = ''
         self.image = None
         self.x = None
         self.p = None
         self.Spx = None
-
+        self.cipher_type = None
         self.destination_path = ''
         self.cryptogram = []
         self.decrypted_image = None
@@ -91,8 +89,6 @@ class Cipher:
         N,M = im.size
         print(im.size)
         im = np.asarray(im)
-        x = x
-        p = p
         #print(im)
         first_plc = []
         last_plc = []
@@ -153,7 +149,6 @@ class Cipher:
         #print(im.size)
         px = np.asarray(im)
         p = p1
-        Spx = Spx
         xk = x1
         decrypted_im = []
         taba = []
@@ -294,7 +289,7 @@ class Cipher:
         enc_N, enc_M = cryptogram.size
         
         J_flatter = J.reshape(enc_N*enc_M,3) #zmiana struktury na listę pikseli
-        J_flatter
+        #J_flatter
         
         
         
@@ -339,7 +334,7 @@ class Cipher:
 
     def key_sensitivity(self, change_value):
         
-        if self.alg_num==1:
+        if self.cipher_type==1:
             im_oryg = self.encryption1(self.image, self.x, self.p)
             im_x = self.encryption1(self.image, self.x+change_value, self.p)
             im_p = self.encryption1(self.image, self.x, self.p+change_value)
@@ -358,7 +353,7 @@ class Cipher:
         random_M = random.randint(0, M-1)
         im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
         
-        if self.alg_num==1:
+        if self.cipher_type==1:
             enc_im = self.encryption1(self.image, self.x, self.p)
             enc_im2 = self.encryption1(im2, self.x, self.p)
         else:
@@ -380,18 +375,18 @@ class Cipher:
             
         return res
 
-    def npcr2(im1, im2):
-        im1 = np.asarray(im1)
-        im2 = np.asarray(im2)
-        values = [0,0,0]
-        for i in range(len(im1)):
-            for j in range(len(im1[i])):
-                for k in range(len(im1[i][j])):
-                    if im1[i][j][k] != im2[i][j][k]:
-                        values[k]+=1
-        length = im1.size/3
-        values = [(x/length) * 100 for x in values]
-        return values
+    #def npcr2(im1, im2):
+    #    im1 = np.asarray(im1)
+    #    im2 = np.asarray(im2)
+    #    values = [0,0,0]
+    #    for i in range(len(im1)):
+    #        for j in range(len(im1[i])):
+    #            for k in range(len(im1[i][j])):
+    #                if im1[i][j][k] != im2[i][j][k]:
+    #                    values[k]+=1
+    #    length = im1.size/3
+    #    values = [(x/length) * 100 for x in values]
+    #    return values
 
     def uaci(self):
         N, M = self.image.size #szerokość, wysokość
@@ -401,12 +396,12 @@ class Cipher:
         random_M = random.randint(0, M-1)
         im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
         
-        if self.alg_num==1:
-            enc_im = self.encryption1(self.image)
-            enc_im2 = self.encryption1(im2)
+        if self.cipher_type==1:
+            enc_im = self.encryption1(self.image, self.x, self.p)
+            enc_im2 = self.encryption1(im2, self.x, self.p)
         else:
-            enc_im = self.encryption2(self.image)
-            enc_im2 = self. encryption2(im2)
+            enc_im = self.encryption2(self.image, self.x, self.p)
+            enc_im2 = self. encryption2(im2, self.x, self.p)
         
         enc_px = list(enc_im.getdata())
         enc_px2 = list(enc_im2.getdata())
@@ -439,10 +434,10 @@ class Cipher:
     def correlations(self, encrypted = 1):
         
         if encrypted == 1:
-            if self.alg_num==1:
-                im = self.encryption1(self.image)
+            if self.cipher_type==1:
+                im = self.encryption1(self.image, self.x, self.p)
             else:
-                im = self.encryption2(self.image)
+                im = self.encryption2(self.image, self.x, self.p)
         
         N, M = im.size
         r = []
