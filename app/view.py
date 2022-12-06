@@ -41,20 +41,20 @@ class View():
         self.get_correlations = None
 
         #rozmiary okien, obrazów itp.
-        self.root_window_width = 820 #570
-        self.root_window_height = 497 #355
-        self.small_window_width = 816 #566
-        self.small_window_height = 472 #345
-        self.nb_page_width = 816 #566
-        self.nb_page_height = 467 #325
-        self.max_image_width = 350 #270
-        self.max_image_height = 350 #270
+        self.root_window_width = 820
+        self.root_window_height = 497 
+        self.small_window_width = 816 
+        self.small_window_height = 472
+        self.nb_page_width = 816 
+        self.nb_page_height = 467 
+        self.max_image_width = 350 
+        self.max_image_height = 350 
 
         #scieżki do obrazów w tle, logo, tytuł okien
         self.main_encode_bg = 'bg_img/encode_bg2.png'
         self.main_decode_bg = 'bg_img/decode_bg2.png'
         self.encoded_window_bg1 = 'bg_img/encoded_window_bg2.png'
-        self.encoded_window_bg2 = 'bg_img/encoded_measures_bg2.png'
+        self.encoded_window_bg2 = 'bg_img/encoded_measures_bg222.png'
         self.decoded_window_bg = 'bg_img/decoded_window_bg2.png'
 
         self.logo_img = 'app_logo_mini2.png'
@@ -513,7 +513,6 @@ class View():
         self.root.destroy()
 
     def inner_window_close(self, win):
-        # win.quit()
         win.destroy()
 
     def enc_open_window(self):
@@ -578,14 +577,49 @@ class View():
         enc2_toresults_button = tk.Button(page2_encode_measures, text = 'Powrót', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame(page2_encode_results))
         enc2_toresults_button.place(relx=0.029, rely=0.905)
 
-        fig = plt.figure(figsize=(3,2),dpi=100)
-        ax = fig.add_axes([0,0.1,0.8,0.8])
-        line = FigureCanvasTkAgg(fig, page2_encode_measures)
-        line.get_tk_widget().pack(side=tk.LEFT)
-        line.draw()
+        #ramka z wynikami miar jakości
+        enc2_outer_measure_frame = tk.Frame(page2_encode_measures, width=(self.nb_page_width-48), height=(self.nb_page_height-108), bg=self.dark_bg_color)
+        enc2_outer_measure_frame.place(relx=0.5, rely=0.049, anchor='n')
+
+        measure_main_frame = tk.Frame(enc2_outer_measure_frame, width=(self.nb_page_width-48), height=(self.nb_page_height-108), bg=self.dark_bg_color)
+        measure_main_frame.pack(fill='both', expand=1)
+
+        measure_canvas = tk.Canvas(measure_main_frame, width=(self.nb_page_width-48), height=(self.nb_page_height-108), bg=self.dark_bg_color)
+        measure_canvas.pack(side='left', fill='both', expand=1)
+
+        measure_scrollbar = tk.Scrollbar(measure_main_frame, orient='vertical', command=measure_canvas.yview, bg=self.dark_bg_color)
+        measure_scrollbar.pack(side='right', fill='y')
+
+        measure_canvas.configure(yscrollcommand=measure_scrollbar.set)
+        measure_canvas.bind('<Configure>', lambda e: measure_canvas.configure(scrollregion = measure_canvas.bbox("all")))
+
+        measure_inner_frame = tk.Frame(measure_canvas, bg=self.dark_bg_color)
+        measure_canvas.create_window((0,0), window=measure_inner_frame, anchor='nw')
+
+        #poszczególne widgety z wynikami miar jakości
+        measure_label_hist = tk.Label(measure_inner_frame, height=5, text='Histogramy', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_hist.grid(column=0, row=0, sticky='ew')
+
+        measure_label_npcr = tk.Label(measure_inner_frame, height=5, text='NPCR', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_npcr.grid(column=0, row=1, sticky='ew')
+
+        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_keysens.grid(column=0, row=2, sticky='ew')
+
+        measure_label_uaci = tk.Label(measure_inner_frame, height=5, text='UACI', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_uaci.grid(column=0, row=3, sticky='ew')
+
+        measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor.grid(column=0, row=4, sticky='ew')
+
+        # fig = plt.figure(figsize=(3,2),dpi=100)
+        # ax = fig.add_axes([0,0.1,0.8,0.8])
+        # line = FigureCanvasTkAgg(fig, page2_encode_measures)
+        # line.get_tk_widget().pack(side=tk.LEFT)
+        # line.draw()
 
         #button - do strony z miarami jakości
-        enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures, line, ax))
+        enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures)) #, line, ax
         enc2_tomeasures_button.place(relx=0.878, rely=0.929, anchor='center')
 
         self.change_frame(page2_encode_results) #żeby na starcie była otwarta pierwsza strona
@@ -593,21 +627,21 @@ class View():
     def change_frame(self, frame):
         frame.tkraise()
 
-    def change_frame_calc(self, frame, line, ax):
+    def change_frame_calc(self, frame): #, line, ax
         self.change_frame(frame)
 
         #obliczenie miar itp
 
-        #przykładowy wykres
-        ax.clear()
-        t = np.arange(0.0, 2.0, 0.01)
-        s = 1 + np.sin(2 * np.pi * t)
-        # fig = plt.Figure(figsize=(3,2), dpi=100)
-        # ax = fig.add_subplot(111)
-        ax.plot(t,s)
-        line.draw()
-        # line.get_tk_widget().pack(side=tk.LEFT) #, fill=tk.BOTH
-        # return fig
+        # #przykładowy wykres
+        # ax.clear()
+        # t = np.arange(0.0, 2.0, 0.01)
+        # s = 1 + np.sin(2 * np.pi * t)
+        # # fig = plt.Figure(figsize=(3,2), dpi=100)
+        # # ax = fig.add_subplot(111)
+        # ax.plot(t,s)
+        # line.draw()
+        # # line.get_tk_widget().pack(side=tk.LEFT) #, fill=tk.BOTH
+        # # return fig
 
     def copy_to_clipboard(self, image1): #kopiowanie obrazu do schowka
         output = BytesIO()
