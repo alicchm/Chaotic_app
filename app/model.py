@@ -416,8 +416,8 @@ class Cipher:
             res.append(round((dif_sum/(N*M))*100,2))
         return res
 
-    def Entropy(self): #entropia
-        r, g, b = self.image.split()
+    def entropy(self): #entropia
+        r, g, b = self.cryptogram.split()
         
         results = []
         

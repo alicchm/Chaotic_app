@@ -647,6 +647,15 @@ class View():
         measure_label_entropy = tk.Label(measure_inner_frame, height=5, text='Entropia', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_entropy.grid(column=0, row=6, sticky='ew')
 
+        self.entropy_r_label = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.entropy_r_label.grid(column=0, row=7)
+
+        self.entropy_g_label = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.entropy_g_label.grid(column=1, row=7)
+
+        self.entropy_b_label = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.entropy_b_label.grid(column=2, row=7)
+
         #key sensitivity
         measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_keysens.grid(column=0, row=8, sticky='ew')
@@ -686,6 +695,11 @@ class View():
         self.uaci_r_label.config(text=f'R: {self.uaci[0]}', fg=red)
         self.uaci_g_label.config(text=f'G: {self.uaci[1]}', fg=green)
         self.uaci_b_label.config(text=f'B: {self.uaci[2]}', fg=blue)
+
+        #entropia
+        self.entropy_r_label.config(text=f'R: {self.entropy[0]}', fg=red)
+        self.entropy_g_label.config(text=f'G: {self.entropy[1]}', fg=green)
+        self.entropy_b_label.config(text=f'B: {self.entropy[2]}', fg=blue)
 
 
     def copy_to_clipboard(self, image1): #kopiowanie obrazu do schowka
@@ -753,7 +767,7 @@ class View():
         # self.key_sensivity = self.controller.get_key_sensivity()
         self.npcr = self.controller.get_npcr()
         self.uaci = self.controller.get_uaci()
-        # self.entropy = self.controller.get_entropy()
+        self.entropy = self.controller.get_entropy()
         # self.get_correlations = self.controller.get_correlations()
 
     def key_sensivity(self):
