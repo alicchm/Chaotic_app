@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import CENTER, LEFT, RIGHT, Toplevel, ttk, filedialog
 from PIL import ImageTk, Image, ImageStat
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
 from io import BytesIO
@@ -10,9 +11,12 @@ from datetime import datetime
 from controller import Controller
 from tkinter.messagebox import showinfo, showerror
 import copy
+import ctypes
 
 class View():
     def __init__(self, master):
+        # ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
         self.root = master
         self.root.protocol("WM_DELETE_WINDOW", self.app_close)
         self.controller = None
@@ -612,14 +616,20 @@ class View():
         measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor.grid(column=0, row=8, sticky='ew')
 
-        # fig = plt.figure(figsize=(3,2),dpi=100)
-        # ax = fig.add_axes([0,0.1,0.8,0.8])
-        # line = FigureCanvasTkAgg(fig, page2_encode_measures)
-        # line.get_tk_widget().pack(side=tk.LEFT)
-        # line.draw()
+        fig_hist1 = Figure(figsize=(4.25,3), dpi=60)
+        canvas_hist1 = FigureCanvasTkAgg(fig_hist1, measure_inner_frame)
+        canvas_hist1.get_tk_widget().grid(column=0,row=1)
+
+        fig_hist2 = Figure(figsize=(4.25,3), dpi=60) #(figsize=(5,3), dpi=80)
+        canvas_hist2 = FigureCanvasTkAgg(fig_hist2, measure_inner_frame)
+        canvas_hist2.get_tk_widget().grid(column=1,row=1)
+
+        fig_hist3 = Figure(figsize=(4.25,3), dpi=60)
+        canvas_hist3 = FigureCanvasTkAgg(fig_hist3, measure_inner_frame)
+        canvas_hist3.get_tk_widget().grid(column=2,row=1)
 
         #button - do strony z miarami jakości
-        enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures)) #, line, ax
+        enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures, fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3)) #
         enc2_tomeasures_button.place(relx=0.878, rely=0.929, anchor='center')
 
         self.change_frame(page2_encode_results) #żeby na starcie była otwarta pierwsza strona
@@ -627,21 +637,12 @@ class View():
     def change_frame(self, frame):
         frame.tkraise()
 
-    def change_frame_calc(self, frame): #, line, ax
+    def change_frame_calc(self, frame, fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3):
         self.change_frame(frame)
 
         #obliczenie miar itp
+        self.draw_histograms(copy.copy(self.cryptogram), fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3)
 
-        # #przykładowy wykres
-        # ax.clear()
-        # t = np.arange(0.0, 2.0, 0.01)
-        # s = 1 + np.sin(2 * np.pi * t)
-        # # fig = plt.Figure(figsize=(3,2), dpi=100)
-        # # ax = fig.add_subplot(111)
-        # ax.plot(t,s)
-        # line.draw()
-        # # line.get_tk_widget().pack(side=tk.LEFT) #, fill=tk.BOTH
-        # # return fig
 
     def copy_to_clipboard(self, image1): #kopiowanie obrazu do schowka
         output = BytesIO()
@@ -687,17 +688,19 @@ class View():
         dec2_copy_button = tk.Button(dec2_window, text = 'Kopiuj obraz', width=15, height=1, bg=self.dark_gray_color, bd=0, command=lambda:self.copy_to_clipboard(self.image_decrypted))
         dec2_copy_button.place(relx=0.777, rely=0.35)
     
-    def draw_histograms(im): #rysowanie histogramów
+    def draw_histograms(self, im, fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3): #rysowanie histogramów
+        obj1 = fig_hist1.gca()
+        obj2 = fig_hist2.gca()
+        obj3 = fig_hist3.gca()
+        
+        obj1.hist([x[0] for x in list(im.getdata())], bins = 256, color = 'tab:red')
+        canvas_hist1.draw()
 
-        plt.hist([x[0] for x in list(im.getdata())], bins = 256, color = 'tab:red')
-        plt.ylim((0,4000))
-        plt.show()
-        plt.hist([x[1] for x in list(im.getdata())], bins = 256, color = 'tab:green')
-        plt.ylim((0,4000))
-        plt.show()
-        plt.hist([x[2] for x in list(im.getdata())], bins = 256, color = 'tab:blue')
-        plt.ylim((0,4000))
-        plt.show()
+        obj2.hist([x[1] for x in list(im.getdata())], bins = 256, color = 'tab:green')
+        canvas_hist2.draw()
+
+        obj3.hist([x[2] for x in list(im.getdata())], bins = 256, color = 'tab:blue')
+        canvas_hist3.draw()
 
     def get_measures(self):
         self.key_sensivity = self.controller.get_key_sensivity()
