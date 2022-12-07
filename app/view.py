@@ -601,20 +601,9 @@ class View():
         measure_canvas.create_window((0,0), window=measure_inner_frame, anchor='nw')
 
         #poszczególne widgety z wynikami miar jakości
+        #histogramy
         measure_label_hist = tk.Label(measure_inner_frame, height=5, text='Histogramy', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_hist.grid(column=0, row=0, sticky='ew')
-
-        measure_label_npcr = tk.Label(measure_inner_frame, height=5, text='NPCR', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_npcr.grid(column=0, row=2, sticky='ew')
-
-        measure_label_uaci = tk.Label(measure_inner_frame, height=5, text='UACI', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_uaci.grid(column=0, row=4, sticky='ew')
-
-        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_keysens.grid(column=0, row=6, sticky='ew')
-
-        measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_cor.grid(column=0, row=8, sticky='ew')
 
         fig_hist1 = Figure(figsize=(4.25,3), dpi=60)
         canvas_hist1 = FigureCanvasTkAgg(fig_hist1, measure_inner_frame)
@@ -628,6 +617,44 @@ class View():
         canvas_hist3 = FigureCanvasTkAgg(fig_hist3, measure_inner_frame)
         canvas_hist3.get_tk_widget().grid(column=2,row=1)
 
+        #npcr
+        measure_label_npcr = tk.Label(measure_inner_frame, height=5, text='NPCR', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_npcr.grid(column=0, row=2, sticky='ew')
+
+        self.npcr_r_label = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.npcr_r_label.grid(column=0, row=3)
+
+        self.npcr_g_label = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.npcr_g_label.grid(column=1, row=3)
+
+        self.npcr_b_label = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.npcr_b_label.grid(column=2, row=3)
+
+        #uaci
+        measure_label_uaci = tk.Label(measure_inner_frame, height=5, text='UACI', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_uaci.grid(column=0, row=4, sticky='ew')
+
+        self.uaci_r_label = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.uaci_r_label.grid(column=0, row=5)
+
+        self.uaci_g_label = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.uaci_g_label.grid(column=1, row=5)
+
+        self.uaci_b_label = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.uaci_b_label.grid(column=2, row=5)
+
+        #entropia
+        measure_label_entropy = tk.Label(measure_inner_frame, height=5, text='Entropia', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_entropy.grid(column=0, row=6, sticky='ew')
+
+        #key sensitivity
+        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_keysens.grid(column=0, row=8, sticky='ew')
+
+        #korelacja
+        measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor.grid(column=0, row=10, sticky='ew')
+
         #button - do strony z miarami jakości
         enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures, fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3)) #
         enc2_tomeasures_button.place(relx=0.878, rely=0.929, anchor='center')
@@ -639,9 +666,26 @@ class View():
 
     def change_frame_calc(self, frame, fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3):
         self.change_frame(frame)
+        self.get_measures()
+
+        #paleta kolorów dla wyników
+        red = '#d62728'
+        green = '#2ca02c'
+        blue = '#1f77b4'
 
         #obliczenie miar itp
+        #histogramy
         self.draw_histograms(copy.copy(self.cryptogram), fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3)
+
+        #npcr
+        self.npcr_r_label.config(text=f'R: {self.npcr[0]}', fg=red)
+        self.npcr_g_label.config(text=f'G: {self.npcr[1]}', fg=green)
+        self.npcr_b_label.config(text=f'B: {self.npcr[2]}', fg=blue)
+
+        #uaci
+        self.uaci_r_label.config(text=f'R: {self.uaci[0]}', fg=red)
+        self.uaci_g_label.config(text=f'G: {self.uaci[1]}', fg=green)
+        self.uaci_b_label.config(text=f'B: {self.uaci[2]}', fg=blue)
 
 
     def copy_to_clipboard(self, image1): #kopiowanie obrazu do schowka
@@ -694,20 +738,23 @@ class View():
         obj3 = fig_hist3.gca()
         
         obj1.hist([x[0] for x in list(im.getdata())], bins = 256, color = 'tab:red')
+        obj1.set_title('R')
         canvas_hist1.draw()
 
         obj2.hist([x[1] for x in list(im.getdata())], bins = 256, color = 'tab:green')
+        obj2.set_title('G')
         canvas_hist2.draw()
 
         obj3.hist([x[2] for x in list(im.getdata())], bins = 256, color = 'tab:blue')
+        obj3.set_title('B')
         canvas_hist3.draw()
 
     def get_measures(self):
-        self.key_sensivity = self.controller.get_key_sensivity()
+        # self.key_sensivity = self.controller.get_key_sensivity()
         self.npcr = self.controller.get_npcr()
         self.uaci = self.controller.get_uaci()
-        self.entropy = self.controller.get_entropy()
-        self.get_correlations = self.controller.get_correlations()
+        # self.entropy = self.controller.get_entropy()
+        # self.get_correlations = self.controller.get_correlations()
 
     def key_sensivity(self):
         im_oryg, im_x, im_p = self.key_sensivity()
