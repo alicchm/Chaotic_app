@@ -764,14 +764,14 @@ class View():
         canvas_hist3.draw()
 
     def get_measures(self):
-        # self.key_sensivity = self.controller.get_key_sensivity()
+        self.key_sensivity = self.controller.get_key_sensitivity(10**(-16))
         self.npcr = self.controller.get_npcr()
         self.uaci = self.controller.get_uaci()
         self.entropy = self.controller.get_entropy()
         # self.get_correlations = self.controller.get_correlations()
 
-    def key_sensivity(self):
-        im_oryg, im_x, im_p = self.key_sensivity()
+    def key_sensitivity(self):
+        im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))
         plt.figure(figsize=(20,10))
         
         plt.subplot(1,3,1)
