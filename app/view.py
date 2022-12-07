@@ -792,12 +792,13 @@ class View():
 
     def key_sensitivity(self):
         im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))
-        
+
         self.ax1.imshow(im_oryg)
-
+        self.canvas_sens1.draw()
         self.ax2.imshow(im_x)
-
+        self.canvas_sens2.draw()
         self.ax3.imshow(im_p)
+        self.canvas_sens3.draw()
         
     def start_encryption(self):
         print(self.enc_x_entry.get(), self.enc_p_entry.get(), self.enc_option_radio.get())
