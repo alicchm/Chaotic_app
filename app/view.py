@@ -660,6 +660,22 @@ class View():
         measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_keysens.grid(column=0, row=8, sticky='ew')
 
+        self.key_sens1 = Figure(figsize=(4.25,3), dpi=60)
+        self.ax1 = self.key_sens1.add_subplot(111)
+        self.canvas_sens1 = FigureCanvasTkAgg(self.key_sens1, measure_inner_frame)
+        self.canvas_sens1.get_tk_widget().grid(column=0,row=9)
+
+        self.key_sens2 = Figure(figsize=(4.25,3), dpi=60) #(figsize=(5,3), dpi=80)
+        self.ax2 = self.key_sens2.add_subplot(111)
+        self.canvas_sens2 = FigureCanvasTkAgg(self.key_sens2, measure_inner_frame)
+        self.canvas_sens2.get_tk_widget().grid(column=1,row=9)
+
+        self.key_sens3 = Figure(figsize=(4.25,3), dpi=60)
+        self.ax3 = self.key_sens3.add_subplot(111)
+        self.canvas_sens3 = FigureCanvasTkAgg(self.key_sens3, measure_inner_frame)
+        self.canvas_sens3.get_tk_widget().grid(column=2,row=9)
+        
+
         #korelacja
         measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor.grid(column=0, row=10, sticky='ew')
@@ -700,6 +716,10 @@ class View():
         self.entropy_r_label.config(text=f'R: {self.entropy[0]}', fg=red)
         self.entropy_g_label.config(text=f'G: {self.entropy[1]}', fg=green)
         self.entropy_b_label.config(text=f'B: {self.entropy[2]}', fg=blue)
+
+        #keysensitivity
+        self.key_sensitivity()
+
 
 
     def copy_to_clipboard(self, image1): #kopiowanie obrazu do schowka
@@ -764,7 +784,7 @@ class View():
         canvas_hist3.draw()
 
     def get_measures(self):
-        self.key_sensivity = self.controller.get_key_sensitivity(10**(-16))
+        #self.key_sensivity = self.controller.get_key_sensitivity(10**(-16))
         self.npcr = self.controller.get_npcr()
         self.uaci = self.controller.get_uaci()
         self.entropy = self.controller.get_entropy()
@@ -772,20 +792,13 @@ class View():
 
     def key_sensitivity(self):
         im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))
-        plt.figure(figsize=(20,10))
         
-        plt.subplot(1,3,1)
-        plt.axis('off')
-        plt.imshow(im_oryg)
+        self.ax1.imshow(im_oryg)
+
+        self.ax2.imshow(im_x)
+
+        self.ax3.imshow(im_p)
         
-        plt.subplot(1,3,2)
-        plt.axis('off')
-        plt.imshow(im_x)
-        
-        plt.subplot(1,3,3)
-        plt.axis('off')
-        plt.imshow(im_p)
-    
     def start_encryption(self):
         print(self.enc_x_entry.get(), self.enc_p_entry.get(), self.enc_option_radio.get())
         self.controller.set_x(float(self.enc_x_entry.get()))
