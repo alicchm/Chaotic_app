@@ -601,16 +601,16 @@ class View():
         measure_label_hist.grid(column=0, row=0, sticky='ew')
 
         measure_label_npcr = tk.Label(measure_inner_frame, height=5, text='NPCR', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_npcr.grid(column=0, row=1, sticky='ew')
-
-        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_keysens.grid(column=0, row=2, sticky='ew')
+        measure_label_npcr.grid(column=0, row=2, sticky='ew')
 
         measure_label_uaci = tk.Label(measure_inner_frame, height=5, text='UACI', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_uaci.grid(column=0, row=3, sticky='ew')
+        measure_label_uaci.grid(column=0, row=4, sticky='ew')
+
+        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_keysens.grid(column=0, row=6, sticky='ew')
 
         measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_cor.grid(column=0, row=4, sticky='ew')
+        measure_label_cor.grid(column=0, row=8, sticky='ew')
 
         # fig = plt.figure(figsize=(3,2),dpi=100)
         # ax = fig.add_axes([0,0.1,0.8,0.8])
