@@ -609,7 +609,7 @@ class View():
         canvas_hist1 = FigureCanvasTkAgg(fig_hist1, measure_inner_frame)
         canvas_hist1.get_tk_widget().grid(column=0,row=1)
 
-        fig_hist2 = Figure(figsize=(4.25,3), dpi=60) #(figsize=(5,3), dpi=80)
+        fig_hist2 = Figure(figsize=(4.25,3), dpi=60) 
         canvas_hist2 = FigureCanvasTkAgg(fig_hist2, measure_inner_frame)
         canvas_hist2.get_tk_widget().grid(column=1,row=1)
 
@@ -674,11 +674,49 @@ class View():
         self.ax3 = self.key_sens3.add_subplot(111)
         self.canvas_sens3 = FigureCanvasTkAgg(self.key_sens3, measure_inner_frame)
         self.canvas_sens3.get_tk_widget().grid(column=2,row=9)
-        
 
         #korelacja
         measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor.grid(column=0, row=10, sticky='ew')
+
+        #horyzontalna
+        measure_label_cor_horiz = tk.Label(measure_inner_frame, height=5, text='Horyzontalna', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor_horiz.grid(column=1, row=11, sticky='ew')
+
+        self.corr_r_label_horiz = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_r_label_horiz.grid(column=0, row=12)
+
+        self.corr_g_label_horiz = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_g_label_horiz.grid(column=1, row=12)
+
+        self.corr_b_label_horiz = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_b_label_horiz.grid(column=2, row=12)
+
+        #wertykalna
+        measure_label_cor_ver = tk.Label(measure_inner_frame, height=5, text='Wertykalna', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor_ver.grid(column=1, row=13, sticky='ew')
+
+        self.corr_r_label_ver = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_r_label_ver.grid(column=0, row=14)
+
+        self.corr_g_label_ver = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_g_label_ver.grid(column=1, row=14)
+
+        self.corr_b_label_ver = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_b_label_ver.grid(column=2, row=14)
+
+        #diagonalna
+        measure_label_cor_dia = tk.Label(measure_inner_frame, height=5, text='Diagonalna', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor_dia.grid(column=1, row=15, sticky='ew')
+
+        self.corr_r_label_dia = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_r_label_dia.grid(column=0, row=16)
+
+        self.corr_g_label_dia = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_g_label_dia.grid(column=1, row=16)
+
+        self.corr_b_label_dia = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        self.corr_b_label_dia.grid(column=2, row=16)         
 
         #button - do strony z miarami jakości
         enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures, fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3)) #
@@ -720,6 +758,21 @@ class View():
         #keysensitivity
         self.key_sensitivity()
 
+        #korelacja
+        #horyzontalna
+        self.corr_r_label_horiz.config(text=f'R: {self.correlations[0][0]}', fg=red)
+        self.corr_g_label_horiz.config(text=f'G: {self.correlations[0][1]}', fg=green)
+        self.corr_b_label_horiz.config(text=f'B: {self.correlations[0][2]}', fg=blue)
+
+        #wertykalna
+        self.corr_r_label_ver.config(text=f'R: {self.correlations[1][0]}', fg=red)
+        self.corr_g_label_ver.config(text=f'G: {self.correlations[1][1]}', fg=green)
+        self.corr_b_label_ver.config(text=f'B: {self.correlations[1][2]}', fg=blue)
+
+        #diagonalna
+        self.corr_r_label_dia.config(text=f'R: {self.correlations[2][0]}', fg=red)
+        self.corr_g_label_dia.config(text=f'G: {self.correlations[2][1]}', fg=green)
+        self.corr_b_label_dia.config(text=f'B: {self.correlations[2][2]}', fg=blue)
 
 
     def copy_to_clipboard(self, image1): #kopiowanie obrazu do schowka
@@ -788,7 +841,7 @@ class View():
         self.npcr = self.controller.get_npcr()
         self.uaci = self.controller.get_uaci()
         self.entropy = self.controller.get_entropy()
-        # self.get_correlations = self.controller.get_correlations()
+        self.correlations = self.controller.get_correlations()
 
     def key_sensitivity(self):
         im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))

@@ -433,18 +433,23 @@ class Cipher:
 
     def correlations(self, encrypted = 1):
         
-        if encrypted == 1:
-            if self.cipher_type==1:
-                im = self.encryption1(self.image, self.x, self.p)
-            else:
-                im = self.encryption2(self.image, self.x, self.p)
+        # if encrypted == 1:
+        #     if self.cipher_type==1:
+        #         im = self.encryption1(self.image, self.x, self.p)
+        #     else:
+        #         im = self.encryption2(self.image, self.x, self.p)
+
+        if self.cipher_type==1:
+            im = self.encryption1(self.image, self.x, self.p)
+        else:
+            im = self.encryption2(self.image, self.x, self.p)
         
         N, M = im.size
         r = []
             
         #horizontal
-        im21 = self.image.crop((0,0,N-1,M))
-        im22 = self.image.crop((1,0,N,M))
+        im21 = im.crop((0,0,N-1,M))
+        im22 = im.crop((1,0,N,M))
         
         stat21 = ImageStat.Stat(im21)
         stat22 = ImageStat.Stat(im22)
