@@ -794,10 +794,21 @@ class View():
         im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))
 
         self.ax1.imshow(im_oryg)
+        self.ax1.axes.get_xaxis().set_visible(False)
+        self.ax1.axes.get_yaxis().set_visible(False)
+        self.ax1.set_title('Obraz oryginalny')
         self.canvas_sens1.draw()
+
         self.ax2.imshow(im_x)
+        self.ax2.axes.get_xaxis().set_visible(False)
+        self.ax2.axes.get_yaxis().set_visible(False)
+        self.ax2.set_title('Zmieniona wartość x')
         self.canvas_sens2.draw()
+
         self.ax3.imshow(im_p)
+        self.ax3.axes.get_xaxis().set_visible(False)
+        self.ax3.axes.get_yaxis().set_visible(False)
+        self.ax3.set_title('Zmieniona wartość p')
         self.canvas_sens3.draw()
         
     def start_encryption(self):
