@@ -52,7 +52,7 @@ class Controller:
         return self.model.npcr()
 
     def get_uaci(self):
-        return self.model.npcr()
+        return self.model.uaci()
 
     def get_entropy(self):
         return self.model.entropy()

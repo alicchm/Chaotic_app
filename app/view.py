@@ -746,14 +746,14 @@ class View():
         self.draw_histograms(copy.copy(self.cryptogram), fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3)
 
         #npcr
-        self.npcr_r_label.config(text=f'R: {self.npcr[0]}', fg=red)
-        self.npcr_g_label.config(text=f'G: {self.npcr[1]}', fg=green)
-        self.npcr_b_label.config(text=f'B: {self.npcr[2]}', fg=blue)
+        self.npcr_r_label.config(text=f'R: {self.npcr[0]} %', fg=red)
+        self.npcr_g_label.config(text=f'G: {self.npcr[1]} %', fg=green)
+        self.npcr_b_label.config(text=f'B: {self.npcr[2]} %', fg=blue)
 
         #uaci
-        self.uaci_r_label.config(text=f'R: {self.uaci[0]}', fg=red)
-        self.uaci_g_label.config(text=f'G: {self.uaci[1]}', fg=green)
-        self.uaci_b_label.config(text=f'B: {self.uaci[2]}', fg=blue)
+        self.uaci_r_label.config(text=f'R: {self.uaci[0]} %', fg=red)
+        self.uaci_g_label.config(text=f'G: {self.uaci[1]} %', fg=green)
+        self.uaci_b_label.config(text=f'B: {self.uaci[2]} %', fg=blue)
 
         #entropia
         self.entropy_r_label.config(text=f'R: {self.entropy[0]}', fg=red)

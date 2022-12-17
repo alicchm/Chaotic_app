@@ -291,8 +291,6 @@ class Cipher:
         J_flatter = J.reshape(enc_N*enc_M,3) #zmiana struktury na listę pikseli
         #J_flatter
         
-        
-        
         px_list2 = []
         xk2 = x1
         p = p1
@@ -335,11 +333,11 @@ class Cipher:
     def key_sensitivity(self, change_value):
         
         if self.cipher_type==1:
-            im_oryg = self.encryption1(self.image, self.x, self.p)
+            im_oryg = self.cryptogram
             im_x = self.encryption1(self.image, self.x+change_value, self.p)
             im_p = self.encryption1(self.image, self.x, self.p+change_value)
         else:
-            im_oryg = self.encryption2(self.image, self.x, self.p)
+            im_oryg = self.cryptogram
             im_x = self.encryption2(self.image, self.x+change_value, self.p)
             im_p = self.encryption2(self.image, self.x, self.p+change_value)
         
@@ -354,10 +352,10 @@ class Cipher:
         im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
         
         if self.cipher_type==1:
-            enc_im = self.encryption1(self.image, self.x, self.p)
+            enc_im = self.cryptogram
             enc_im2 = self.encryption1(im2, self.x, self.p)
         else:
-            enc_im = self.encryption2(self.image, self.x, self.p)
+            enc_im = self.cryptogram
             enc_im2 = self.encryption2(im2, self.x, self.p)
         
         enc_px = list(enc_im.getdata())
@@ -397,10 +395,10 @@ class Cipher:
         im2_px[random_N, random_M] = ((im2_px[random_N, random_M][0]+1)%256, (im2_px[random_N, random_M][1]+1)%256, (im2_px[random_N, random_M][2]+1)%256)
         
         if self.cipher_type==1:
-            enc_im = self.encryption1(self.image, self.x, self.p)
+            enc_im = self.cryptogram
             enc_im2 = self.encryption1(im2, self.x, self.p)
         else:
-            enc_im = self.encryption2(self.image, self.x, self.p)
+            enc_im = self.cryptogram
             enc_im2 = self. encryption2(im2, self.x, self.p)
         
         enc_px = list(enc_im.getdata())
@@ -439,10 +437,12 @@ class Cipher:
         #     else:
         #         im = self.encryption2(self.image, self.x, self.p)
 
-        if self.cipher_type==1:
-            im = self.encryption1(self.image, self.x, self.p)
-        else:
-            im = self.encryption2(self.image, self.x, self.p)
+        # if self.cipher_type==1:
+        #     im = self.encryption1(self.image, self.x, self.p)
+        # else:
+        #     im = self.encryption2(self.image, self.x, self.p)
+
+        im = self.cryptogram
         
         N, M = im.size
         r = []
