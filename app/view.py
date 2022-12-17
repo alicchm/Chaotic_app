@@ -10,6 +10,7 @@ import win32clipboard, os
 from datetime import datetime
 from controller import Controller
 from tkinter.messagebox import showinfo, showerror
+from tkinter.font import Font
 import copy
 import ctypes
 
@@ -676,11 +677,11 @@ class View():
         self.canvas_sens3.get_tk_widget().grid(column=2,row=9)
 
         #korelacja
-        measure_label_cor = tk.Label(measure_inner_frame, height=5, text='Korelacja', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor = tk.Label(measure_inner_frame, height=3, text='Korelacja', anchor='sw', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor.grid(column=0, row=10, sticky='ew')
 
         #horyzontalna
-        measure_label_cor_horiz = tk.Label(measure_inner_frame, height=5, text='Horyzontalna', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor_horiz = tk.Label(measure_inner_frame, height=3, text='Horyzontalna', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor_horiz.grid(column=1, row=11, sticky='ew')
 
         self.corr_r_label_horiz = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
@@ -693,7 +694,7 @@ class View():
         self.corr_b_label_horiz.grid(column=2, row=12)
 
         #wertykalna
-        measure_label_cor_ver = tk.Label(measure_inner_frame, height=5, text='Wertykalna', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor_ver = tk.Label(measure_inner_frame, height=3, text='Wertykalna', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor_ver.grid(column=1, row=13, sticky='ew')
 
         self.corr_r_label_ver = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
@@ -706,7 +707,7 @@ class View():
         self.corr_b_label_ver.grid(column=2, row=14)
 
         #diagonalna
-        measure_label_cor_dia = tk.Label(measure_inner_frame, height=5, text='Diagonalna', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_cor_dia = tk.Label(measure_inner_frame, height=3, text='Diagonalna', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor_dia.grid(column=1, row=15, sticky='ew')
 
         self.corr_r_label_dia = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
@@ -716,7 +717,11 @@ class View():
         self.corr_g_label_dia.grid(column=1, row=16)
 
         self.corr_b_label_dia = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_b_label_dia.grid(column=2, row=16)         
+        self.corr_b_label_dia.grid(column=2, row=16)  
+
+        #pusty label
+        measure_label_empty = tk.Label(measure_inner_frame, height=3, text=' ', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_empty.grid(column=1, row=17, sticky='ew')       
 
         #button - do strony z miarami jakości
         enc2_tomeasures_button = tk.Button(page2_encode_results, text = 'Miary', width=20, height=1, bg=self.light_gray_color, bd=0, command=lambda: self.change_frame_calc(page2_encode_measures, fig_hist1, canvas_hist1, fig_hist2, canvas_hist2, fig_hist3, canvas_hist3)) #
