@@ -61,6 +61,7 @@ class View():
         self.encoded_window_bg1 = 'bg_img/encoded_window_bg2.png'
         self.encoded_window_bg2 = 'bg_img/encoded_measures_bg222.png'
         self.decoded_window_bg = 'bg_img/decoded_window_bg2.png'
+        self.copy_text_img = 'bg_img/copy_symbol2.png'
 
         self.logo_img = 'app_logo_mini2.png'
         self.window_title = 'Chaotyczne szyfrowanie obrazów'
@@ -563,10 +564,16 @@ class View():
         enc2_key_label.place(relx=0.777, rely=0.49)
 
         #label - wartość klucza
-        enc2_keyval_label = tk.Text(page2_encode_results, bg=self.light_gray_color, height=1, width=13, relief='flat', inactiveselectbackground=self.light_gray_color)
+        enc2_keyval_label = tk.Text(page2_encode_results, bg=self.light_gray_color, height=1, width=10, relief='flat', inactiveselectbackground=self.light_gray_color)
         enc2_keyval_label.insert(1.0, self.spx)
         enc2_keyval_label.configure(state='disabled') #trzeba najpierw podać zawartość, potem zmienić stan
         enc2_keyval_label.place(relx=0.779, rely=0.54)
+
+        enc2_copy_key_button_img = Image.open(self.copy_text_img).resize((15,15),resample=Image.LANCZOS)
+        enc2_copy_key_button_photo = ImageTk.PhotoImage(enc2_copy_key_button_img)
+        enc2_copy_key_button = ttk.Button(page2_encode_results, image=enc2_copy_key_button_photo, command=lambda:self.copy_text_to_clipboard(self.spx), width=1, padding='1 1 1 1')
+        enc2_copy_key_button.place(relx=0.883, rely=0.535)
+        enc2_copy_key_button.image = enc2_copy_key_button_photo
 
         #strona z miarami jakości
         page2_encode_measures = tk.Frame(enc2_window, width=self.nb_page_width, height=self.nb_page_height, bg=self.dark_bg_color)
@@ -789,6 +796,15 @@ class View():
         win32clipboard.OpenClipboard()
         win32clipboard.EmptyClipboard()
         win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
+        win32clipboard.CloseClipboard()
+
+    def copy_text_to_clipboard(self, text):
+        text = str(text)
+        print(text)
+        text = text.encode('utf8')
+        win32clipboard.OpenClipboard()
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardText(text)
         win32clipboard.CloseClipboard()
 
     def dec_open_window(self):
