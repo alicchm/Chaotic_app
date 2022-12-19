@@ -313,7 +313,7 @@ class View():
     def enc_openimage(self, tab_num):
         enc_filename = filedialog.askopenfilename(
             title = 'Wybierz obraz',
-            filetypes=[('Obraz JPG','*.jpg')]
+            filetypes=[('Obrazy JPG i PNG','.jpg .png'), ('Obraz JPG','*.jpg'), ('Obraz PNG','*.png')]
         )
 
         # showinfo(title='Wybrany plik', message=f'{enc_filename},{type(enc_filename)}')
