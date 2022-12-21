@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import CENTER, LEFT, RIGHT, Toplevel, ttk, filedialog
+from tkinter import CENTER, LEFT, RIGHT, Toplevel, ttk, filedialog, messagebox
 from PIL import ImageTk, Image, ImageStat
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -887,25 +887,33 @@ class View():
         
     def start_encryption(self):
         print(self.enc_x_entry.get(), self.enc_p_entry.get(), self.enc_option_radio.get())
-        self.controller.set_x(float(self.enc_x_entry.get()))
-        self.controller.set_p(float(self.enc_p_entry.get()))
-        self.controller.set_ciphertype(float(self.enc_option_radio.get()))
-        self.cryptogram = self.controller.start_encryption()
-        self.spx = self.controller.get_Spx()
-        print(np.asarray(self.cryptogram))
-        self.enc_open_window()
+        if self.image is not None:
+            self.controller.set_x(float(self.enc_x_entry.get()))
+            self.controller.set_p(float(self.enc_p_entry.get()))
+            self.controller.set_ciphertype(float(self.enc_option_radio.get()))
+            self.cryptogram = self.controller.start_encryption()
+            self.spx = self.controller.get_Spx()
+            print(np.asarray(self.cryptogram))
+            self.enc_open_window()
+        else:
+            messagebox.showerror('Brak obrazu', 'Przed rozpoczęciem wybierz obraz do zaszyfrowania.')
+
         #self.routine(1)
 
     def start_decryption(self):
-        self.controller.set_x(float(self.dec_x_entry.get()))
-        self.controller.set_p(float(self.dec_p_entry.get()))
-        self.controller.set_Spx(float(self.dec_key_entry.get()))
-        self.controller.set_ciphertype(float(self.dec_option_radio.get()))
-        self.image_decrypted = self.controller.start_decryption()
-        #print(np.asarray(self.cryptogram))
-        self.dec_open_window()
-        #self.routine(1)
-    
+        if self.image is not None:
+            print('działa')
+            self.controller.set_x(float(self.dec_x_entry.get()))
+            self.controller.set_p(float(self.dec_p_entry.get()))
+            self.controller.set_Spx(float(self.dec_key_entry.get()))
+            self.controller.set_ciphertype(float(self.dec_option_radio.get()))
+            self.image_decrypted = self.controller.start_decryption()
+            #print(np.asarray(self.cryptogram))
+            self.dec_open_window()
+            #self.routine(1)
+        else:
+            messagebox.showerror('Brak obrazu', 'Przed rozpoczęciem wybierz obraz do zaszyfrowania.')
+        
     def set_image_for_enc(self):
         print(self.image)
         self.image_toview = copy.copy(self.image)

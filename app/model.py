@@ -276,7 +276,7 @@ class Cipher:
         for i in range(M):
             px_list.append([])
             for j in range(N):
-                px_list[i].append(first_place[(i*M)+j])
+                px_list[i].append(first_place[(i*N)+j])
         #print(px_list)
         #zapisanie listy jako obraz
         cryptogram = Image.fromarray(np.uint8(px_list))
@@ -287,7 +287,7 @@ class Cipher:
     def decryption1(self, cryptogram, Spx, x1, p1):
         J = np.asarray(cryptogram)
         enc_N, enc_M = cryptogram.size
-        
+        print('działa')
         J_flatter = J.reshape(enc_N*enc_M,3) #zmiana struktury na listę pikseli
         #J_flatter
         
@@ -296,7 +296,7 @@ class Cipher:
         p = p1
         sb = self.generate_sbox(xk2, p, Spx, enc_N, enc_M)
         deque_sb = col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
-
+        print('działa')
         while len(J_flatter)>0:
             xk2 = self.m_map(xk2, p) #calculate x from recurence
 
@@ -316,13 +316,13 @@ class Cipher:
 
             shift = int((256*xk2)//1) #obliczenie wartości shift
             deque_sb.rotate(shift) #shift s-box
-            
+        print('działa')    
         #zmiana struktury listy, by móc ją potem odczytać jako obraz
         decode_px = []
         for i in range(enc_M):
             decode_px.append([])
             for j in range(enc_N):
-                decode_px[i].append(px_list2[(i*enc_M)+j])
+                decode_px[i].append(px_list2[(i*enc_N)+j])
 
         decrypted = Image.fromarray(np.uint8(decode_px))
         return decrypted
