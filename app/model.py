@@ -181,14 +181,13 @@ class Cipher:
             xk = self.m_map(xk,p)
             
             if xk <= 0.5: #pierwszy nieodczytany piksel
-                px = decrypted_im[0]
+                px_list[i] = decrypted_im[0]
                 decrypted_im = np.delete(decrypted_im, 0, 0)
-                px_list[i] = px
                 
             elif xk > 0.5: #ostatni nieodczytany piksel
-                px = decrypted_im[len(decrypted_im)-1]
+                px_list[i] = decrypted_im[len(decrypted_im)-1]
                 decrypted_im = np.delete(decrypted_im, len(decrypted_im)-1, 0)
-                px_list[i] = px
+    
             i=i+1  
         print(px_list)
         #px_list = np.roll(px_list, -Spx) XDxdDd
