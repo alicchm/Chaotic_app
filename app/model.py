@@ -196,7 +196,7 @@ class Cipher:
         for i in range(M):
             decode_px.append([])
             for j in range(N):
-                decode_px[i].append(px_list[(i*M)+j])
+                decode_px[i].append(px_list[(i*N)+j])
         decrypted_image =  Image.fromarray(np.uint8(decode_px))
         decrypted_image.save("odszyfrowane.jpg")
         return decrypted_image
