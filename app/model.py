@@ -93,13 +93,13 @@ class Cipher:
         first_plc = []
         last_plc = []
         xk = x
-        for i in range(len(im)):
-            for j in range(len(im[i])):
-                xk = self.m_map(xk,p)
-                if xk <= 0.5:
-                    first_plc.append(im[i,j])
-                elif xk > 0.5:
-                    last_plc.append(im[i,j])
+        im_flatten = im.reshape(N*M,3)
+        for i in range(len(im_flatten)):
+            xk = self.m_map(xk,p)
+            if xk <= 0.5:
+                first_plc.append(im_flatten[i])
+            elif xk > 0.5:
+                last_plc.append(im_flatten[i])
                     
         last_plc_rev = last_plc[::-1]
         first_plc.extend(last_plc_rev)
@@ -112,7 +112,7 @@ class Cipher:
         for i in range(M):
             px_list.append([])
             for j in range(N):
-                px_list[i].append(first_plc[(i*M)+j])
+                px_list[i].append(first_plc[(i*N)+j])
         
         
         px = np.asarray(px_list)
@@ -171,23 +171,23 @@ class Cipher:
                 tmp_1.append(tmp_2)       
             decrypted_im.append(tmp_1)
         decrypted_im = np.asarray(decrypted_im)
-        print(decrypted_im.size)
+        print(decrypted_im.size, N, M)
         #px = []
         xk = x1
-        decrypted_im = decrypted_im.reshape(N*M,3)
-        px_list = np.empty([len(decrypted_im), 3])
+        decrypted_im1 = decrypted_im.reshape(N*M,3)
+        px_list = np.empty([len(decrypted_im1), 3])
+        print(decrypted_im1)
         i = 0
-        while len(decrypted_im)>0:
+        while len(decrypted_im1)>0:
             xk = self.m_map(xk,p)
             
             if xk <= 0.5: #pierwszy nieodczytany piksel
-                px_list[i] = decrypted_im[0]
-                decrypted_im = np.delete(decrypted_im, 0, 0)
+                px_list[i] = decrypted_im1[0]
+                decrypted_im1 = np.delete(decrypted_im1, 0, 0)
                 
             elif xk > 0.5: #ostatni nieodczytany piksel
-                px_list[i] = decrypted_im[len(decrypted_im)-1]
-                decrypted_im = np.delete(decrypted_im, len(decrypted_im)-1, 0)
-    
+                px_list[i] = decrypted_im1[len(decrypted_im1)-1]
+                decrypted_im1 = np.delete(decrypted_im1, len(decrypted_im1)-1, 0)
             i=i+1  
         print(px_list)
         #px_list = np.roll(px_list, -Spx) XDxdDd
@@ -295,7 +295,7 @@ class Cipher:
         p = p1
         sb = self.generate_sbox(xk2, p, Spx, enc_N, enc_M)
         deque_sb = col.deque(sb) #zmiana typu "listy" żeby szybciej wykonywał się obrót cykliczny s-box
-        print('działa')
+        print(J_flatter)
         while len(J_flatter)>0:
             xk2 = self.m_map(xk2, p) #calculate x from recurence
 
