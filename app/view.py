@@ -626,7 +626,7 @@ class View():
         canvas_hist3.get_tk_widget().grid(column=2,row=1)
 
         #npcr
-        measure_label_npcr = tk.Label(measure_inner_frame, height=5, text='NPCR', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_npcr = tk.Label(measure_inner_frame, height=5, text='NPCR (Number of Pixels Change Rate)', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_npcr.grid(column=0, row=2, sticky='ew')
 
         self.npcr_r_label = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
@@ -639,7 +639,7 @@ class View():
         self.npcr_b_label.grid(column=2, row=3)
 
         #uaci
-        measure_label_uaci = tk.Label(measure_inner_frame, height=5, text='UACI', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_uaci = tk.Label(measure_inner_frame, height=5, text='UACI (Unified Average Changing Intensity)', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_uaci.grid(column=0, row=4, sticky='ew')
 
         self.uaci_r_label = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
@@ -665,7 +665,7 @@ class View():
         self.entropy_b_label.grid(column=2, row=7)
 
         #key sensitivity
-        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Key Sensitivity', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Wrażliwość na zmianę klucza', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_keysens.grid(column=0, row=8, sticky='ew')
 
         self.key_sens1 = Figure(figsize=(4.25,3), dpi=60)
@@ -876,13 +876,13 @@ class View():
         self.ax2.imshow(im_x)
         self.ax2.axes.get_xaxis().set_visible(False)
         self.ax2.axes.get_yaxis().set_visible(False)
-        self.ax2.set_title('Zmieniona wartość x')
+        self.ax2.set_title('Zmieniona wartość $x$, $x_{zmienione} = x + 10^{-16}$')
         self.canvas_sens2.draw()
 
         self.ax3.imshow(im_p)
         self.ax3.axes.get_xaxis().set_visible(False)
         self.ax3.axes.get_yaxis().set_visible(False)
-        self.ax3.set_title('Zmieniona wartość p')
+        self.ax3.set_title('Zmieniona wartość $p$, $p_{zmienione} = p + 10^{-16}$')
         self.canvas_sens3.draw()
         
     def start_encryption(self):
