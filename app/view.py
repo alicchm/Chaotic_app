@@ -353,9 +353,12 @@ class View():
         if value != '' and self.check_if_float(value) == True:
             val_float = float(value)
             #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
-            self.enc_x.set(val_float)
-            self.enc_x_before.set(val_float)
-            return True
+            if val_float > 0 and val_float < 1:
+                self.enc_x.set(val_float)
+                self.enc_x_before.set(val_float)
+                return True
+            else:
+                return False
         else:       
             return False
 
@@ -364,9 +367,12 @@ class View():
         if value != '' and self.check_if_float(value) == True:
             val_float = float(value)
             #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
-            self.enc_x.set(val_float)
-            self.enc_x_before.set(val_float)
-            return True
+            if val_float > 0 and val_float < 1:
+                self.enc_x.set(val_float)
+                self.enc_x_before.set(val_float)
+                return True
+            else:
+                return False
         else:       
             return False
 
@@ -390,7 +396,7 @@ class View():
     def entry_p_validate(self, value): #walidacja wprowadzonej wartości p
         if value != '' and self.check_if_float(value) == True:
             val_float = float(value)
-            if (val_float<=0.5 and val_float>=0.25 and self.enc_option_radio.get()==1) or (val_float<1 and val_float>0 and self.enc_option_radio.get()==2):
+            if (val_float<0.5 and val_float>=0.25 and self.enc_option_radio.get()==1) or (val_float<1 and val_float>0 and self.enc_option_radio.get()==2):
                 self.enc_p.set(val_float)
                 self.enc_p_before.set(val_float)
                 return True
@@ -403,7 +409,7 @@ class View():
         print('p decode val')
         if value != '' and self.check_if_float(value) == True:
             val_float = float(value)
-            if (val_float<=0.5 and val_float>=0.25 and self.dec_option_radio.get()==1) or (val_float<1 and val_float>0 and self.dec_option_radio.get()==2):
+            if (val_float<0.5 and val_float>=0.25 and self.dec_option_radio.get()==1) or (val_float<1 and val_float>0 and self.dec_option_radio.get()==2):
                 self.enc_p.set(val_float)
                 self.enc_p_before.set(val_float)
                 return True
@@ -502,8 +508,8 @@ class View():
             self.enc_x_range[0] = '0.001'
             self.enc_x_range[1] = '0.999'
         elif self.enc_option_radio.get() == 2:
-            self.enc_p_range[0] = '0.001'
-            self.enc_p_range[1] = '0.999'
+            self.enc_p_range[0] = '0.25'
+            self.enc_p_range[1] = '0.5'
             self.enc_x_range[0] = '0.001'
             self.enc_x_range[1] = '0.999'
 
@@ -888,13 +894,20 @@ class View():
     def start_encryption(self):
         print(self.enc_x_entry.get(), self.enc_p_entry.get(), self.enc_option_radio.get())
         if self.image is not None:
-            self.controller.set_x(float(self.enc_x_entry.get()))
-            self.controller.set_p(float(self.enc_p_entry.get()))
-            self.controller.set_ciphertype(float(self.enc_option_radio.get()))
-            self.cryptogram = self.controller.start_encryption()
-            self.spx = self.controller.get_Spx()
-            print(np.asarray(self.cryptogram))
-            self.enc_open_window()
+            try:
+                if float(self.enc_x_entry.get()) == float(self.enc_p_entry.get()) or float(self.enc_p_entry.get())<0.25 or float(self.enc_p_entry.get()) >= 0.5 or float(self.enc_x_entry.get())<=0 or float(self.enc_x_entry.get())>=1:
+                    raise ValueError
+                self.controller.set_x(float(self.enc_x_entry.get()))
+                self.controller.set_p(float(self.enc_p_entry.get()))
+                self.controller.set_ciphertype(float(self.enc_option_radio.get()))
+                self.cryptogram = self.controller.start_encryption()
+                self.spx = self.controller.get_Spx()
+                print(np.asarray(self.cryptogram))
+                self.enc_open_window()
+            except ValueError:
+                messagebox.showerror('Błąd', 'Dla podanych wartości algorytm natrafił na dzielenie przez 0. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1].')
+            except TypeError:
+                messagebox.showerror('Błąd', 'Dla podanych wartości algorytm natrafił na dzielenie przez 0. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1].')
         else:
             messagebox.showerror('Brak obrazu', 'Przed rozpoczęciem wybierz obraz do zaszyfrowania.')
 
@@ -903,14 +916,21 @@ class View():
     def start_decryption(self):
         if self.image is not None:
             print('działa')
-            self.controller.set_x(float(self.dec_x_entry.get()))
-            self.controller.set_p(float(self.dec_p_entry.get()))
-            self.controller.set_Spx(float(self.dec_key_entry.get()))
-            self.controller.set_ciphertype(float(self.dec_option_radio.get()))
-            self.image_decrypted = self.controller.start_decryption()
-            #print(np.asarray(self.cryptogram))
-            self.dec_open_window()
-            #self.routine(1)
+            try:
+                if float(self.dec_x_entry.get()) ==  float(self.dec_p_entry.get()) or float(self.dec_p_entry.get())<0.25 or float(self.dec_p_entry.get()) >= 0.5 or float(self.dec_x_entry.get())<=0 or float(self.dec_x_entry.get())>=1 or float(self.dec_key_entry.get()) <= 0:
+                        raise ValueError
+                self.controller.set_x(float(self.dec_x_entry.get()))
+                self.controller.set_p(float(self.dec_p_entry.get()))
+                self.controller.set_Spx(float(self.dec_key_entry.get()))
+                self.controller.set_ciphertype(float(self.dec_option_radio.get()))
+                self.image_decrypted = self.controller.start_decryption()
+                #print(np.asarray(self.cryptogram))
+                self.dec_open_window()
+                #self.routine(1)
+            except ValueError:
+                messagebox.showerror('Dzielenie przez 0', 'Podaj wartości dziesiętne. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1]. Spx powinno być większe od 0.')
+            except TypeError:
+                messagebox.showerror('Dzielenie przez 0', 'Podaj wartości dziesiętne. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1]. Spx powinno być większe od 0.')
         else:
             messagebox.showerror('Brak obrazu', 'Przed rozpoczęciem wybierz obraz do zaszyfrowania.')
         
