@@ -127,10 +127,10 @@ class View():
         self.enc_style_radiobutton = ttk.Style()
         self.enc_style_radiobutton.configure('enc_radio.TRadiobutton', background=self.orange_color)
 
-        self.enc_algorithm1_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 1.', variable=self.enc_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='enc_radio.TRadiobutton')
+        self.enc_algorithm1_radio = ttk.Radiobutton(self.page_encode, text='Algorytm S-BOX', variable=self.enc_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='enc_radio.TRadiobutton')
         self.enc_algorithm1_radio.place(relx=0.09, rely=0.35)
         
-        self.enc_algorithm2_radio = ttk.Radiobutton(self.page_encode, text='Algorytm 2.', variable=self.enc_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='enc_radio.TRadiobutton')
+        self.enc_algorithm2_radio = ttk.Radiobutton(self.page_encode, text='Algorytm HEX', variable=self.enc_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='enc_radio.TRadiobutton')
         self.enc_algorithm2_radio.place(relx=0.09, rely=0.4)
         self.enc_option_radio.set(1)
 
@@ -189,10 +189,10 @@ class View():
         self.dec_style_radiobutton = ttk.Style()
         self.dec_style_radiobutton.configure('dec_radio.TRadiobutton', background=self.orange_color)
 
-        self.dec_algorithm1_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 1.', variable=self.dec_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='dec_radio.TRadiobutton')
+        self.dec_algorithm1_radio = ttk.Radiobutton(self.page_decode, text='Algorytm S-BOX', variable=self.dec_option_radio, value=1, command=lambda:self.enc_selectalgorithm(1), style='dec_radio.TRadiobutton')
         self.dec_algorithm1_radio.place(relx=0.09, rely=0.31)
 
-        self.dec_algorithm2_radio = ttk.Radiobutton(self.page_decode, text='Algorytm 2.', variable=self.dec_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='dec_radio.TRadiobutton')
+        self.dec_algorithm2_radio = ttk.Radiobutton(self.page_decode, text='Algorytm HEX', variable=self.dec_option_radio, value=2, command=lambda:self.enc_selectalgorithm(2), style='dec_radio.TRadiobutton')
         self.dec_algorithm2_radio.place(relx=0.09, rely=0.36)
         self.dec_option_radio.set(1)
 
@@ -510,21 +510,21 @@ class View():
 
     def enc_selectalgorithm(self, cipher_type):
         print('wybrano algorytm: ', self.enc_option_radio.get())
-        if self.enc_option_radio.get() == 1:
-            self.enc_p_range[0] = '0.25'
-            self.enc_p_range[1] = '0.5'
-            self.enc_x_range[0] = '0.001'
-            self.enc_x_range[1] = '0.999'
-        elif self.enc_option_radio.get() == 2:
-            self.enc_p_range[0] = '0.25'
-            self.enc_p_range[1] = '0.5'
-            self.enc_x_range[0] = '0.001'
-            self.enc_x_range[1] = '0.999'
+        # if self.enc_option_radio.get() == 1:
+            # self.enc_p_range[0] = '0.25'
+            # self.enc_p_range[1] = '0.5'
+            # self.enc_x_range[0] = '0.001'
+            # self.enc_x_range[1] = '0.999'
+        # elif self.enc_option_radio.get() == 2:
+            # self.enc_p_range[0] = '0.25'
+            # self.enc_p_range[1] = '0.5'
+            # self.enc_x_range[0] = '0.001'
+            # self.enc_x_range[1] = '0.999'
 
-        self.enc_p.set(self.enc_p_range[0])
-        self.enc_p_before.set(self.enc_p_range[0])
-        self.enc_x.set(self.enc_x_range[0])
-        self.enc_x_before.set(self.enc_x_range[0])
+        # self.enc_p.set(self.enc_p_range[0])
+        # self.enc_p_before.set(self.enc_p_range[0])
+        # self.enc_x.set(self.enc_x_range[0])
+        # self.enc_x_before.set(self.enc_x_range[0])
         
         self.cipher_type = cipher_type
 
