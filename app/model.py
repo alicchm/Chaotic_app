@@ -44,7 +44,7 @@ class Cipher:
                 self.decrypted_image = self.decryption2(self.image, self.Spx, self.x, self.p)
                 return self.decrypted_image
 
-    def get_ciphertyper(self):
+    def get_ciphertype(self):
         return self.cipher_type
 
     def m_map(self, xk, p):
@@ -132,7 +132,7 @@ class Cipher:
                     for a in range(len(hexa)):
                         xk = self.asymetric_tent_map(xk,p)
                         #print(xk)
-                        xk_rounded = int(round(xk,3) * 100)
+                        xk_rounded = int(np.round(xk, decimals = 3) * 100)
                         taba.append(xk_rounded)
                         hexa[a] = (hexa[a] + xk_rounded * Spx) % 16
                     #print(hexa)
@@ -162,7 +162,7 @@ class Cipher:
                     for a in range(len(hexa)):
                         xk = self.asymetric_tent_map(xk,p)
                         #print(xk)
-                        xk_rounded = int(round(xk,3) * 100 )
+                        xk_rounded = int(np.round(xk, decimals = 3) * 100 )
                         taba.append(xk_rounded)
                         hexa[a] = (hexa[a] - xk_rounded * Spx) % 16
                     #print(hexa)
@@ -190,7 +190,6 @@ class Cipher:
                 decrypted_im1 = np.delete(decrypted_im1, len(decrypted_im1)-1, 0)
             i=i+1  
         print(px_list)
-        #px_list = np.roll(px_list, -Spx) XDxdDd
         decode_px = []
         for i in range(M):
             decode_px.append([])
