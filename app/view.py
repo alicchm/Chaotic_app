@@ -136,34 +136,34 @@ class View():
 
         #wartość x
         self.enc_x = tk.StringVar()
-        self.enc_x_before = tk.StringVar()
-        self.enc_x_range = ['0.001', '0.999']
-        self.enc_x.set(self.enc_x_range[0])
-        self.enc_x_before.set(self.enc_x_range[0])
+        # self.enc_x_before = tk.StringVar()
+        # self.enc_x_range = ['0.001', '0.999']
+        # self.enc_x.set(self.enc_x_range[0])
+        # self.enc_x_before.set(self.enc_x_range[0])
 
         self.enc_x_label = tk.Label(self.page_encode, text='x =', bg=self.orange_color)
         self.enc_x_label.place(relx=0.091, rely=0.55)
 
-        entry_x_val_function = self.root.register(self.entry_x_validate)
-        entry_x_inval_function = self.root.register(self.entry_x_invalid)
+        # entry_x_val_function = self.root.register(self.entry_x_validate)
+        # entry_x_inval_function = self.root.register(self.entry_x_invalid)
         self.enc_x_entry = tk.Entry(self.page_encode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_x, justify=tk.LEFT)
-        self.enc_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function,'%P'), invalidcommand=(entry_x_inval_function))
+        # self.enc_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function,'%P'), invalidcommand=(entry_x_inval_function))
         self.enc_x_entry.place(relx=0.125, rely=0.555)
 
         #wartość p
         self.enc_p = tk.StringVar()
-        self.enc_p_before = tk.StringVar()
-        self.enc_p_range = ['0.25', '0.5']
-        self.enc_p.set(self.enc_p_range[0])
-        self.enc_p_before.set(self.enc_p_range[0])
+        # self.enc_p_before = tk.StringVar()
+        # self.enc_p_range = ['0.25', '0.5']
+        # self.enc_p.set(self.enc_p_range[0])
+        # self.enc_p_before.set(self.enc_p_range[0])
 
         self.enc_p_label = tk.Label(self.page_encode, text='p =', bg=self.orange_color)
         self.enc_p_label.place(relx=0.091, rely=0.6)
 
-        entry_p_val_function = self.root.register(self.entry_p_validate)
-        entry_p_inval_function = self.root.register(self.entry_p_invalid)
+        # entry_p_val_function = self.root.register(self.entry_p_validate)
+        # entry_p_inval_function = self.root.register(self.entry_p_invalid)
         self.enc_p_entry = tk.Entry(self.page_encode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_p, justify=tk.LEFT)
-        self.enc_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function,'%P'), invalidcommand=(entry_p_inval_function))        
+        # self.enc_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function,'%P'), invalidcommand=(entry_p_inval_function))        
         self.enc_p_entry.place(relx=0.125, rely=0.605)
 
         #szyfrowanie - start algorytmu
@@ -200,20 +200,20 @@ class View():
         self.dec_x_label = tk.Label(self.page_decode, text='x =', bg=self.orange_color)
         self.dec_x_label.place(relx=0.091, rely=0.455)
 
-        entry_x_val_function_dec = self.root.register(self.entry_x_validate_dec)
-        entry_x_inval_function_dec = self.root.register(self.entry_x_invalid_dec)
+        # entry_x_val_function_dec = self.root.register(self.entry_x_validate_dec)
+        # entry_x_inval_function_dec = self.root.register(self.entry_x_invalid_dec)
         self.dec_x_entry = tk.Entry(self.page_decode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_x, justify=tk.LEFT)
-        self.dec_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function_dec,'%P'), invalidcommand=(entry_x_inval_function_dec))
+        # self.dec_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function_dec,'%P'), invalidcommand=(entry_x_inval_function_dec))
         self.dec_x_entry.place(relx=0.125, rely=0.46)
 
         #wartość p
         self.dec_p_label = tk.Label(self.page_decode, text='p =', bg=self.orange_color)
         self.dec_p_label.place(relx=0.091, rely=0.505)
 
-        entry_p_val_function_dec = self.root.register(self.entry_p_validate_dec)
-        entry_p_inval_function_dec = self.root.register(self.entry_p_invalid_dec)
+        # entry_p_val_function_dec = self.root.register(self.entry_p_validate_dec)
+        # entry_p_inval_function_dec = self.root.register(self.entry_p_invalid_dec)
         self.dec_p_entry = tk.Entry(self.page_decode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_p, justify=tk.LEFT)
-        self.dec_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function_dec,'%P'), invalidcommand=(entry_p_inval_function_dec))        
+        # self.dec_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function_dec,'%P'), invalidcommand=(entry_p_inval_function_dec))        
         self.dec_p_entry.place(relx=0.125, rely=0.51)
 
         #wartość klucza
@@ -221,15 +221,15 @@ class View():
         self.dec_key_label.place(relx=0.095, rely=0.595)
 
         self.dec_key = tk.StringVar()
-        self.dec_key_before = tk.StringVar()
-        self.dec_key_range = ['0', '1000000000']
-        self.dec_key.set(self.dec_key_range[0])
-        self.dec_key_before.set(self.dec_key_range[0])
+        # self.dec_key_before = tk.StringVar()
+        # self.dec_key_range = ['0', '1000000000']
+        # self.dec_key.set(self.dec_key_range[0])
+        # self.dec_key_before.set(self.dec_key_range[0])
 
-        entry_key_function = self.root.register(self.entry_key_validate)
-        entry_key_inval_function = self.root.register(self.entry_key_invalid)
+        # entry_key_function = self.root.register(self.entry_key_validate)
+        # entry_key_inval_function = self.root.register(self.entry_key_invalid)
         self.dec_key_entry = tk.Entry(self.page_decode, width=11, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.dec_key, justify=tk.LEFT)
-        self.dec_key_entry.config(validate='focusout', validatecommand=(entry_key_function,'%P'), invalidcommand=(entry_key_inval_function))        
+        # self.dec_key_entry.config(validate='focusout', validatecommand=(entry_key_function,'%P'), invalidcommand=(entry_key_inval_function))        
         self.dec_key_entry.place(relx=0.107, rely=0.645)
 
         #deszyfrowanie - start algorytmu
@@ -291,11 +291,14 @@ class View():
         self.p = None
         self.spx = None
         self.cipher_type = 1
-        self.enc_x.set(self.enc_x_range[0])
-        self.enc_p.set(self.enc_p_range[0])
-        self.enc_x_before.set(self.enc_x_range[0])
-        self.enc_p_before.set(self.enc_p_range[0])
-        self.dec_key.set(self.dec_key_range[0])
+        self.enc_x.set(0)
+        self.enc_p.set(0)
+        self.dec_key.set(0)
+        # self.enc_x.set(self.enc_x_range[0])
+        # self.enc_p.set(self.enc_p_range[0])
+        # self.enc_x_before.set(self.enc_x_range[0])
+        # self.enc_p_before.set(self.enc_p_range[0])
+        # self.dec_key.set(self.dec_key_range[0])
         print('działa')
         self.enc_option_radio.set(1)
         self.dec_option_radio.set(1)
@@ -349,124 +352,124 @@ class View():
         except ValueError:
             return False
 
-    def entry_x_validate(self, value): #walidacja wprowadzonej wartości x
-        if value != '' and self.check_if_float(value) == True:
-            val_float = float(value)
-            #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
-            if val_float > 0 and val_float < 1:
-                self.enc_x.set(val_float)
-                self.enc_x_before.set(val_float)
-                return True
-            else:
-                return False
-        else:       
-            return False
+    # def entry_x_validate(self, value): #walidacja wprowadzonej wartości x
+    #     if value != '' and self.check_if_float(value) == True:
+    #         val_float = float(value)
+    #         #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
+    #         if val_float > 0 and val_float < 1:
+    #             self.enc_x.set(val_float)
+    #             self.enc_x_before.set(val_float)
+    #             return True
+    #         else:
+    #             return False
+    #     else:       
+    #         return False
 
-    def entry_x_validate_dec(self, value): #walidacja wprowadzonej wartości x
-        print('x decode val')
-        if value != '' and self.check_if_float(value) == True:
-            val_float = float(value)
-            #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
-            if val_float > 0 and val_float < 1:
-                self.enc_x.set(val_float)
-                self.enc_x_before.set(val_float)
-                return True
-            else:
-                return False
-        else:       
-            return False
+    # def entry_x_validate_dec(self, value): #walidacja wprowadzonej wartości x
+    #     print('x decode val')
+    #     if value != '' and self.check_if_float(value) == True:
+    #         val_float = float(value)
+    #         #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
+    #         if val_float > 0 and val_float < 1:
+    #             self.enc_x.set(val_float)
+    #             self.enc_x_before.set(val_float)
+    #             return True
+    #         else:
+    #             return False
+    #     else:       
+    #         return False
 
-    def entry_x_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
-        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
-        showerror(title='Niepoprawna wartość', message=msg)
+    # def entry_x_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
+    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
+    #     showerror(title='Niepoprawna wartość', message=msg)
         
-        self.enc_x_entry.delete(0,tk.END)
-        self.enc_x_entry.insert(0,float(self.enc_x_before.get()))
-        self.enc_x.set(self.enc_x_before.get())
+    #     self.enc_x_entry.delete(0,tk.END)
+    #     self.enc_x_entry.insert(0,float(self.enc_x_before.get()))
+    #     self.enc_x.set(self.enc_x_before.get())
 
-    def entry_x_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
-        print('x decode inval')
-        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
-        showerror(title='Niepoprawna wartość', message=msg)
+    # def entry_x_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
+    #     print('x decode inval')
+    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
+    #     showerror(title='Niepoprawna wartość', message=msg)
         
-        self.dec_x_entry.delete(0,tk.END)
-        self.dec_x_entry.insert(0,float(self.enc_x_before.get()))
-        self.enc_x.set(self.enc_x_before.get())
+    #     self.dec_x_entry.delete(0,tk.END)
+    #     self.dec_x_entry.insert(0,float(self.enc_x_before.get()))
+    #     self.enc_x.set(self.enc_x_before.get())
 
-    def entry_p_validate(self, value): #walidacja wprowadzonej wartości p
-        if value != '' and self.check_if_float(value) == True:
-            val_float = float(value)
-            if (val_float<0.5 and val_float>=0.25 and self.enc_option_radio.get()==1) or (val_float<1 and val_float>0 and self.enc_option_radio.get()==2):
-                self.enc_p.set(val_float)
-                self.enc_p_before.set(val_float)
-                return True
-            else: 
-                return False
-        else:      
-            return False
+    # def entry_p_validate(self, value): #walidacja wprowadzonej wartości p
+    #     if value != '' and self.check_if_float(value) == True:
+    #         val_float = float(value)
+    #         if (val_float<0.5 and val_float>=0.25 and self.enc_option_radio.get()==1) or (val_float<1 and val_float>0 and self.enc_option_radio.get()==2):
+    #             self.enc_p.set(val_float)
+    #             self.enc_p_before.set(val_float)
+    #             return True
+    #         else: 
+    #             return False
+    #     else:      
+    #         return False
 
-    def entry_p_validate_dec(self, value): #walidacja wprowadzonej wartości p
-        print('p decode val')
-        if value != '' and self.check_if_float(value) == True:
-            val_float = float(value)
-            if (val_float<0.5 and val_float>=0.25 and self.dec_option_radio.get()==1) or (val_float<1 and val_float>0 and self.dec_option_radio.get()==2):
-                self.enc_p.set(val_float)
-                self.enc_p_before.set(val_float)
-                return True
-            else: 
-                return False
-        else:      
-            return False
+    # def entry_p_validate_dec(self, value): #walidacja wprowadzonej wartości p
+    #     print('p decode val')
+    #     if value != '' and self.check_if_float(value) == True:
+    #         val_float = float(value)
+    #         if (val_float<0.5 and val_float>=0.25 and self.dec_option_radio.get()==1) or (val_float<1 and val_float>0 and self.dec_option_radio.get()==2):
+    #             self.enc_p.set(val_float)
+    #             self.enc_p_before.set(val_float)
+    #             return True
+    #         else: 
+    #             return False
+    #     else:      
+    #         return False
 
-    def entry_p_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
-        range = ''
-        if self.enc_option_radio.get() == 1:
-            range = f'[0.25, 0.5]'
-        else:
-            range = f'(0, 1)'
-        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
-        showerror(title='Niepoprawna wartość', message=msg)
+    # def entry_p_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
+    #     range = ''
+    #     if self.enc_option_radio.get() == 1:
+    #         range = f'[0.25, 0.5]'
+    #     else:
+    #         range = f'(0, 1)'
+    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
+    #     showerror(title='Niepoprawna wartość', message=msg)
         
-        self.enc_p_entry.delete(0,tk.END)
-        self.enc_p_entry.insert(0,float(self.enc_p_before.get()))
+    #     self.enc_p_entry.delete(0,tk.END)
+    #     self.enc_p_entry.insert(0,float(self.enc_p_before.get()))
 
-        self.enc_p.set(self.enc_p_before.get())
+    #     self.enc_p.set(self.enc_p_before.get())
     
-    def entry_p_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
-        print('p decode inval')
-        range = ''
-        if self.dec_option_radio.get() == 1:
-            range = f'[0.25, 0.5]'
-        else:
-            range = f'(0, 1)'
-        msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
-        showerror(title='Niepoprawna wartość', message=msg)
+    # def entry_p_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
+    #     print('p decode inval')
+    #     range = ''
+    #     if self.dec_option_radio.get() == 1:
+    #         range = f'[0.25, 0.5]'
+    #     else:
+    #         range = f'(0, 1)'
+    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
+    #     showerror(title='Niepoprawna wartość', message=msg)
         
-        self.dec_p_entry.delete(0,tk.END)
-        self.dec_p_entry.insert(0,float(self.enc_p_before.get()))
+    #     self.dec_p_entry.delete(0,tk.END)
+    #     self.dec_p_entry.insert(0,float(self.enc_p_before.get()))
 
-        self.enc_p.set(self.enc_p_before.get())
+    #     self.enc_p.set(self.enc_p_before.get())
 
-    def entry_key_validate(self, value): #walidacja wprowadzonej wartości klucza
-        if value != '' and self.check_if_int(value) == True:
-            val_int = int(value)
-            if val_int>=0:
-                self.dec_key.set(val_int)
-                self.dec_key_before.set(val_int)
-                return True
-            else:
-                return False
-        else:      
-            return False
+    # def entry_key_validate(self, value): #walidacja wprowadzonej wartości klucza
+    #     if value != '' and self.check_if_int(value) == True:
+    #         val_int = int(value)
+    #         if val_int>=0:
+    #             self.dec_key.set(val_int)
+    #             self.dec_key_before.set(val_int)
+    #             return True
+    #         else:
+    #             return False
+    #     else:      
+    #         return False
 
-    def entry_key_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości klucza
-        msg = f'Podana wartość jest nieprawidłowa. Podaj nieujemną liczbę całkowitą.'
-        showerror(title='Niepoprawna wartość', message=msg)
+    # def entry_key_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości klucza
+    #     msg = f'Podana wartość jest nieprawidłowa. Podaj nieujemną liczbę całkowitą.'
+    #     showerror(title='Niepoprawna wartość', message=msg)
         
-        self.dec_key_entry.delete(0,tk.END)
-        self.dec_key_entry.insert(0,int(self.dec_key_before.get()))
+    #     self.dec_key_entry.delete(0,tk.END)
+    #     self.dec_key_entry.insert(0,int(self.dec_key_before.get()))
 
-        self.dec_key.set(self.dec_key_before.get())
+    #     self.dec_key.set(self.dec_key_before.get())
 
     def save_img(self, parent_window, img, tab_number):
         file_dir = filedialog.askdirectory(
