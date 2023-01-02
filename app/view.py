@@ -322,18 +322,23 @@ class View():
         # showinfo(title='Wybrany plik', message=f'{enc_filename},{type(enc_filename)}')
         if enc_filename != '':
             if Image.open(enc_filename).mode == 'RGB':
-                # showinfo(title='Wybrany plik', message=Image.open(enc_filename).mode)
-                #USTAWIANIE ŚCIEŻKI I OBRAZU
-                self.path = enc_filename
-                self.controller.set_image(self.path)
-                #TUTAJ SIE USTAWIA OBRAZEK JAKĄŚ FUNKCJĄ FOR EXAMPLE self.controller.get_image()
-                
-                if tab_num == 1:
-                    self.image = self.controller.get_image().copy()
-                    self.set_image_for_enc()
+                img_size = Image.open(enc_filename).size
+                if img_size[0] <=540 and img_size[0] >= 100 and img_size[1] <=540 and img_size[1] >= 100: #sprawdzenie wymiarów obrazu
+                    # showinfo(title='Wybrany plik', message=Image.open(enc_filename).mode)
+                    #USTAWIANIE ŚCIEŻKI I OBRAZU
+                    self.path = enc_filename
+                    self.controller.set_image(self.path)
+                    #TUTAJ SIE USTAWIA OBRAZEK JAKĄŚ FUNKCJĄ FOR EXAMPLE self.controller.get_image()
+                    
+                    if tab_num == 1:
+                        self.image = self.controller.get_image().copy()
+                        self.set_image_for_enc()
+                    else:
+                        self.image = self.controller.get_image().copy()
+                        self.set_image_for_dec()
                 else:
-                    self.image = self.controller.get_image().copy()
-                    self.set_image_for_dec()
+                    msg = 'Wymiary wybranego obrazu są nieprawidłowe. \nWymagana szerokość: [100, 540] \nWymagana wysokość: [100, 540]'
+                    showerror(title='Nieobsługiwany plik', message=msg)
             else:
                 msg = 'Wybrano nieobsługiwany typ pliku. Wymagany model przestrzeni barw obrazu to RGB (model RGBA nie jest obsługiwany).'
                 showerror(title='Nieobsługiwany plik', message=msg)
