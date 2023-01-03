@@ -328,18 +328,18 @@ class Cipher:
     #MIARY (metoda draw histograms jest w w widoku)
 
 
-    def key_sensitivity(self, change_value):
+    # def key_sensitivity(self, change_value):
         
-        if self.cipher_type==1:
-            im_oryg = self.cryptogram
-            im_x = self.encryption1(self.image, self.x+change_value, self.p)
-            im_p = self.encryption1(self.image, self.x, self.p+change_value)
-        else:
-            im_oryg = self.cryptogram
-            im_x = self.encryption2(self.image, self.x+change_value, self.p)
-            im_p = self.encryption2(self.image, self.x, self.p+change_value)
+    #     if self.cipher_type==1:
+    #         im_oryg = self.cryptogram
+    #         im_x = self.encryption1(self.image, self.x+change_value, self.p)
+    #         im_p = self.encryption1(self.image, self.x, self.p+change_value)
+    #     else:
+    #         im_oryg = self.cryptogram
+    #         im_x = self.encryption2(self.image, self.x+change_value, self.p)
+    #         im_p = self.encryption2(self.image, self.x, self.p+change_value)
         
-        return im_oryg, im_x, im_p
+    #     return im_oryg, im_x, im_p
 
     def npcr(self):
         N, M = self.image.size #szerokość, wysokość

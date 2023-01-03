@@ -45,8 +45,8 @@ class Controller:
         print(np.asarray(self.model.cryptogram))
         return self.model.cryptogram
     
-    def get_key_sensitivity(self, change_value):
-        return self.model.key_sensitivity(change_value)
+    # def get_key_sensitivity(self, change_value):
+    #     return self.model.key_sensitivity(change_value)
 
     def get_npcr(self):
         return self.model.npcr()

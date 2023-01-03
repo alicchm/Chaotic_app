@@ -39,7 +39,7 @@ class View():
         self.spx = None
 
         #miary
-        self.key_sensivity = None
+        # self.key_sensivity = None
         self.npcr = None
         self.uaci = None
         self.entropy = None
@@ -679,66 +679,66 @@ class View():
         self.entropy_b_label.grid(column=2, row=7)
 
         #key sensitivity
-        measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Wrażliwość na zmianę klucza', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_keysens.grid(column=0, row=8, sticky='ew')
+        # measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Wrażliwość na zmianę klucza', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
+        # measure_label_keysens.grid(column=0, row=8, sticky='ew')
 
-        self.key_sens1 = Figure(figsize=(4.25,3), dpi=60)
-        self.ax1 = self.key_sens1.add_subplot(111)
-        self.canvas_sens1 = FigureCanvasTkAgg(self.key_sens1, measure_inner_frame)
-        self.canvas_sens1.get_tk_widget().grid(column=0,row=9)
+        # self.key_sens1 = Figure(figsize=(4.25,3), dpi=60)
+        # self.ax1 = self.key_sens1.add_subplot(111)
+        # self.canvas_sens1 = FigureCanvasTkAgg(self.key_sens1, measure_inner_frame)
+        # self.canvas_sens1.get_tk_widget().grid(column=0,row=9)
 
-        self.key_sens2 = Figure(figsize=(4.25,3), dpi=60) #(figsize=(5,3), dpi=80)
-        self.ax2 = self.key_sens2.add_subplot(111)
-        self.canvas_sens2 = FigureCanvasTkAgg(self.key_sens2, measure_inner_frame)
-        self.canvas_sens2.get_tk_widget().grid(column=1,row=9)
+        # self.key_sens2 = Figure(figsize=(4.25,3), dpi=60) #(figsize=(5,3), dpi=80)
+        # self.ax2 = self.key_sens2.add_subplot(111)
+        # self.canvas_sens2 = FigureCanvasTkAgg(self.key_sens2, measure_inner_frame)
+        # self.canvas_sens2.get_tk_widget().grid(column=1,row=9)
 
-        self.key_sens3 = Figure(figsize=(4.25,3), dpi=60)
-        self.ax3 = self.key_sens3.add_subplot(111)
-        self.canvas_sens3 = FigureCanvasTkAgg(self.key_sens3, measure_inner_frame)
-        self.canvas_sens3.get_tk_widget().grid(column=2,row=9)
+        # self.key_sens3 = Figure(figsize=(4.25,3), dpi=60)
+        # self.ax3 = self.key_sens3.add_subplot(111)
+        # self.canvas_sens3 = FigureCanvasTkAgg(self.key_sens3, measure_inner_frame)
+        # self.canvas_sens3.get_tk_widget().grid(column=2,row=9)
 
         #korelacja
         measure_label_cor = tk.Label(measure_inner_frame, height=3, text='Korelacja', anchor='sw', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_cor.grid(column=0, row=10, sticky='ew')
+        measure_label_cor.grid(column=0, row=8, sticky='ew')
 
         #horyzontalna
         measure_label_cor_horiz = tk.Label(measure_inner_frame, height=3, text='Horyzontalna', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_cor_horiz.grid(column=1, row=11, sticky='ew')
+        measure_label_cor_horiz.grid(column=1, row=9, sticky='ew')
 
         self.corr_r_label_horiz = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_r_label_horiz.grid(column=0, row=12)
+        self.corr_r_label_horiz.grid(column=0, row=10)
 
         self.corr_g_label_horiz = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_g_label_horiz.grid(column=1, row=12)
+        self.corr_g_label_horiz.grid(column=1, row=10)
 
         self.corr_b_label_horiz = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_b_label_horiz.grid(column=2, row=12)
+        self.corr_b_label_horiz.grid(column=2, row=10)
 
         #wertykalna
         measure_label_cor_ver = tk.Label(measure_inner_frame, height=3, text='Wertykalna', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_cor_ver.grid(column=1, row=13, sticky='ew')
+        measure_label_cor_ver.grid(column=1, row=11, sticky='ew')
 
         self.corr_r_label_ver = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_r_label_ver.grid(column=0, row=14)
+        self.corr_r_label_ver.grid(column=0, row=12)
 
         self.corr_g_label_ver = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_g_label_ver.grid(column=1, row=14)
+        self.corr_g_label_ver.grid(column=1, row=12)
 
         self.corr_b_label_ver = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_b_label_ver.grid(column=2, row=14)
+        self.corr_b_label_ver.grid(column=2, row=12)
 
         #diagonalna
         measure_label_cor_dia = tk.Label(measure_inner_frame, height=3, text='Diagonalna', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        measure_label_cor_dia.grid(column=1, row=15, sticky='ew')
+        measure_label_cor_dia.grid(column=1, row=13, sticky='ew')
 
         self.corr_r_label_dia = tk.Label(measure_inner_frame, height=1, text='R: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_r_label_dia.grid(column=0, row=16)
+        self.corr_r_label_dia.grid(column=0, row=14)
 
         self.corr_g_label_dia = tk.Label(measure_inner_frame, height=1, text='G: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_g_label_dia.grid(column=1, row=16)
+        self.corr_g_label_dia.grid(column=1, row=14)
 
         self.corr_b_label_dia = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.corr_b_label_dia.grid(column=2, row=16)  
+        self.corr_b_label_dia.grid(column=2, row=14)  
 
         #pusty label
         measure_label_empty = tk.Label(measure_inner_frame, height=3, text=' ', anchor='s', bg=self.dark_bg_color, foreground=self.offwhite_color)
@@ -782,7 +782,7 @@ class View():
         self.entropy_b_label.config(text=f'B: {self.entropy[2]}', fg=blue)
 
         #keysensitivity
-        self.key_sensitivity()
+        # self.key_sensitivity()
 
         #korelacja
         #horyzontalna
@@ -878,26 +878,26 @@ class View():
         self.entropy = self.controller.get_entropy()
         self.correlations = self.controller.get_correlations()
 
-    def key_sensitivity(self):
-        im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))
+    # def key_sensitivity(self):
+    #     im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))
 
-        self.ax1.imshow(im_oryg)
-        self.ax1.axes.get_xaxis().set_visible(False)
-        self.ax1.axes.get_yaxis().set_visible(False)
-        self.ax1.set_title('Obraz oryginalny')
-        self.canvas_sens1.draw()
+    #     self.ax1.imshow(im_oryg)
+    #     self.ax1.axes.get_xaxis().set_visible(False)
+    #     self.ax1.axes.get_yaxis().set_visible(False)
+    #     self.ax1.set_title('Obraz oryginalny')
+    #     self.canvas_sens1.draw()
 
-        self.ax2.imshow(im_x)
-        self.ax2.axes.get_xaxis().set_visible(False)
-        self.ax2.axes.get_yaxis().set_visible(False)
-        self.ax2.set_title('Zmieniona wartość $x$, $x_{zmienione} = x + 10^{-16}$')
-        self.canvas_sens2.draw()
+    #     self.ax2.imshow(im_x)
+    #     self.ax2.axes.get_xaxis().set_visible(False)
+    #     self.ax2.axes.get_yaxis().set_visible(False)
+    #     self.ax2.set_title('Zmieniona wartość $x$, $x_{zmienione} = x + 10^{-16}$')
+    #     self.canvas_sens2.draw()
 
-        self.ax3.imshow(im_p)
-        self.ax3.axes.get_xaxis().set_visible(False)
-        self.ax3.axes.get_yaxis().set_visible(False)
-        self.ax3.set_title('Zmieniona wartość $p$, $p_{zmienione} = p + 10^{-16}$')
-        self.canvas_sens3.draw()
+    #     self.ax3.imshow(im_p)
+    #     self.ax3.axes.get_xaxis().set_visible(False)
+    #     self.ax3.axes.get_yaxis().set_visible(False)
+    #     self.ax3.set_title('Zmieniona wartość $p$, $p_{zmienione} = p + 10^{-16}$')
+    #     self.canvas_sens3.draw()
         
     def start_encryption(self):
         print(self.enc_x_entry.get(), self.enc_p_entry.get(), self.enc_option_radio.get())
