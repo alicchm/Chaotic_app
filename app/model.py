@@ -132,9 +132,9 @@ class Cipher:
                     for a in range(len(hexa)):
                         xk = self.asymetric_tent_map(xk,p)
                         #print(xk)
-                        xk_rounded = int(np.round(xk, decimals = 3) * 100)
+                        xk_rounded = int(np.round(xk*(Spx/N*M), decimals = 3) * 100 )
                         taba.append(xk_rounded)
-                        hexa[a] = (hexa[a] + xk_rounded * Spx) % 16
+                        hexa[a] = (hexa[a] + xk_rounded) % 16
                     #print(hexa)
                     tmp_2.append(self.to_decim(hexa))
                     #print(tmp_2)
@@ -162,9 +162,9 @@ class Cipher:
                     for a in range(len(hexa)):
                         xk = self.asymetric_tent_map(xk,p)
                         #print(xk)
-                        xk_rounded = int(np.round(xk, decimals = 3) * 100 )
+                        xk_rounded = int(np.round(xk*(Spx/N*M), decimals = 3) * 100 )
                         taba.append(xk_rounded)
-                        hexa[a] = (hexa[a] - xk_rounded * Spx) % 16
+                        hexa[a] = (hexa[a] - xk_rounded) % 16
                     #print(hexa)
                     tmp_2.append(self.to_decim(hexa))
                     #print(tmp_2)
