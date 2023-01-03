@@ -936,9 +936,9 @@ class View():
                 self.dec_open_window()
                 #self.routine(1)
             except ValueError:
-                messagebox.showerror('Dzielenie przez 0', 'Podaj wartości dziesiętne. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1]. Spx powinno być większe od 0.')
+                messagebox.showerror('Dzielenie przez 0', 'Podaj wartości dziesiętne. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1]. Wartość klucza powinna być większa od 0.')
             except TypeError:
-                messagebox.showerror('Dzielenie przez 0', 'Podaj wartości dziesiętne. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1]. Spx powinno być większe od 0.')
+                messagebox.showerror('Dzielenie przez 0', 'Podaj wartości dziesiętne. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1]. Wartość klucza powinna być większa od 0.')
         else:
             messagebox.showerror('Brak obrazu', 'Przed rozpoczęciem wybierz obraz do zaszyfrowania.')
         
