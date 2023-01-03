@@ -409,7 +409,7 @@ class Cipher:
             for j in range(len(enc_px)): #obliczenie sumy ze wzoru
                 dif_sum += (abs(enc_px[j][i] - enc_px2[j][i])/255)
             
-            res.append(round((dif_sum/(N*M))*100,2))
+            res.append(round((dif_sum/(N*M))*100,4))
         return res
 
     def entropy(self): #entropia
