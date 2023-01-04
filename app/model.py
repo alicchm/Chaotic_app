@@ -89,114 +89,89 @@ class Cipher:
         N,M = im.size
         print(im.size)
         im = np.asarray(im)
-        #print(im)
         first_plc = []
         last_plc = []
         xk = x
-        im_flatten = im.reshape(N*M,3)
-        for i in range(len(im_flatten)):
-            xk = self.m_map(xk,p)
-            if xk <= 0.5:
-                first_plc.append(im_flatten[i])
-            elif xk > 0.5:
-                last_plc.append(im_flatten[i])
-                    
-        last_plc_rev = last_plc[::-1]
-        first_plc.extend(last_plc_rev)
-        
-        self.Spx = np.sum(im)
+        self.Spx = np.sum(im)        
         Spx = self.Spx
-        #first_plc = np.roll(first_plc, Spx) XDD
+        ### ZAPISYWANIE -> system szesnastkowy + dodawanie modulo ###
+        ciphered_im = []
+        xk1 = x
+        xk2 = x
         
-        px_list = []
+        taba_first = []
+        taba_last = []
+        im_flatten = im.reshape(N*M,3)
+        
+        for i in range(len(im_flatten)): #dla każdego piksela
+            tmp_2 = [] #wartość jednego piksela
+            xk2 = self.m_map(xk2,p)
+                
+            for k in range(len(im_flatten[i])): #dla każdego kanału rgb
+                hexa = self.to_hex(im_flatten[i][k])
+                for a in range(len(hexa)):
+                    xk1 = self.asymetric_tent_map(xk1,p)
+                    xk1_rounded = int(np.round(xk1*(Spx/N*M), decimals = 3) * 100 )
+                    hexa[a] = (hexa[a] + xk1_rounded) % 16
+                tmp_2.append(self.to_decim(hexa))
+                    
+            if xk2 <= 0.5:
+                taba_first.append(tmp_2)
+            elif xk2 > 0.5:
+                taba_last.append(tmp_2)
+
+        taba_last_rev = taba_last[::-1]
+        taba_first.extend(taba_last_rev)
+        
+        px_list = [] #ułożenie pikseli w odpowiednim formacie, żeby później zapisać jako obraz
         for i in range(M):
             px_list.append([])
             for j in range(N):
-                px_list[i].append(first_plc[(i*N)+j])
-        
-        
-        px = np.asarray(px_list)
-        ### ZAPISYWANIE -> system szesnastkowy + dodawanie modulo ###
-        ciphered_im = []
-        xk = x
-        print(len(px))
-        print(xk)
-        taba = []
-        for i in range(len(px)):
-            tmp_1 = []
-            for j in range(len(px[i])):
-                tmp_2 = []
-                for k in range(len(px[i][j])):
-                    hexa = self.to_hex(px[i][j][k])
-                    #print(hexa)
-                    for a in range(len(hexa)):
-                        xk = self.asymetric_tent_map(xk,p)
-                        #print(xk)
-                        xk_rounded = int(np.round(xk*(Spx/N*M), decimals = 3) * 100 )
-                        taba.append(xk_rounded)
-                        hexa[a] = (hexa[a] + xk_rounded) % 16
-                    #print(hexa)
-                    tmp_2.append(self.to_decim(hexa))
-                    #print(tmp_2)
-                tmp_1.append(tmp_2)       
-            ciphered_im.append(tmp_1)
-        cryptogram = Image.fromarray(np.uint8(ciphered_im))
+                px_list[i].append(taba_first[(i*N)+j])
+            
+        cryptogram = Image.fromarray(np.uint8(px_list))
 
         return cryptogram
 
     def decryption2(self, im, Spx, x1, p1):
         N,M = im.size
         #print(im.size)
-        px = np.asarray(im)
         p = p1
-        xk = x1
-        decrypted_im = []
+        xk1 = x1
+        xk2 = x1
         taba = []
-        for i in range(len(px)):
-            tmp_1 = []
-            for j in range(len(px[i])):
-                tmp_2 = []
-                for k in range(len(px[i][j])):
-                    hexa = self.to_hex(px[i][j][k])
-                    #print(hexa)
-                    for a in range(len(hexa)):
-                        xk = self.asymetric_tent_map(xk,p)
-                        #print(xk)
-                        xk_rounded = int(np.round(xk*(Spx/N*M), decimals = 3) * 100 )
-                        taba.append(xk_rounded)
-                        hexa[a] = (hexa[a] - xk_rounded) % 16
-                    #print(hexa)
-                    tmp_2.append(self.to_decim(hexa))
-                    #print(tmp_2)
-                tmp_1.append(tmp_2)       
-            decrypted_im.append(tmp_1)
-        decrypted_im = np.asarray(decrypted_im)
-        print(decrypted_im.size, N, M)
-        #px = []
-        xk = x1
-        decrypted_im1 = decrypted_im.reshape(N*M,3)
-        px_list = np.empty([len(decrypted_im1), 3])
-        print(decrypted_im1)
-        i = 0
-        while len(decrypted_im1)>0:
-            xk = self.m_map(xk,p)
+        
+        im = np.asarray(im)
+        im_flatten = im.reshape(N*M,3)
+        first = 0
+        last = 1
+        for i in range(len(im_flatten)): #dla każdego piksela
+            tmp_2 = [] #wartość jednego piksela
+            xk2 = self.m_map(xk2,p)
             
-            if xk <= 0.5: #pierwszy nieodczytany piksel
-                px_list[i] = decrypted_im1[0]
-                decrypted_im1 = np.delete(decrypted_im1, 0, 0)
+            if xk2 <= 0.5:
+                pixel = im_flatten[first]
+                first += 1
+            elif xk2 > 0.5:
+                pixel = im_flatten[-last]
+                last += 1
                 
-            elif xk > 0.5: #ostatni nieodczytany piksel
-                px_list[i] = decrypted_im1[len(decrypted_im1)-1]
-                decrypted_im1 = np.delete(decrypted_im1, len(decrypted_im1)-1, 0)
-            i=i+1  
-        print(px_list)
+            for k in range(len(pixel)): #dla każdego kanału rgb
+                hexa = self.to_hex(pixel[k])
+                for a in range(len(hexa)):
+                    xk1 = self.asymetric_tent_map(xk1,p)
+                    xk1_rounded = int(np.round(xk1*(Spx/N*M), decimals = 3) * 100 )
+                    hexa[a] = (hexa[a] - xk1_rounded) % 16
+                tmp_2.append(self.to_decim(hexa))
+            taba.append(tmp_2)
+                    
         decode_px = []
         for i in range(M):
             decode_px.append([])
             for j in range(N):
-                decode_px[i].append(px_list[(i*N)+j])
+                decode_px[i].append(taba[(i*N)+j])
         decrypted_image =  Image.fromarray(np.uint8(decode_px))
-        decrypted_image.save("odszyfrowane.jpg")
+        #decrypted_image.save("odszyfrowane.jpg")
         return decrypted_image
         
 
