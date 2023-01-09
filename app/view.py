@@ -283,7 +283,7 @@ class View():
         self.desc_mmap_eq.grid(column=0, row=3, sticky='ew')
 
         self.desc_alg4_label = tk.Label(self.desc_inner_frame, height=1, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
-                                            text='gdzie $p$ leży w przedziale $(0,1)$.', anchor='w')
+                                            text='gdzie p leży w przedziale (0,1).', anchor='w')
         self.desc_alg4_label.grid(column=0, row=4, sticky='ew')
 
         self.desc_blank_label = tk.Label(self.desc_inner_frame, height=1, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
@@ -300,7 +300,7 @@ class View():
         self.desc_tent_eq.grid(column=0, row=7, sticky='ew')
 
         self.desc_alg6_label = tk.Label(self.desc_inner_frame, height=2, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
-                                            text='gdzie $p$ leży w przedziale $[0.25,0.5]$.\n', anchor='w')
+                                            text='gdzie p leży w przedziale [0.25,0.5].\n', anchor='w')
         self.desc_alg6_label.grid(column=0, row=8, sticky='ew')
 
         self.desc_alg7_label = tk.Label(self.desc_inner_frame, height=3, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
@@ -975,7 +975,7 @@ class View():
         self.enc_image = self.image_toview.resize(self.resize_image(self.image_toview), Image.Resampling.LANCZOS)
         self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)
 
-        self.enc_image_label = ttk.Label(self.page_encode, image=self.enc_image_tk)
+        self.enc_image_label = ttk.Label(self.page_encode, image=self.enc_image_tk, background=self.dark_bg_color)
         self.enc_image_label.place(relx=0.71, rely=0.502, anchor='center')
 
 
@@ -984,6 +984,6 @@ class View():
         self.dec_image = self.image_toview.resize(self.resize_image(self.image_toview), Image.Resampling.LANCZOS)
         self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
 
-        self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
+        self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk, background=self.dark_bg_color)
         self.dec_image_label.place(relx=0.71, rely=0.502, anchor='center') 
     
