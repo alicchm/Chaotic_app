@@ -63,6 +63,9 @@ class View():
         self.decoded_window_bg = 'bg_img/decoded_window_bg2.png'
         self.copy_text_img = 'bg_img/copy_symbol2.png'
 
+        self.mmap_eq = 'bg_img/mmap_eq.jpg'
+        self.tent_eq = 'bg_img/tent_eq.jpg'
+
         self.logo_img = 'app_logo_mini2.png'
         self.window_title = 'Chaotyczne szyfrowanie obrazów'
 
@@ -260,26 +263,50 @@ class View():
         self.desc_inner_frame = tk.Frame(self.desc_canvas, bg=self.dark_bg_color)
         self.desc_canvas.create_window((0,0), window=self.desc_inner_frame, anchor='nw')
 
-        self.desc_alg1_textbox = tk.Text(self.desc_inner_frame, height=5, bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.desc_alg1_textbox.insert(1.0,'Tutaj może jakiś tekst.\n A tu jeszcze trochę tekstu.')
-        self.desc_alg1_textbox.configure(state='disabled')
-        self.desc_alg1_textbox.grid(column=0, row=0, sticky='ew')
+        self.desc_alg1_label = tk.Label(self.desc_inner_frame, height=8, wraplength=700, justify='left', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text='Dostępne są dwa algorytmy szyfrujące. Implementacja pierwszego z nich (S-BOX) opiera się o wybrany gotowy algorytm opublikowany w artykule naukowym' +
+                                           ' "New Chaotic System: M-Map and Its Application in Chaos-Based Cryptography". Drugi algorytm (HEX) jest algorytmem autorskim.' +
+                                           ' Podczas jego działania każda wartość kanału RGB (liczby całkowite z od 0 do 255) każdego piksela zapisywana jest przy pomocy szesnastkowego systemu liczbowego.')
+        self.desc_alg1_label.grid(column=0, row=0, sticky='ew')
 
-        self.desc_alg1_label = tk.Label(self.desc_inner_frame, height=5, text='Może tu jakiś wzór', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.desc_alg1_label.grid(column=0, row=1, sticky='ew')
+        self.desc_alg2_label = tk.Label(self.desc_inner_frame, height=3, anchor='w', wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text='W obydwu algorymtach wykorzystane są odzwzorowania: asymetryczne namiotowe oraz M-Map.\n\n')
+        self.desc_alg2_label.grid(column=0, row=1, sticky='ew')
 
-        self.desc_alg2_label = tk.Label(self.desc_inner_frame, height=5, text='Może tu jeszcze jakiś wzór', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.desc_alg2_label.grid(column=0, row=2, sticky='ew')
+        self.desc_alg3_label = tk.Label(self.desc_inner_frame, height=1, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text='Asymetryczne odwzorowanie namiotowe:', anchor='w')
+        self.desc_alg3_label.grid(column=0, row=2, sticky='ew')
 
-        self.desc_alg2_textbox = tk.Text(self.desc_inner_frame, height=5, bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.desc_alg2_textbox.insert(1.0,'Tutaj może jakiś tekst.\n A tu jeszcze trochę tekstu.')
-        self.desc_alg2_textbox.configure(state='disabled')
-        self.desc_alg2_textbox.grid(column=0, row=3, sticky='ew')
+        self.desc_mmap_eq_img = ImageTk.PhotoImage(Image.open(self.mmap_eq))
+        self.desc_mmap_eq = tk.Label(self.desc_inner_frame, image=self.desc_mmap_eq_img, bg=self.dark_bg_color)
+        self.desc_mmap_eq.img = self.desc_mmap_eq_img
+        self.desc_mmap_eq.grid(column=0, row=3, sticky='ew')
 
-        self.desc_alg2_textbox = tk.Text(self.desc_inner_frame, height=5, bg=self.dark_bg_color, foreground=self.offwhite_color)
-        self.desc_alg2_textbox.insert(1.0,'Tutaj może jakiś tekst.\n A tu jeszcze trochę tekstu.')
-        self.desc_alg2_textbox.configure(state='disabled')
-        self.desc_alg2_textbox.grid(column=0, row=4, sticky='ew')
+        self.desc_alg4_label = tk.Label(self.desc_inner_frame, height=1, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text='gdzie $p$ leży w przedziale $(0,1)$.', anchor='w')
+        self.desc_alg4_label.grid(column=0, row=4, sticky='ew')
+
+        self.desc_blank_label = tk.Label(self.desc_inner_frame, height=1, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text=' ', anchor='w')
+        self.desc_blank_label.grid(column=0, row=5, sticky='ew')
+
+        self.desc_alg5_label = tk.Label(self.desc_inner_frame, height=1, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text='Odwzorowanie M-Map:', anchor='w')
+        self.desc_alg5_label.grid(column=0, row=6, sticky='ew')
+
+        self.desc_tent_eq_img = ImageTk.PhotoImage(Image.open(self.tent_eq))
+        self.desc_tent_eq = tk.Label(self.desc_inner_frame, image=self.desc_tent_eq_img, bg=self.dark_bg_color)
+        self.desc_tent_eq.img = self.desc_tent_eq_img
+        self.desc_tent_eq.grid(column=0, row=7, sticky='ew')
+
+        self.desc_alg6_label = tk.Label(self.desc_inner_frame, height=2, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text='gdzie $p$ leży w przedziale $[0.25,0.5]$.\n', anchor='w')
+        self.desc_alg6_label.grid(column=0, row=8, sticky='ew')
+
+        self.desc_alg7_label = tk.Label(self.desc_inner_frame, height=3, wraplength=700, justify='left', bg=self.dark_bg_color, foreground=self.offwhite_color,
+                                            text='Szczegółowe informacje na temat implementacji algorytmów oraz sposobu liczenia i analizowania ich miar jakości umieszczone są w pracy inżynierskiej'
+                                            + ' zatytułowanej "Implementacja i analiza algorytmów szyfrowania obrazu". \n', anchor='w')
+        self.desc_alg7_label.grid(column=0, row=9, sticky='ew')
 
     def routine(self, event):
         self.path = None
