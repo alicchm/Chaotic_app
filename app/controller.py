@@ -4,7 +4,6 @@ class Controller:
     def __init__(self, view, model):
         self.model = model
         self.view = view
-        print('model gotów')
 
     def start_encryption(self):
         self.model.cryptogram = self.model.start_encryption()
@@ -42,12 +41,8 @@ class Controller:
         return self.model.Spx
 
     def get_cryptogram(self):
-        print(np.asarray(self.model.cryptogram))
         return self.model.cryptogram
     
-    # def get_key_sensitivity(self, change_value):
-    #     return self.model.key_sensitivity(change_value)
-
     def get_npcr(self):
         return self.model.npcr()
 

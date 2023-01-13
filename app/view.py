@@ -27,11 +27,9 @@ class View():
         self.image = None
         self.image_toview = None
         self.cipher_type = 1
-        #self.enc_image = None
-        #self.enc_image_tk = None
+
         self.cryptogram = None
         self.cryptogram_toview = None
-        #self.image_todecrypt = None
         self.image_decrypted = None
         self.image_decrypted_toview = None
         self.x = None
@@ -39,7 +37,6 @@ class View():
         self.spx = None
 
         #miary
-        # self.key_sensivity = None
         self.npcr = None
         self.uaci = None
         self.entropy = None
@@ -139,34 +136,21 @@ class View():
 
         #wartość x
         self.enc_x = tk.StringVar()
-        # self.enc_x_before = tk.StringVar()
-        # self.enc_x_range = ['0.001', '0.999']
-        # self.enc_x.set(self.enc_x_range[0])
-        # self.enc_x_before.set(self.enc_x_range[0])
+
 
         self.enc_x_label = tk.Label(self.page_encode, text='x =', bg=self.orange_color)
         self.enc_x_label.place(relx=0.091, rely=0.55)
 
-        # entry_x_val_function = self.root.register(self.entry_x_validate)
-        # entry_x_inval_function = self.root.register(self.entry_x_invalid)
         self.enc_x_entry = tk.Entry(self.page_encode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_x, justify=tk.LEFT)
-        # self.enc_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function,'%P'), invalidcommand=(entry_x_inval_function))
         self.enc_x_entry.place(relx=0.125, rely=0.555)
 
         #wartość p
         self.enc_p = tk.StringVar()
-        # self.enc_p_before = tk.StringVar()
-        # self.enc_p_range = ['0.25', '0.5']
-        # self.enc_p.set(self.enc_p_range[0])
-        # self.enc_p_before.set(self.enc_p_range[0])
 
         self.enc_p_label = tk.Label(self.page_encode, text='p =', bg=self.orange_color)
         self.enc_p_label.place(relx=0.091, rely=0.6)
 
-        # entry_p_val_function = self.root.register(self.entry_p_validate)
-        # entry_p_inval_function = self.root.register(self.entry_p_invalid)
         self.enc_p_entry = tk.Entry(self.page_encode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_p, justify=tk.LEFT)
-        # self.enc_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function,'%P'), invalidcommand=(entry_p_inval_function))        
         self.enc_p_entry.place(relx=0.125, rely=0.605)
 
         #szyfrowanie - start algorytmu
@@ -203,8 +187,6 @@ class View():
         self.dec_x_label = tk.Label(self.page_decode, text='x =', bg=self.orange_color)
         self.dec_x_label.place(relx=0.091, rely=0.455)
 
-        # entry_x_val_function_dec = self.root.register(self.entry_x_validate_dec)
-        # entry_x_inval_function_dec = self.root.register(self.entry_x_invalid_dec)
         self.dec_x_entry = tk.Entry(self.page_decode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_x, justify=tk.LEFT)
         # self.dec_x_entry.config(validate='focusout', validatecommand=(entry_x_val_function_dec,'%P'), invalidcommand=(entry_x_inval_function_dec))
         self.dec_x_entry.place(relx=0.125, rely=0.46)
@@ -213,10 +195,7 @@ class View():
         self.dec_p_label = tk.Label(self.page_decode, text='p =', bg=self.orange_color)
         self.dec_p_label.place(relx=0.091, rely=0.505)
 
-        # entry_p_val_function_dec = self.root.register(self.entry_p_validate_dec)
-        # entry_p_inval_function_dec = self.root.register(self.entry_p_invalid_dec)
         self.dec_p_entry = tk.Entry(self.page_decode, width=10, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.enc_p, justify=tk.LEFT)
-        # self.dec_p_entry.config(validate='focusout', validatecommand=(entry_p_val_function_dec,'%P'), invalidcommand=(entry_p_inval_function_dec))        
         self.dec_p_entry.place(relx=0.125, rely=0.51)
 
         #wartość klucza
@@ -224,28 +203,13 @@ class View():
         self.dec_key_label.place(relx=0.095, rely=0.595)
 
         self.dec_key = tk.StringVar()
-        # self.dec_key_before = tk.StringVar()
-        # self.dec_key_range = ['0', '1000000000']
-        # self.dec_key.set(self.dec_key_range[0])
-        # self.dec_key_before.set(self.dec_key_range[0])
 
-        # entry_key_function = self.root.register(self.entry_key_validate)
-        # entry_key_inval_function = self.root.register(self.entry_key_invalid)
         self.dec_key_entry = tk.Entry(self.page_decode, width=11, relief='flat', bd=0, bg=self.light_orange_color, textvariable=self.dec_key, justify=tk.LEFT)
-        # self.dec_key_entry.config(validate='focusout', validatecommand=(entry_key_function,'%P'), invalidcommand=(entry_key_inval_function))        
         self.dec_key_entry.place(relx=0.107, rely=0.645)
 
         #deszyfrowanie - start algorytmu
         self.dec_encode_button = tk.Button(self.page_decode, text = 'Deszyfruj!', width=15, height=1, bg=self.orange_color, bd=0, command=self.start_decryption)
         self.dec_encode_button.place(relx=0.086, rely=0.786)
-
-        #wyświetlanie załadowanego obrazu TERAZ JEST W FUNKCJI set_image_for_dec
-        #self.dec_image = Image.open("encoded.png")
-        #self.dec_image = self.dec_image.resize(self.resize_image(self.dec_image), Image.Resampling.LANCZOS)
-        #self.dec_image_tk = ImageTk.PhotoImage(self.dec_image)
-
-        #self.dec_image_label = ttk.Label(self.page_decode, image=self.dec_image_tk)
-        #self.dec_image_label.place(relx=0.425, rely=0.082)
 
         #strona z opisem algorytmów
         self.desc_main_frame = tk.Frame(self.page_description, bg=self.dark_bg_color)
@@ -321,21 +285,14 @@ class View():
         self.enc_x.set(0)
         self.enc_p.set(0)
         self.dec_key.set(0)
-        # self.enc_x.set(self.enc_x_range[0])
-        # self.enc_p.set(self.enc_p_range[0])
-        # self.enc_x_before.set(self.enc_x_range[0])
-        # self.enc_p_before.set(self.enc_p_range[0])
-        # self.dec_key.set(self.dec_key_range[0])
-        print('działa')
+
         self.enc_option_radio.set(1)
         self.dec_option_radio.set(1)
         if hasattr(self, 'enc_image_label'):
             self.enc_image_label.config(image='')
-            print('działa 1')
 
         if hasattr(self, 'dec_image_label'):
             self.dec_image_label.config(image='')
-            print('działa 2')
 
     def setController(self, controller):
         self.controller = controller
@@ -346,12 +303,10 @@ class View():
             filetypes=[('Obrazy JPG i PNG','.jpg .png'), ('Obraz JPG','*.jpg'), ('Obraz PNG','*.png')]
         )
 
-        # showinfo(title='Wybrany plik', message=f'{enc_filename},{type(enc_filename)}')
         if enc_filename != '':
             if Image.open(enc_filename).mode == 'RGB':
                 img_size = Image.open(enc_filename).size
                 if img_size[0] <=540 and img_size[0] >= 100 and img_size[1] <=540 and img_size[1] >= 100: #sprawdzenie wymiarów obrazu
-                    # showinfo(title='Wybrany plik', message=Image.open(enc_filename).mode)
                     #USTAWIANIE ŚCIEŻKI I OBRAZU
                     self.path = enc_filename
                     self.controller.set_image(self.path)
@@ -384,124 +339,6 @@ class View():
         except ValueError:
             return False
 
-    # def entry_x_validate(self, value): #walidacja wprowadzonej wartości x
-    #     if value != '' and self.check_if_float(value) == True:
-    #         val_float = float(value)
-    #         #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
-    #         if val_float > 0 and val_float < 1:
-    #             self.enc_x.set(val_float)
-    #             self.enc_x_before.set(val_float)
-    #             return True
-    #         else:
-    #             return False
-    #     else:       
-    #         return False
-
-    # def entry_x_validate_dec(self, value): #walidacja wprowadzonej wartości x
-    #     print('x decode val')
-    #     if value != '' and self.check_if_float(value) == True:
-    #         val_float = float(value)
-    #         #TU JESZCZE SPRAWDZENIE CZY JEST W ODPOWIEDNIM ZAKRESIE
-    #         if val_float > 0 and val_float < 1:
-    #             self.enc_x.set(val_float)
-    #             self.enc_x_before.set(val_float)
-    #             return True
-    #         else:
-    #             return False
-    #     else:       
-    #         return False
-
-    # def entry_x_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
-    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
-    #     showerror(title='Niepoprawna wartość', message=msg)
-        
-    #     self.enc_x_entry.delete(0,tk.END)
-    #     self.enc_x_entry.insert(0,float(self.enc_x_before.get()))
-    #     self.enc_x.set(self.enc_x_before.get())
-
-    # def entry_x_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości x
-    #     print('x decode inval')
-    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału (0,1). Miejsca dziesiętne oddziel od całości kropką.'
-    #     showerror(title='Niepoprawna wartość', message=msg)
-        
-    #     self.dec_x_entry.delete(0,tk.END)
-    #     self.dec_x_entry.insert(0,float(self.enc_x_before.get()))
-    #     self.enc_x.set(self.enc_x_before.get())
-
-    # def entry_p_validate(self, value): #walidacja wprowadzonej wartości p
-    #     if value != '' and self.check_if_float(value) == True:
-    #         val_float = float(value)
-    #         if (val_float<0.5 and val_float>=0.25 and self.enc_option_radio.get()==1) or (val_float<1 and val_float>0 and self.enc_option_radio.get()==2):
-    #             self.enc_p.set(val_float)
-    #             self.enc_p_before.set(val_float)
-    #             return True
-    #         else: 
-    #             return False
-    #     else:      
-    #         return False
-
-    # def entry_p_validate_dec(self, value): #walidacja wprowadzonej wartości p
-    #     print('p decode val')
-    #     if value != '' and self.check_if_float(value) == True:
-    #         val_float = float(value)
-    #         if (val_float<0.5 and val_float>=0.25 and self.dec_option_radio.get()==1) or (val_float<1 and val_float>0 and self.dec_option_radio.get()==2):
-    #             self.enc_p.set(val_float)
-    #             self.enc_p_before.set(val_float)
-    #             return True
-    #         else: 
-    #             return False
-    #     else:      
-    #         return False
-
-    # def entry_p_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
-    #     range = ''
-    #     if self.enc_option_radio.get() == 1:
-    #         range = f'[0.25, 0.5]'
-    #     else:
-    #         range = f'(0, 1)'
-    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
-    #     showerror(title='Niepoprawna wartość', message=msg)
-        
-    #     self.enc_p_entry.delete(0,tk.END)
-    #     self.enc_p_entry.insert(0,float(self.enc_p_before.get()))
-
-    #     self.enc_p.set(self.enc_p_before.get())
-    
-    # def entry_p_invalid_dec(self):  #instrukcja dla niepoprawnie wprowadzonej wartości p
-    #     print('p decode inval')
-    #     range = ''
-    #     if self.dec_option_radio.get() == 1:
-    #         range = f'[0.25, 0.5]'
-    #     else:
-    #         range = f'(0, 1)'
-    #     msg = f'Podana wartość jest nieprawidłowa. Podaj liczbę dziesiętną z przedziału {range}. Miejsca dziesiętne oddziel od całości kropką.'
-    #     showerror(title='Niepoprawna wartość', message=msg)
-        
-    #     self.dec_p_entry.delete(0,tk.END)
-    #     self.dec_p_entry.insert(0,float(self.enc_p_before.get()))
-
-    #     self.enc_p.set(self.enc_p_before.get())
-
-    # def entry_key_validate(self, value): #walidacja wprowadzonej wartości klucza
-    #     if value != '' and self.check_if_int(value) == True:
-    #         val_int = int(value)
-    #         if val_int>=0:
-    #             self.dec_key.set(val_int)
-    #             self.dec_key_before.set(val_int)
-    #             return True
-    #         else:
-    #             return False
-    #     else:      
-    #         return False
-
-    # def entry_key_invalid(self):  #instrukcja dla niepoprawnie wprowadzonej wartości klucza
-    #     msg = f'Podana wartość jest nieprawidłowa. Podaj nieujemną liczbę całkowitą.'
-    #     showerror(title='Niepoprawna wartość', message=msg)
-        
-    #     self.dec_key_entry.delete(0,tk.END)
-    #     self.dec_key_entry.insert(0,int(self.dec_key_before.get()))
-
-    #     self.dec_key.set(self.dec_key_before.get())
 
     def save_img(self, parent_window, img, tab_number):
         file_dir = filedialog.askdirectory(
@@ -536,23 +373,6 @@ class View():
         return int(width), int(height)
 
     def enc_selectalgorithm(self, cipher_type):
-        print('wybrano algorytm: ', self.enc_option_radio.get())
-        # if self.enc_option_radio.get() == 1:
-            # self.enc_p_range[0] = '0.25'
-            # self.enc_p_range[1] = '0.5'
-            # self.enc_x_range[0] = '0.001'
-            # self.enc_x_range[1] = '0.999'
-        # elif self.enc_option_radio.get() == 2:
-            # self.enc_p_range[0] = '0.25'
-            # self.enc_p_range[1] = '0.5'
-            # self.enc_x_range[0] = '0.001'
-            # self.enc_x_range[1] = '0.999'
-
-        # self.enc_p.set(self.enc_p_range[0])
-        # self.enc_p_before.set(self.enc_p_range[0])
-        # self.enc_x.set(self.enc_x_range[0])
-        # self.enc_x_before.set(self.enc_x_range[0])
-        
         self.cipher_type = cipher_type
 
     def app_close(self):
@@ -585,7 +405,6 @@ class View():
         
         #wyświetlenie zakodowanego obrazu
         #TU MOŻNA Z PALCA ZROBIĆ JAK W FUNKACJACH ŁADUJĄCYCH OBRAZY PRZYPISZE SIĘ ZMIENNĄ
-        #nc2_img_base = Image.open("encoded.png") #self.encrypted_image
         self.cryptogram_toview = copy.copy(self.cryptogram)
         enc2_img = ImageTk.PhotoImage(self.cryptogram_toview.resize(self.resize_image(self.cryptogram_toview), Image.Resampling.LANCZOS))
         enc2_img_label = tk.Label(page2_encode_results, image=enc2_img)
@@ -705,25 +524,6 @@ class View():
         self.entropy_b_label = tk.Label(measure_inner_frame, height=1, text='B: ', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
         self.entropy_b_label.grid(column=2, row=7)
 
-        #key sensitivity
-        # measure_label_keysens = tk.Label(measure_inner_frame, height=5, text='Wrażliwość na zmianę klucza', anchor='w', bg=self.dark_bg_color, foreground=self.offwhite_color)
-        # measure_label_keysens.grid(column=0, row=8, sticky='ew')
-
-        # self.key_sens1 = Figure(figsize=(4.25,3), dpi=60)
-        # self.ax1 = self.key_sens1.add_subplot(111)
-        # self.canvas_sens1 = FigureCanvasTkAgg(self.key_sens1, measure_inner_frame)
-        # self.canvas_sens1.get_tk_widget().grid(column=0,row=9)
-
-        # self.key_sens2 = Figure(figsize=(4.25,3), dpi=60) #(figsize=(5,3), dpi=80)
-        # self.ax2 = self.key_sens2.add_subplot(111)
-        # self.canvas_sens2 = FigureCanvasTkAgg(self.key_sens2, measure_inner_frame)
-        # self.canvas_sens2.get_tk_widget().grid(column=1,row=9)
-
-        # self.key_sens3 = Figure(figsize=(4.25,3), dpi=60)
-        # self.ax3 = self.key_sens3.add_subplot(111)
-        # self.canvas_sens3 = FigureCanvasTkAgg(self.key_sens3, measure_inner_frame)
-        # self.canvas_sens3.get_tk_widget().grid(column=2,row=9)
-
         #korelacja
         measure_label_cor = tk.Label(measure_inner_frame, height=3, text='Korelacja', anchor='sw', bg=self.dark_bg_color, foreground=self.offwhite_color)
         measure_label_cor.grid(column=0, row=8, sticky='ew')
@@ -808,9 +608,6 @@ class View():
         self.entropy_g_label.config(text=f'G: {self.entropy[1]}', fg=green)
         self.entropy_b_label.config(text=f'B: {self.entropy[2]}', fg=blue)
 
-        #keysensitivity
-        # self.key_sensitivity()
-
         #korelacja
         #horyzontalna
         self.corr_r_label_horiz.config(text=f'R: {self.correlations[0][0]}', fg=red)
@@ -841,7 +638,6 @@ class View():
 
     def copy_text_to_clipboard(self, text):
         text = str(text)
-        print(text)
         text = text.encode('utf8')
         win32clipboard.OpenClipboard()
         win32clipboard.EmptyClipboard()
@@ -866,7 +662,6 @@ class View():
         dec2_bgimg_label.place(relx=0.5, rely=0.5, anchor='center')
 
         #wyświetlenie odkodowanego obrazu
-        #dec2_img_base = Image.open("lena.jpg")
         self.image_decrypted_toview = copy.copy(self.image_decrypted)
         dec2_img = ImageTk.PhotoImage(self.image_decrypted_toview.resize(self.resize_image(self.image_decrypted_toview), Image.Resampling.LANCZOS))
         dec2_img_label = tk.Label(dec2_window, image=dec2_img)
@@ -899,35 +694,13 @@ class View():
         canvas_hist3.draw()
 
     def get_measures(self):
-        #self.key_sensivity = self.controller.get_key_sensitivity(10**(-16))
         self.npcr = self.controller.get_npcr()
         self.uaci = self.controller.get_uaci()
         self.entropy = self.controller.get_entropy()
         self.correlations = self.controller.get_correlations()
 
-    # def key_sensitivity(self):
-    #     im_oryg, im_x, im_p = self.controller.get_key_sensitivity(10**(-16))
-
-    #     self.ax1.imshow(im_oryg)
-    #     self.ax1.axes.get_xaxis().set_visible(False)
-    #     self.ax1.axes.get_yaxis().set_visible(False)
-    #     self.ax1.set_title('Obraz oryginalny')
-    #     self.canvas_sens1.draw()
-
-    #     self.ax2.imshow(im_x)
-    #     self.ax2.axes.get_xaxis().set_visible(False)
-    #     self.ax2.axes.get_yaxis().set_visible(False)
-    #     self.ax2.set_title('Zmieniona wartość $x$, $x_{zmienione} = x + 10^{-16}$')
-    #     self.canvas_sens2.draw()
-
-    #     self.ax3.imshow(im_p)
-    #     self.ax3.axes.get_xaxis().set_visible(False)
-    #     self.ax3.axes.get_yaxis().set_visible(False)
-    #     self.ax3.set_title('Zmieniona wartość $p$, $p_{zmienione} = p + 10^{-16}$')
-    #     self.canvas_sens3.draw()
         
     def start_encryption(self):
-        print(self.enc_x_entry.get(), self.enc_p_entry.get(), self.enc_option_radio.get())
         if self.image is not None:
             try:
                 if float(self.enc_x_entry.get()) == float(self.enc_p_entry.get()) or float(self.enc_p_entry.get())<0.25 or float(self.enc_p_entry.get()) >= 0.5 or float(self.enc_x_entry.get())<=0 or float(self.enc_x_entry.get())>=1:
@@ -937,7 +710,6 @@ class View():
                 self.controller.set_ciphertype(float(self.enc_option_radio.get()))
                 self.cryptogram = self.controller.start_encryption()
                 self.spx = self.controller.get_Spx()
-                print(np.asarray(self.cryptogram))
                 self.enc_open_window()
             except ValueError:
                 messagebox.showerror('Błąd', 'Dla podanych wartości algorytm natrafił na dzielenie przez 0. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1].')
@@ -946,11 +718,9 @@ class View():
         else:
             messagebox.showerror('Brak obrazu', 'Przed rozpoczęciem wybierz obraz do zaszyfrowania.')
 
-        #self.routine(1)
 
     def start_decryption(self):
         if self.image is not None:
-            print('działa')
             try:
                 if float(self.dec_x_entry.get()) ==  float(self.dec_p_entry.get()) or float(self.dec_p_entry.get())<0.25 or float(self.dec_p_entry.get()) >= 0.5 or float(self.dec_x_entry.get())<=0 or float(self.dec_x_entry.get())>=1 or float(self.dec_key_entry.get()) <= 0:
                         raise ValueError
@@ -959,9 +729,7 @@ class View():
                 self.controller.set_Spx(float(self.dec_key_entry.get()))
                 self.controller.set_ciphertype(float(self.dec_option_radio.get()))
                 self.image_decrypted = self.controller.start_decryption()
-                #print(np.asarray(self.cryptogram))
                 self.dec_open_window()
-                #self.routine(1)
             except ValueError:
                 messagebox.showerror('Dzielenie przez 0', 'Podaj wartości dziesiętne. Wartości x i p nie powinny być takie same. Wartość p powinna być w przedziale (0.25, 0.5), a x w [0, 1]. Wartość klucza powinna być większa od 0.')
             except TypeError:
@@ -970,7 +738,6 @@ class View():
             messagebox.showerror('Brak obrazu', 'Przed rozpoczęciem wybierz obraz do zaszyfrowania.')
         
     def set_image_for_enc(self):
-        print(self.image)
         self.image_toview = copy.copy(self.image)
         self.enc_image = self.image_toview.resize(self.resize_image(self.image_toview), Image.Resampling.LANCZOS)
         self.enc_image_tk = ImageTk.PhotoImage(self.enc_image)

@@ -6,7 +6,6 @@ from math import log2, sqrt
 
 class Cipher:
     def __init__(self):
-        #self.alg_num = 1 #default wybrany czyli np 1/2
         self.source_path = ''
         self.image = None
         self.x = None
@@ -20,7 +19,6 @@ class Cipher:
 
     def set_source_path(self, path):
         self.source_path = path
-        print(self.source_path)
         self.set_image()
 
     def set_image(self):
@@ -49,10 +47,8 @@ class Cipher:
 
     def m_map(self, xk, p):
         if xk<=0.5 and xk>=0:
-            #print((xk/p)*(2-(xk/p)))
             return ((xk/p)*(2-(xk/p)))
         elif xk<=1 and xk>0.5:
-            #print(((1-xk)/p)*(2-((1-xk)/p)))
             return (((1-xk)/p)*(2-((1-xk)/p)))
     
     def asymetric_tent_map(self, xk, p):
@@ -74,7 +70,6 @@ class Cipher:
         elif len(hexa)==1:
             hexa.insert(0, 0)
         return hexa
-    #print(to_hex(255))
 
     def to_decim(self, hexa):
         length = len(hexa) - 1
@@ -87,7 +82,6 @@ class Cipher:
     def encryption2(self, im, x, p):
         ### CZYTANIE -> PERMUTACJA ###
         N,M = im.size
-        print(im.size)
         im = np.asarray(im)
         first_plc = []
         last_plc = []
@@ -135,7 +129,6 @@ class Cipher:
 
     def decryption2(self, im, Spx, x1, p1):
         N,M = im.size
-        #print(im.size)
         p = p1
         xk1 = x1
         xk2 = x1
@@ -209,11 +202,9 @@ class Cipher:
     def encryption1(self, im, x1, p1):
         I = np.asarray(im)
         N, M = im.size #szerokość, wysokość
-        print('DZIAŁA')
         #obliczenie wartości klucza Spx
         self.Spx = self.calc_spx(I)
         Spx = self.Spx
-        print(Spx)
         p = p1
         xk = x1
         sb = self.generate_sbox(xk, p, Spx, N, M)
@@ -226,8 +217,6 @@ class Cipher:
         for i in range(M): #po wierszach obrazu
             for j in range(N): #po kolumnach obrazu
                 xk = self.m_map(xk, p) #calculate xk from m_map
-                #print(xk)
-                #Read the S − box value for the pixels RGB components (S − box(px(i,j)));
                 new_px_vals = [deque_sb[I[i][j][0]],deque_sb[I[i][j][1]],deque_sb[I[i][j][2]]] 
 
                 if xk <= 0.5:
@@ -237,11 +226,9 @@ class Cipher:
                 
                 shift = int((256*xk)//1) #calculate shift
                 deque_sb.rotate(shift) #shift s-box
-            #print(xk)
         #połączenie w całość pikseli zapisywanych od końca i od początku
         last_place_rv = last_place[::-1]
         first_place.extend(last_place_rv)
-        #print(last_place_rv)
         #utworzenie nowej listy pikseli (zaszyfrowanych)
         px_list = []
         
@@ -250,7 +237,6 @@ class Cipher:
             px_list.append([])
             for j in range(N):
                 px_list[i].append(first_place[(i*N)+j])
-        #print(px_list)
         #zapisanie listy jako obraz
         cryptogram = Image.fromarray(np.uint8(px_list))
         print(np.asarray(cryptogram))
@@ -261,9 +247,7 @@ class Cipher:
         J = np.asarray(cryptogram)
         enc_N, enc_M = cryptogram.size
         print('działa')
-        J_flatter = J.reshape(enc_N*enc_M,3) #zmiana struktury na listę pikseli
-        #J_flatter
-        
+        J_flatter = J.reshape(enc_N*enc_M,3) #zmiana struktury na listę pikseli        
         px_list2 = []
         xk2 = x1
         p = p1
@@ -300,22 +284,6 @@ class Cipher:
         decrypted = Image.fromarray(np.uint8(decode_px))
         return decrypted
 
-    #MIARY (metoda draw histograms jest w w widoku)
-
-
-    # def key_sensitivity(self, change_value):
-        
-    #     if self.cipher_type==1:
-    #         im_oryg = self.cryptogram
-    #         im_x = self.encryption1(self.image, self.x+change_value, self.p)
-    #         im_p = self.encryption1(self.image, self.x, self.p+change_value)
-    #     else:
-    #         im_oryg = self.cryptogram
-    #         im_x = self.encryption2(self.image, self.x+change_value, self.p)
-    #         im_p = self.encryption2(self.image, self.x, self.p+change_value)
-        
-    #     return im_oryg, im_x, im_p
-
     def npcr(self):
         N, M = self.image.size #szerokość, wysokość
         im2 = self.image.copy()
@@ -345,19 +313,6 @@ class Cipher:
             res.append(round((dif_sum/(N*M))*100,4))
             
         return res
-
-    #def npcr2(im1, im2):
-    #    im1 = np.asarray(im1)
-    #    im2 = np.asarray(im2)
-    #    values = [0,0,0]
-    #    for i in range(len(im1)):
-    #        for j in range(len(im1[i])):
-    #            for k in range(len(im1[i][j])):
-    #                if im1[i][j][k] != im2[i][j][k]:
-    #                    values[k]+=1
-    #    length = im1.size/3
-    #    values = [(x/length) * 100 for x in values]
-    #    return values
 
     def uaci(self):
         N, M = self.image.size #szerokość, wysokość
@@ -404,17 +359,6 @@ class Cipher:
 
     def correlations(self, encrypted = 1):
         
-        # if encrypted == 1:
-        #     if self.cipher_type==1:
-        #         im = self.encryption1(self.image, self.x, self.p)
-        #     else:
-        #         im = self.encryption2(self.image, self.x, self.p)
-
-        # if self.cipher_type==1:
-        #     im = self.encryption1(self.image, self.x, self.p)
-        # else:
-        #     im = self.encryption2(self.image, self.x, self.p)
-
         im = self.cryptogram
         
         N, M = im.size
